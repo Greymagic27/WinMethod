@@ -1,15 +1,10 @@
 package io.github.greymagic27.jna_clone;
 
 import java.lang.foreign.Arena;
-import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
-import java.util.stream.Stream;
-import org.jetbrains.annotations.NotNull;
+import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -20,19 +15,40 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TypeMapperTest {
 
-    private static @NotNull Stream<Arguments> provideLayoutMappings() {
-        return Stream.of(Arguments.of(int.class, ValueLayout.JAVA_INT), Arguments.of(long.class, ValueLayout.JAVA_LONG), Arguments.of(short.class, ValueLayout.JAVA_SHORT), Arguments.of(byte.class, ValueLayout.JAVA_BYTE), Arguments.of(boolean.class, ValueLayout.JAVA_INT), Arguments.of(double.class, ValueLayout.JAVA_DOUBLE), Arguments.of(float.class, ValueLayout.JAVA_FLOAT), Arguments.of(Integer.class, ValueLayout.JAVA_INT), Arguments.of(String.class, ValueLayout.ADDRESS), Arguments.of(Pointer.class, ValueLayout.ADDRESS), Arguments.of(void.class, null));
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideLayoutMappings")
-    void testLayoutFor(Class<?> type, MemoryLayout expected) {
-        assertEquals(expected, TypeMapper.layoutFor(type));
+    @Test
+    void testLayoutMappings() {
+        for (Class<?> type : List.of(int.class, Integer.class)) {
+            assertEquals(ValueLayout.JAVA_INT, TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(long.class, Long.class)) {
+            assertEquals(ValueLayout.JAVA_LONG, TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(short.class, Short.class)) {
+            assertEquals(ValueLayout.JAVA_SHORT, TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(byte.class, Byte.class)) {
+            assertEquals(ValueLayout.JAVA_BYTE, TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(boolean.class, Boolean.class)) {
+            assertEquals(ValueLayout.JAVA_INT, TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(double.class, Double.class)) {
+            assertEquals(ValueLayout.JAVA_DOUBLE, TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(float.class, Float.class)) {
+            assertEquals(ValueLayout.JAVA_FLOAT, TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(void.class, Void.class)) {
+            assertNull(TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class)) {
+            assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
+        }
     }
 
     @Test
-    void testLayoutForInvalid() {
-        assertThrows(IllegalArgumentException.class, () -> TypeMapper.layoutFor(Object.class));
+    void testLayoutMappingsInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> TypeMapper.layoutMappings(Object.class));
     }
 
     @Test
@@ -71,6 +87,18 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_Structure() {
+        TestPoint point = new TestPoint();
+        point.x = 10;
+        point.y = 20;
+        try (Arena arena = Arena.ofConfined()) {
+            Object result = TypeMapper.toNative(point, Structure.class, arena);
+            assertInstanceOf(MemorySegment.class, result);
+            assertEquals(point.pointer().segment(), result);
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -93,5 +121,12 @@ class TypeMapperTest {
     void testFromNative_Identity() {
         String test = "test";
         assertEquals(test, TypeMapper.fromNative(test, String.class));
+    }
+
+    @SuppressWarnings("unused")
+    @Structure.FieldOrder({"x", "y"})
+    private static class TestPoint extends Structure {
+        private int x;
+        private int y;
     }
 }

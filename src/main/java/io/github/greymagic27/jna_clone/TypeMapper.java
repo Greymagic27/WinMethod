@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 public final class TypeMapper {
 
-    static @Nullable MemoryLayout layoutFor(Class<?> javaType) {
+    static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
         if (javaType == int.class || javaType == Integer.class) return ValueLayout.JAVA_INT;
         if (javaType == long.class || javaType == Long.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class) return ValueLayout.JAVA_SHORT;
@@ -21,6 +21,7 @@ public final class TypeMapper {
         if (javaType == void.class || javaType == Void.class) return null;
         if (javaType == String.class) return ValueLayout.ADDRESS;
         if (javaType == Pointer.class) return ValueLayout.ADDRESS;
+        if (javaType == Structure.class) return ValueLayout.ADDRESS;
         throw new IllegalArgumentException("No native layout mapping for: " + javaType);
     }
 
@@ -33,6 +34,9 @@ public final class TypeMapper {
         }
         if (javaType == Pointer.class) {
             return ((Pointer) value).segment();
+        }
+        if (javaType == Structure.class) {
+            return ((Structure) value).pointer().segment();
         }
         if (javaType == Boolean.class || javaType == boolean.class) {
             return ((Boolean) value) ? 1 : 0;

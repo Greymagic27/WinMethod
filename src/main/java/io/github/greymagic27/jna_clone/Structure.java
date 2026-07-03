@@ -43,7 +43,7 @@ public abstract class Structure {
         long maxAlign = 1;
         for (Field f : orderedFields) {
             f.setAccessible(true);
-            MemoryLayout ml = TypeMapper.layoutFor(f.getType());
+            MemoryLayout ml = TypeMapper.layoutMappings(f.getType());
             if (ml == null) throw new IllegalStateException("Unsupported struct field type: " + f.getType() + " on " + f.getName());
             long align = ml.byteAlignment();
             long pad = (align - (currentOffset % align)) % align;

@@ -33,9 +33,9 @@ public final class NativeLibrary {
         Class<?>[] paramTypes = method.getParameterTypes();
         MemoryLayout[] argLayouts = new MemoryLayout[paramTypes.length];
         for (int i = 0; i < paramTypes.length; i++) {
-            argLayouts[i] = TypeMapper.layoutFor(paramTypes[i]);
+            argLayouts[i] = TypeMapper.layoutMappings(paramTypes[i]);
         }
-        MemoryLayout returnLayout = TypeMapper.layoutFor(method.getReturnType());
+        MemoryLayout returnLayout = TypeMapper.layoutMappings(method.getReturnType());
         FunctionDescriptor descriptor = returnLayout == null ? FunctionDescriptor.ofVoid(argLayouts) : FunctionDescriptor.of(returnLayout, argLayouts);
         return linker.downcallHandle(address, descriptor);
     }
