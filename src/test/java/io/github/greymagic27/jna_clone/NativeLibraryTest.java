@@ -45,9 +45,12 @@ class NativeLibraryTest {
     void testMapLibraryNameLogic() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method mapper = NativeLibrary.class.getDeclaredMethod("mapLibraryName", String.class);
         mapper.setAccessible(true);
+        assertEquals("opengl32.dll", mapper.invoke(lib, "opengl32"));
+        assertEquals("opengl32.dll", mapper.invoke(lib, "opengl32.dll"));
         assertEquals("user32.dll", mapper.invoke(lib, "user32"));
+        assertEquals("user32.dll", mapper.invoke(lib, "user32.dll"));
         assertEquals("test*.dll", mapper.invoke(lib, "test*.dll"));
-        assertEquals("test.dll.dll", mapper.invoke(lib, "test.dll"));
+        assertEquals("test*.dll", mapper.invoke(lib, "test*"));
     }
 
     interface MockFunctions {

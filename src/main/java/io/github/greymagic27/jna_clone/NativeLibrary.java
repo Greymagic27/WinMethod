@@ -41,6 +41,6 @@ public final class NativeLibrary {
     }
 
     private String mapLibraryName(@NotNull String libraryName) {
-        return libraryName.toLowerCase().endsWith("*.dll") ? libraryName : libraryName + ".dll";
+        return libraryName.toLowerCase().endsWith(".dll") ? libraryName : libraryName + ".dll";
     }
 }
