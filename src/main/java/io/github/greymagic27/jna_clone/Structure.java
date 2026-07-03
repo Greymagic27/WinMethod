@@ -110,7 +110,7 @@ public abstract class Structure {
             }
         }
         if (!missing.isEmpty()) {
-            throw new RuntimeException("@FieldOrder on " + getClass().getSimpleName() + " names \"" + missing + "\", but no such field exists");
+            throw new RuntimeException("@FieldOrder on " + getClass().getSimpleName() + " names " + missing + ", but no such field(s) exist");
         }
         return resolved;
     }
