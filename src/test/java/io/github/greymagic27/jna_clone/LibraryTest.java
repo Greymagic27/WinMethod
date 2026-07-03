@@ -51,7 +51,7 @@ class LibraryTest {
         assertFalse(result.isNull(), "Process handle should be a valid memory address");
     }
 
-    interface Kernel32 {
+    interface Kernel32 extends Library {
         int GetCurrentProcessId();
 
         int GetProcessId(Pointer process);

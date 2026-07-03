@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public interface Library {
 
-    static <T> @NotNull T load(String libraryName, @NotNull Class<T> interfaceType) {
+    static <T extends Library> @NotNull T load(String libraryName, @NotNull Class<T> interfaceType) {
         NativeLibrary nativeLibrary = new NativeLibrary(libraryName);
         InvocationHandler handler = ((_, method, args) -> {
             if (method.getDeclaringClass() == Object.class) {
