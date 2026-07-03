@@ -24,7 +24,6 @@ class LibraryTest {
 
     @Test
     void testLoadAndInvoke() {
-        Kernel32 kernel32 = Library.load("kernel32", Kernel32.class);
         assertNotNull(kernel32, "Proxy should not be null");
         assertTrue(Proxy.isProxyClass(kernel32.getClass()), "Returned object should be a proxy");
         int pid = kernel32.GetCurrentProcessId();
