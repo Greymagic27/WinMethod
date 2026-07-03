@@ -6,9 +6,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import org.jetbrains.annotations.NotNull;
 
-public final class Library {
+public interface Library {
 
-    public static <T> @NotNull T load(String libraryName, @NotNull Class<T> interfaceType) {
+    static <T> @NotNull T load(String libraryName, @NotNull Class<T> interfaceType) {
         final ThreadLocal<Integer> LAST_ERROR = ThreadLocal.withInitial(() -> 0);
         NativeLibrary nativeLibrary = new NativeLibrary(libraryName);
         InvocationHandler handler = ((_, method, args) -> {
