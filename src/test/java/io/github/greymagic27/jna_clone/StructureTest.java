@@ -131,7 +131,7 @@ class StructureTest {
             private int x;
         }
         RuntimeException e = assertThrows(RuntimeException.class, GhostField::new);
-        assertTrue(e.getMessage().contains("no such field exists"));
+        assertTrue(e.getMessage().contains("no such field(s) exist"));
     }
 
     @Test
