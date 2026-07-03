@@ -23,5 +23,5 @@ jobs:
         with:
           gradle-version: '9.6.1'
 
-      - name: Build with Gradle Wrapper
+      - name: Build with Gradle
         run: gradle build
