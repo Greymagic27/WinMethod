@@ -135,6 +135,18 @@ class StructureTest {
     }
 
     @Test
+    void testMultipleGhostFields() {
+        @SuppressWarnings("unused")
+        @Structure.FieldOrder({"x", "ghost1", "ghost2"})
+        class MultipleGhostFields extends Structure {
+            private int x;
+        }
+        RuntimeException e = assertThrows(RuntimeException.class, MultipleGhostFields::new);
+        assertTrue(e.getMessage().contains("ghost1"));
+        assertTrue(e.getMessage().contains("ghost2"));
+    }
+
+    @Test
     void testToString() {
         Point p = new Point();
         p.x = 42;

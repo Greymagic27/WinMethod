@@ -101,12 +101,16 @@ public abstract class Structure {
             throw new IllegalStateException(getClass().getSimpleName() + " must be annotated with @FieldOrder");
         }
         List<Field> resolved = new ArrayList<>();
+        List<String> missing = new ArrayList<>();
         for (String name : order.value()) {
             try {
                 resolved.add(getClass().getDeclaredField(name));
             } catch (NoSuchFieldException e) {
-                throw new RuntimeException("@FieldOrder on " + getClass().getSimpleName() + " names \"" + name + "\", but no such field exists");
+                missing.add(name);
             }
+        }
+        if (!missing.isEmpty()) {
+            throw new RuntimeException("@FieldOrder on " + getClass().getSimpleName() + " names \"" + missing + "\", but no such field exists");
         }
         return resolved;
     }
