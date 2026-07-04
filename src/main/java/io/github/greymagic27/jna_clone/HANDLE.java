@@ -4,8 +4,8 @@ import java.lang.foreign.MemorySegment;
 
 public class HANDLE {
 
-    private final MemorySegment segment;
     public static final HANDLE NULL = new HANDLE(MemorySegment.NULL);
+    private final MemorySegment segment;
 
     public HANDLE(MemorySegment segment) {
         this.segment = segment;

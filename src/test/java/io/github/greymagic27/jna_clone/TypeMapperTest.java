@@ -265,7 +265,7 @@ class TypeMapperTest {
         Object floatResult = TypeMapper.fromNative(3.14f, float.class);
         assertInstanceOf(Float.class, floatResult);
         assertEquals(3.14f, (Float) floatResult, 0.001f);
-        assertEquals((short) 5, TypeMapper.fromNative((short)5, short.class));
+        assertEquals((short) 5, TypeMapper.fromNative((short) 5, short.class));
         assertEquals(true, TypeMapper.fromNative(1, boolean.class));
     }
 

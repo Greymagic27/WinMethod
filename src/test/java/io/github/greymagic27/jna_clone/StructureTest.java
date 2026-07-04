@@ -162,7 +162,7 @@ class StructureTest {
     void testAlignmentPadding() {
         @SuppressWarnings("unused")
         @Structure.FieldOrder({"b", "l"})
-                class Aligned extends Structure {
+        class Aligned extends Structure {
             private byte b;
             private long l;
         }
