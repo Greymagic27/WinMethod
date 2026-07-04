@@ -315,6 +315,13 @@ class TypeMapperTest {
     }
 
     @Test
+    void testFromNative_LONG() {
+        Object result = TypeMapper.fromNative(9999, LONG.class);
+        assertInstanceOf(LONG.class, result);
+        assertEquals(9999, ((LONG) result).longValue());
+    }
+
+    @Test
     void testPrimitiveReturns() {
         Object floatResult = TypeMapper.fromNative(3.14f, float.class);
         assertInstanceOf(Float.class, floatResult);
