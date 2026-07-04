@@ -8,6 +8,7 @@ import java.lang.foreign.ValueLayout;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
+import static java.lang.foreign.ValueLayout.JAVA_FLOAT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -38,7 +39,7 @@ class TypeMapperTest {
             assertEquals(ValueLayout.JAVA_DOUBLE, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(float.class, Float.class)) {
-            assertEquals(ValueLayout.JAVA_FLOAT, TypeMapper.layoutMappings(type));
+            assertEquals(JAVA_FLOAT, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
@@ -217,6 +218,14 @@ class TypeMapperTest {
         }
         RuntimeException e = assertThrows(RuntimeException.class, () -> TypeMapper.fromNative(MemorySegment.NULL, Bad.class));
         assertTrue(e.getMessage().contains("MemorySegment"));
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    @Test
+    void testPrimitiveReturns() {
+        assertEquals(5, TypeMapper.fromNative(5, short.class));
+        assertEquals(3.14f, (Float) TypeMapper.fromNative(3.14f, float.class), 0.001f);
+        assertEquals(true, TypeMapper.fromNative(1, boolean.class));
     }
 
     @SuppressWarnings("unused")

@@ -40,7 +40,8 @@ public final class NativeLibrary {
         return linker.downcallHandle(address, descriptor);
     }
 
-    private String mapLibraryName(@NotNull String libraryName) {
-        return libraryName.toLowerCase().endsWith(".dll") ? libraryName : libraryName + ".dll";
+    private @NotNull String mapLibraryName(@NotNull String libraryName) {
+        String lower = libraryName.toLowerCase();
+        return lower.endsWith(".dll") ? lower : lower + ".dll";
     }
 }

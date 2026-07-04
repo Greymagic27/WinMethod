@@ -1,6 +1,7 @@
 package io.github.greymagic27.jna_clone;
 
 import java.lang.reflect.Proxy;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,10 +46,18 @@ class LibraryTest {
 
     @Test
     void testNullArgumentHandling() {
-        kernel32 = Library.load("kernel32", Kernel32.class);
         Pointer result = kernel32.GetModuleHandleW(null);
         assertNotNull(result, "Returned pointer should not be null");
         assertFalse(result.isNull(), "Process handle should be a valid memory address");
+    }
+
+    @Test
+    void testUnsupportedMethodType() {
+        interface Invalid extends Library {
+            void ChoosePixelFormat(List<String> list);
+        }
+        Invalid lib = Library.load("gdi32", Invalid.class);
+        assertThrows(IllegalArgumentException.class, () -> lib.ChoosePixelFormat(null));
     }
 
     interface Kernel32 extends Library {

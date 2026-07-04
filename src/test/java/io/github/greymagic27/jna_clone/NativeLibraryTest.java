@@ -49,8 +49,12 @@ class NativeLibraryTest {
         assertEquals("opengl32.dll", mapper.invoke(lib, "opengl32.dll"));
         assertEquals("user32.dll", mapper.invoke(lib, "user32"));
         assertEquals("user32.dll", mapper.invoke(lib, "user32.dll"));
-        assertEquals("test*.dll", mapper.invoke(lib, "test*.dll"));
-        assertEquals("test*.dll", mapper.invoke(lib, "test*"));
+        assertEquals("test*^&.dll", mapper.invoke(lib, "test*^&.dll"));
+        assertEquals("test*^&.dll", mapper.invoke(lib, "test*^&"));
+        assertEquals("test.dll", mapper.invoke(lib, "tEsT"));
+        assertEquals("test.dll", mapper.invoke(lib, "tEsT.dLl"));
+        assertEquals("gdi32.dll", mapper.invoke(lib, "GDI32"));
+        assertEquals("gdi32.dll", mapper.invoke(lib, "GDI32.dll"));
     }
 
     interface MockFunctions {

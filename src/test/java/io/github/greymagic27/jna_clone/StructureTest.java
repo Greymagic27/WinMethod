@@ -158,6 +158,23 @@ class StructureTest {
         assertTrue(str.contains("y=7"));
     }
 
+    @Test
+    void testAlignmentPadding() {
+        @SuppressWarnings("unused")
+        @Structure.FieldOrder({"b", "l"})
+                class Aligned extends Structure {
+            private byte b;
+            private long l;
+        }
+        Aligned s = new Aligned();
+        s.b = (byte) 0xAA;
+        s.l = 0xBBBBBBBBBBBBBBBBL;
+        s.write();
+        MemorySegment seg = s.pointer().segment();
+        assertEquals((byte) 0XAA, seg.get(ValueLayout.JAVA_BYTE, 0));
+        assertEquals(0xBBBBBBBBBBBBBBBBL, seg.get(ValueLayout.JAVA_LONG, 8));
+    }
+
     @Structure.FieldOrder({"x", "y"})
     private static class Point extends Structure {
         private int x;

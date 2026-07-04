@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PointerTest {
@@ -50,6 +51,16 @@ class PointerTest {
             }
             Pointer ptr = new Pointer(segment);
             assertEquals(expected, ptr.getWideString(0));
+        }
+    }
+
+    @Test
+    void testGetWideStringOutOfBounds() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(2);
+            segment.set(ValueLayout.JAVA_SHORT, 0, (short) 'A');
+            Pointer p = new Pointer(segment);
+            assertThrows(IndexOutOfBoundsException.class, () -> p.getWideString(0));
         }
     }
 
