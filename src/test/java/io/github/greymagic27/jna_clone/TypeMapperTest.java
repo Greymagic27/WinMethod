@@ -46,7 +46,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(String.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(Pointer.class, Structure.class, Handle.class)) {
+        for (Class<?> type : List.of(Pointer.class, Structure.class, HANDLE.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(HWND.class, HDC.class)) {
@@ -110,8 +110,8 @@ class TypeMapperTest {
     void testToNative_Handle() {
         try (Arena arena = Arena.ofConfined()) {
             MemorySegment segment = arena.allocate(8);
-            Handle handle = new Handle(segment);
-            assertEquals(segment, TypeMapper.toNative(handle, Handle.class, arena));
+            HANDLE handle = new HANDLE(segment);
+            assertEquals(segment, TypeMapper.toNative(handle, HANDLE.class, arena));
         }
     }
 
@@ -136,7 +136,7 @@ class TypeMapperTest {
     @Test
     void testToNative_HandleNull() {
         try (Arena arena = Arena.ofConfined()) {
-            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, Handle.class, arena));
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HANDLE.class, arena));
             assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HWND.class, arena));
             assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HDC.class, arena));
         }
@@ -199,7 +199,7 @@ class TypeMapperTest {
 
     @Test
     void testFromNative_HandleMissingConstructor() {
-        class Bad extends Handle {
+        class Bad extends HANDLE {
             Bad() {
                 super(MemorySegment.NULL);
             }
@@ -210,7 +210,7 @@ class TypeMapperTest {
 
     @Test
     void testFromNative_PointerMissingConstructor() {
-        class Bad extends Handle {
+        class Bad extends HANDLE {
             Bad() {
                 super(MemorySegment.NULL);
             }

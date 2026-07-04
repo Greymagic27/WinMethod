@@ -2,11 +2,11 @@ package io.github.greymagic27.jna_clone;
 
 import java.lang.foreign.MemorySegment;
 
-public class Handle {
+public class HANDLE {
 
     private final MemorySegment segment;
 
-    public Handle(MemorySegment segment) {
+    public HANDLE(MemorySegment segment) {
         this.segment = segment;
     }
 
