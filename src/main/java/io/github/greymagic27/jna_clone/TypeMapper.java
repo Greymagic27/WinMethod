@@ -15,16 +15,13 @@ public final class TypeMapper {
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
         if (javaType == int.class || javaType == Integer.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class) return ValueLayout.JAVA_INT;
-        if (javaType == long.class || javaType == Long.class) return ValueLayout.JAVA_LONG;
-        if (javaType == LRESULT.class) return ValueLayout.JAVA_LONG;
+        if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
         if (javaType == float.class || javaType == Float.class) return ValueLayout.JAVA_FLOAT;
-        if (javaType == String.class) return ValueLayout.ADDRESS;
-        if (javaType == Pointer.class) return ValueLayout.ADDRESS;
-        if (Structure.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
-        if (HANDLE.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
+        if (javaType == String.class || javaType == Pointer.class) return ValueLayout.ADDRESS;
+        if (Structure.class.isAssignableFrom(javaType) || HANDLE.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         if (javaType == void.class || javaType == Void.class) return null;
         throw new IllegalArgumentException("No native layout mapping for: " + javaType);
     }
