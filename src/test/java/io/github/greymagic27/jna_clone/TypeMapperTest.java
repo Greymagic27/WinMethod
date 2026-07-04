@@ -3,6 +3,7 @@ package io.github.greymagic27.jna_clone;
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
 import io.github.greymagic27.jna_clone.WinDef.HDC;
 import io.github.greymagic27.jna_clone.WinDef.HWND;
+import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -24,7 +25,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(int.class, Integer.class)) {
             assertEquals(ValueLayout.JAVA_INT, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(long.class, Long.class)) {
+        for (Class<?> type : List.of(long.class, Long.class, LRESULT.class)) {
             assertEquals(ValueLayout.JAVA_LONG, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(short.class, Short.class)) {
@@ -181,6 +182,22 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_LRESULT() {
+        try (Arena arena = Arena.ofConfined()) {
+            LRESULT value = new LRESULT(9999L);
+            Object result = TypeMapper.toNative(value, LRESULT.class, arena);
+            assertEquals(9999L, result);
+        }
+    }
+
+    @Test
+    void testToNative_LRESULTNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0, TypeMapper.toNative(null, LRESULT.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -258,6 +275,13 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(-1, BOOL.class);
         assertInstanceOf(BOOL.class, result);
         assertTrue(((BOOL) result).booleanValue());
+    }
+
+    @Test
+    void testFromNative_LRESULT() {
+        Object result = TypeMapper.fromNative(9999, LRESULT.class);
+        assertInstanceOf(LRESULT.class, result);
+        assertEquals(9999, ((LRESULT) result).longValue());
     }
 
     @Test

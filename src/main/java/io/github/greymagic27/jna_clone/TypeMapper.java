@@ -1,6 +1,7 @@
 package io.github.greymagic27.jna_clone;
 
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
+import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.MemorySegment;
@@ -13,17 +14,18 @@ public final class TypeMapper {
 
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
         if (javaType == int.class || javaType == Integer.class) return ValueLayout.JAVA_INT;
+        if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class) return ValueLayout.JAVA_INT;
         if (javaType == long.class || javaType == Long.class) return ValueLayout.JAVA_LONG;
+        if (javaType == LRESULT.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class) return ValueLayout.JAVA_BYTE;
-        if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class) return ValueLayout.JAVA_INT;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
         if (javaType == float.class || javaType == Float.class) return ValueLayout.JAVA_FLOAT;
-        if (javaType == void.class || javaType == Void.class) return null;
         if (javaType == String.class) return ValueLayout.ADDRESS;
         if (javaType == Pointer.class) return ValueLayout.ADDRESS;
         if (Structure.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         if (HANDLE.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
+        if (javaType == void.class || javaType == Void.class) return null;
         throw new IllegalArgumentException("No native layout mapping for: " + javaType);
     }
 
@@ -50,6 +52,9 @@ public final class TypeMapper {
         if (javaType == BOOL.class) {
             return ((BOOL) value).intValue();
         }
+        if (javaType == LRESULT.class) {
+            return ((LRESULT) value).longValue();
+        }
         return value;
     }
 
@@ -74,6 +79,9 @@ public final class TypeMapper {
         }
         if (returnType == BOOL.class) {
             return new BOOL((Integer) raw);
+        }
+        if (returnType == LRESULT.class) {
+            return new LRESULT(((Number)raw).longValue());
         }
         return raw;
     }
