@@ -7,7 +7,6 @@ import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.util.List;
-import java.util.Objects;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -249,21 +248,24 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(1, BOOL.class);
         Object result2 = TypeMapper.fromNative(0, BOOL.class);
         assertInstanceOf(BOOL.class, result);
+        assertInstanceOf(BOOL.class, result2);
         assertTrue(((BOOL) result).booleanValue());
-        assertFalse(((BOOL) Objects.requireNonNull(result2)).booleanValue());
+        assertFalse(((BOOL) result2).booleanValue());
     }
 
     @Test
     void testFromNative_BOOLAnyNonZeroIsTrue() {
         Object result = TypeMapper.fromNative(-1, BOOL.class);
-        assertTrue(((BOOL) Objects.requireNonNull(result)).booleanValue());
+        assertInstanceOf(BOOL.class, result);
+        assertTrue(((BOOL) result).booleanValue());
     }
 
-    @SuppressWarnings("DataFlowIssue")
     @Test
     void testPrimitiveReturns() {
-        assertEquals(5, TypeMapper.fromNative(5, short.class));
-        assertEquals(3.14f, (Float) TypeMapper.fromNative(3.14f, float.class), 0.001f);
+        Object floatResult = TypeMapper.fromNative(3.14f, float.class);
+        assertInstanceOf(Float.class, floatResult);
+        assertEquals(3.14f, (Float) floatResult, 0.001f);
+        assertEquals((short) 5, TypeMapper.fromNative((short)5, short.class));
         assertEquals(true, TypeMapper.fromNative(1, boolean.class));
     }
 
