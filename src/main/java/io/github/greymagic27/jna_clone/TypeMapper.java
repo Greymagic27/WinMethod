@@ -21,13 +21,14 @@ public final class TypeMapper {
         if (javaType == void.class || javaType == Void.class) return null;
         if (javaType == String.class) return ValueLayout.ADDRESS;
         if (javaType == Pointer.class) return ValueLayout.ADDRESS;
-        if (javaType == Structure.class) return ValueLayout.ADDRESS;
+        if (Structure.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         throw new IllegalArgumentException("No native layout mapping for: " + javaType);
     }
 
     static Object toNative(Object value, Class<?> javaType, Arena callArena) {
         if (value == null) {
-            return javaType == String.class || javaType == Pointer.class ? MemorySegment.NULL : 0;
+            boolean addressType = javaType == String.class || javaType == Pointer.class || Structure.class.isAssignableFrom(javaType);
+            return addressType ? MemorySegment.NULL : 0;
         }
         if (javaType == String.class) {
             return callArena.allocateFrom((String) value, StandardCharsets.UTF_16LE);
@@ -35,7 +36,7 @@ public final class TypeMapper {
         if (javaType == Pointer.class) {
             return ((Pointer) value).segment();
         }
-        if (javaType == Structure.class) {
+        if (Structure.class.isAssignableFrom(javaType)) {
             return ((Structure) value).pointer().segment();
         }
         if (javaType == Boolean.class || javaType == boolean.class) {
