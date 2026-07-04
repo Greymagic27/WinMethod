@@ -1,5 +1,7 @@
 package io.github.greymagic27.jna_clone;
 
+import io.github.greymagic27.jna_clone.WinDef.HDC;
+import io.github.greymagic27.jna_clone.WinDef.HWND;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -41,7 +43,13 @@ class TypeMapperTest {
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class)) {
+        for (Class<?> type : List.of(String.class)) {
+            assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(Pointer.class, Structure.class, Handle.class)) {
+            assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(HWND.class, HDC.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
     }
@@ -99,6 +107,56 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_Handle() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            Handle handle = new Handle(segment);
+            assertEquals(segment, TypeMapper.toNative(handle, Handle.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_HWND() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            HWND hwnd = new HWND(segment);
+            assertEquals(segment, TypeMapper.toNative(hwnd, HWND.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_HDC() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            HDC hdc = new HDC(segment);
+            assertEquals(segment, TypeMapper.toNative(hdc, HDC.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_HandleNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, Handle.class, arena));
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HWND.class, arena));
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HDC.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_PointerNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, Pointer.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_StructureNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, Structure.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -121,6 +179,44 @@ class TypeMapperTest {
     void testFromNative_Identity() {
         String test = "test";
         assertEquals(test, TypeMapper.fromNative(test, String.class));
+    }
+
+    @Test
+    void testFromNative_HWND() {
+        MemorySegment segment = MemorySegment.ofAddress(0x9999);
+        Object result = TypeMapper.fromNative(segment, HWND.class);
+        assertInstanceOf(HWND.class, result);
+        assertEquals(0x9999, ((HWND) result).segment().address());
+    }
+
+    @Test
+    void testFromNative_HDC() {
+        MemorySegment segment = MemorySegment.ofAddress(0x9999);
+        Object result = TypeMapper.fromNative(segment, HDC.class);
+        assertInstanceOf(HDC.class, result);
+        assertEquals(0x9999L, ((HDC) result).segment().address());
+    }
+
+    @Test
+    void testFromNative_HandleMissingConstructor() {
+        class Bad extends Handle {
+            Bad() {
+                super(MemorySegment.NULL);
+            }
+        }
+        RuntimeException e = assertThrows(RuntimeException.class, () -> TypeMapper.fromNative(MemorySegment.NULL, Bad.class));
+        assertTrue(e.getMessage().contains("MemorySegment"));
+    }
+
+    @Test
+    void testFromNative_PointerMissingConstructor() {
+        class Bad extends Handle {
+            Bad() {
+                super(MemorySegment.NULL);
+            }
+        }
+        RuntimeException e = assertThrows(RuntimeException.class, () -> TypeMapper.fromNative(MemorySegment.NULL, Bad.class));
+        assertTrue(e.getMessage().contains("MemorySegment"));
     }
 
     @SuppressWarnings("unused")

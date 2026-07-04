@@ -22,12 +22,13 @@ public final class TypeMapper {
         if (javaType == String.class) return ValueLayout.ADDRESS;
         if (javaType == Pointer.class) return ValueLayout.ADDRESS;
         if (Structure.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
+        if (Handle.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         throw new IllegalArgumentException("No native layout mapping for: " + javaType);
     }
 
     static Object toNative(Object value, Class<?> javaType, Arena callArena) {
         if (value == null) {
-            boolean addressType = javaType == String.class || javaType == Pointer.class || Structure.class.isAssignableFrom(javaType);
+            boolean addressType = javaType == String.class || javaType == Pointer.class || Structure.class.isAssignableFrom(javaType) || Handle.class.isAssignableFrom(javaType);
             return addressType ? MemorySegment.NULL : 0;
         }
         if (javaType == String.class) {
@@ -38,6 +39,9 @@ public final class TypeMapper {
         }
         if (Structure.class.isAssignableFrom(javaType)) {
             return ((Structure) value).pointer().segment();
+        }
+        if (Handle.class.isAssignableFrom(javaType)) {
+            return ((Handle) value).segment();
         }
         if (javaType == Boolean.class || javaType == boolean.class) {
             return ((Boolean) value) ? 1 : 0;
@@ -52,6 +56,14 @@ public final class TypeMapper {
         }
         if (returnType == Pointer.class) {
             return new Pointer((MemorySegment) raw);
+        }
+        if (Handle.class.isAssignableFrom(returnType)) {
+            try {
+                MemorySegment segment = (MemorySegment) raw;
+                return returnType.getConstructor(MemorySegment.class).newInstance(segment);
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException("Handle subclass " + returnType + " needs a (MemorySegment) constructor", e);
+            }
         }
         if (returnType == Boolean.class || returnType == boolean.class) {
             return ((Integer) raw) != 0;
