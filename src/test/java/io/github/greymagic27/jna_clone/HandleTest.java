@@ -6,8 +6,6 @@ import java.lang.foreign.MemorySegment;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class HandleTest {
 
@@ -33,29 +31,5 @@ class HandleTest {
         HANDLE fromLong = new HANDLE(0x1234);
         HANDLE fromSegment = new HANDLE(MemorySegment.ofAddress(0x1234));
         assertEquals(fromSegment.segment().address(), fromLong.segment().address());
-    }
-
-    @Test
-    void testLongConstructor_Zero() {
-        HANDLE handle = new HANDLE(0);
-        assertTrue(handle.isNull());
-        assertEquals(0, handle.segment().address());
-    }
-
-    @Test
-    void testHandleNullIsNull() {
-        assertTrue(HANDLE.NULL.isNull());
-        assertEquals(0, HANDLE.NULL.segment().address());
-    }
-
-    @Test
-    void testHandleNullToString() {
-        assertEquals("HANDLE@0x0", HANDLE.NULL.toString());
-    }
-
-    @Test
-    void testNullNonZeroAddresses() {
-        assertFalse(new HANDLE(0x1).isNull());
-        assertTrue(new HANDLE(0).isNull());
     }
 }
