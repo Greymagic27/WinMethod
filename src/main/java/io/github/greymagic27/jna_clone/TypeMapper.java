@@ -1,6 +1,7 @@
 package io.github.greymagic27.jna_clone;
 
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
+import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemoryLayout;
@@ -15,7 +16,7 @@ public final class TypeMapper {
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
         if (javaType == int.class || javaType == Integer.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class) return ValueLayout.JAVA_INT;
-        if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class) return ValueLayout.JAVA_LONG;
+        if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class || javaType == LPARAM.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
@@ -52,6 +53,9 @@ public final class TypeMapper {
         if (javaType == LRESULT.class) {
             return ((LRESULT) value).longValue();
         }
+        if (javaType == LPARAM.class) {
+            return ((LPARAM) value).longValue();
+        }
         return value;
     }
 
@@ -79,6 +83,9 @@ public final class TypeMapper {
         }
         if (returnType == LRESULT.class) {
             return new LRESULT(((Number)raw).longValue());
+        }
+        if (returnType == LPARAM.class) {
+            return new LPARAM(((Number)raw).longValue());
         }
         return raw;
     }

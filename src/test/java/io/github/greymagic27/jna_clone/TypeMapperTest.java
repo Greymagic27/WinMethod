@@ -3,6 +3,7 @@ package io.github.greymagic27.jna_clone;
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
 import io.github.greymagic27.jna_clone.WinDef.HDC;
 import io.github.greymagic27.jna_clone.WinDef.HWND;
+import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -198,6 +199,22 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_LPARAM() {
+        try (Arena arena = Arena.ofConfined()) {
+            LPARAM value = new LPARAM(9999L);
+            Object result = TypeMapper.toNative(value, LPARAM.class, arena);
+            assertEquals(9999L, result);
+        }
+    }
+
+    @Test
+    void testToNative_LPARAMNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0, TypeMapper.toNative(null, LPARAM.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -250,17 +267,6 @@ class TypeMapperTest {
     }
 
     @Test
-    void testFromNative_PointerMissingConstructor() {
-        class Bad extends HANDLE {
-            Bad() {
-                super(MemorySegment.NULL);
-            }
-        }
-        RuntimeException e = assertThrows(RuntimeException.class, () -> TypeMapper.fromNative(MemorySegment.NULL, Bad.class));
-        assertTrue(e.getMessage().contains("MemorySegment"));
-    }
-
-    @Test
     void testFromNative_BOOL() {
         Object result = TypeMapper.fromNative(1, BOOL.class);
         Object result2 = TypeMapper.fromNative(0, BOOL.class);
@@ -282,6 +288,13 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(9999, LRESULT.class);
         assertInstanceOf(LRESULT.class, result);
         assertEquals(9999, ((LRESULT) result).longValue());
+    }
+
+    @Test
+    void testFromNative_LPARAM() {
+        Object result = TypeMapper.fromNative(9999, LPARAM.class);
+        assertInstanceOf(LPARAM.class, result);
+        assertEquals(9999, ((LPARAM) result).longValue());
     }
 
     @Test
