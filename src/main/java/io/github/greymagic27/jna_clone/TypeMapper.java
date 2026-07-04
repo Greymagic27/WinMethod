@@ -90,13 +90,13 @@ public final class TypeMapper {
             return new BOOL((Integer) raw);
         }
         if (returnType == LRESULT.class) {
-            return new LRESULT(((Number) raw).longValue());
+            return new LRESULT((Long) raw);
         }
         if (returnType == LPARAM.class) {
-            return new LPARAM(((Number) raw).longValue());
+            return new LPARAM((Long) raw);
         }
         if (returnType == LONG.class) {
-            return new LONG(((Number) raw).longValue());
+            return new LONG((Long) raw);
         }
         if (returnType == WPARAM.class) {
             return new WPARAM((Integer) raw);

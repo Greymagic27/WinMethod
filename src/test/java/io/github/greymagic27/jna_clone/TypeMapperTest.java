@@ -319,23 +319,23 @@ class TypeMapperTest {
 
     @Test
     void testFromNative_LRESULT() {
-        Object result = TypeMapper.fromNative(9999, LRESULT.class);
+        Object result = TypeMapper.fromNative(9999L, LRESULT.class);
         assertInstanceOf(LRESULT.class, result);
-        assertEquals(9999, ((LRESULT) result).longValue());
+        assertEquals(9999L, ((LRESULT) result).longValue());
     }
 
     @Test
     void testFromNative_LPARAM() {
-        Object result = TypeMapper.fromNative(9999, LPARAM.class);
+        Object result = TypeMapper.fromNative(9999L, LPARAM.class);
         assertInstanceOf(LPARAM.class, result);
-        assertEquals(9999, ((LPARAM) result).longValue());
+        assertEquals(9999L, ((LPARAM) result).longValue());
     }
 
     @Test
     void testFromNative_LONG() {
-        Object result = TypeMapper.fromNative(9999, LONG.class);
+        Object result = TypeMapper.fromNative(9999L, LONG.class);
         assertInstanceOf(LONG.class, result);
-        assertEquals(9999, ((LONG) result).longValue());
+        assertEquals(9999L, ((LONG) result).longValue());
     }
 
     @Test
