@@ -6,10 +6,13 @@ import java.nio.charset.StandardCharsets;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public record Pointer(MemorySegment segment) {
+public class Pointer {
+
+    public final MemorySegment segment;
 
     @Contract(pure = true)
-    public Pointer {
+    public Pointer(MemorySegment segment) {
+        this.segment = segment;
     }
 
     public boolean isNull() {

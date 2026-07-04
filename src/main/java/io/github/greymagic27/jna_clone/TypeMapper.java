@@ -38,13 +38,13 @@ public final class TypeMapper {
             return callArena.allocateFrom((String) value, StandardCharsets.UTF_16LE);
         }
         if (javaType == Pointer.class) {
-            return ((Pointer) value).segment();
+            return ((Pointer) value).segment;
         }
         if (Structure.class.isAssignableFrom(javaType)) {
-            return ((Structure) value).pointer().segment();
+            return ((Structure) value).pointer().segment;
         }
         if (HANDLE.class.isAssignableFrom(javaType)) {
-            return ((HANDLE) value).segment();
+            return ((HANDLE) value).segment;
         }
         if (javaType == Boolean.class || javaType == boolean.class) {
             return ((Boolean) value) ? 1 : 0;

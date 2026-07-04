@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 class HdcTest {
 
     @Test
-    void testConstructionStoresSegment() {
+    void testConstructorStoresValue() {
         MemorySegment segment = MemorySegment.ofAddress(0xBEEF);
         HDC hdc = new HDC(segment);
-        assertEquals(0xBEEF, hdc.segment().address());
+        assertEquals(0xBEEF, hdc.segment.address());
     }
 
     @Test

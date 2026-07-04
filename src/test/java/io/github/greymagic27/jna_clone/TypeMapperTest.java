@@ -2,6 +2,8 @@ package io.github.greymagic27.jna_clone;
 
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
 import io.github.greymagic27.jna_clone.WinDef.HDC;
+import io.github.greymagic27.jna_clone.WinDef.HINSTANCE;
+import io.github.greymagic27.jna_clone.WinDef.HMODULE;
 import io.github.greymagic27.jna_clone.WinDef.HWND;
 import io.github.greymagic27.jna_clone.WinDef.LONG;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
@@ -108,7 +110,7 @@ class TypeMapperTest {
         try (Arena arena = Arena.ofConfined()) {
             Object result = TypeMapper.toNative(point, Structure.class, arena);
             assertInstanceOf(MemorySegment.class, result);
-            assertEquals(point.pointer().segment(), result);
+            assertEquals(point.pointer().segment, result);
         }
     }
 
@@ -249,6 +251,38 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_HINSTANCE() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            HINSTANCE hinstance = new HINSTANCE(segment);
+            assertEquals(segment, TypeMapper.toNative(hinstance, HINSTANCE.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_HINSTANCENull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HINSTANCE.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_HMODULE() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            HMODULE hModule = new HMODULE(segment);
+            assertEquals(segment, TypeMapper.toNative(hModule, HMODULE.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_HMODULENull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HMODULE.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -278,7 +312,7 @@ class TypeMapperTest {
         MemorySegment segment = MemorySegment.ofAddress(0x9999);
         Object result = TypeMapper.fromNative(segment, HWND.class);
         assertInstanceOf(HWND.class, result);
-        assertEquals(0x9999, ((HWND) result).segment().address());
+        assertEquals(0x9999, ((HWND) result).segment.address());
     }
 
     @Test
@@ -286,7 +320,7 @@ class TypeMapperTest {
         MemorySegment segment = MemorySegment.ofAddress(0x9999);
         Object result = TypeMapper.fromNative(segment, HDC.class);
         assertInstanceOf(HDC.class, result);
-        assertEquals(0x9999L, ((HDC) result).segment().address());
+        assertEquals(0x9999L, ((HDC) result).segment.address());
     }
 
     @Test
@@ -343,6 +377,22 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(9999, WPARAM.class);
         assertInstanceOf(WPARAM.class, result);
         assertEquals(9999, ((WPARAM) result).intValue());
+    }
+
+    @Test
+    void testFromNative_HINSTANCE() {
+        MemorySegment segment = MemorySegment.ofAddress(0x1234);
+        Object result = TypeMapper.fromNative(segment, HINSTANCE.class);
+        assertInstanceOf(HINSTANCE.class, result);
+        assertEquals(0x1234L, ((HINSTANCE) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_HMODULE() {
+        MemorySegment segment = MemorySegment.ofAddress(0x5678);
+        Object result = TypeMapper.fromNative(segment, HMODULE.class);
+        assertInstanceOf(HMODULE.class, result);
+        assertEquals(0x5678L, ((HMODULE) result).segment.address());
     }
 
     @Test

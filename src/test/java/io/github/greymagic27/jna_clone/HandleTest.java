@@ -23,13 +23,13 @@ class HandleTest {
     void testSegmentAccess() {
         MemorySegment segment = MemorySegment.ofAddress(0x42);
         HANDLE handle = new HANDLE(segment);
-        assertEquals(segment, handle.segment());
+        assertEquals(segment, handle.segment);
     }
 
     @Test
     void testLongConstructor_MatchesMemorySegmentConstructor() {
         HANDLE fromLong = new HANDLE(0x1234);
         HANDLE fromSegment = new HANDLE(MemorySegment.ofAddress(0x1234));
-        assertEquals(fromSegment.segment().address(), fromLong.segment().address());
+        assertEquals(fromSegment.segment.address(), fromLong.segment.address());
     }
 }

@@ -80,7 +80,7 @@ class PointerTest {
         try (Arena arena = Arena.ofConfined()) {
             MemorySegment segment = arena.allocate(4);
             Pointer ptr = new Pointer(segment);
-            assertEquals(segment, ptr.segment());
+            assertEquals(segment, ptr.segment);
         }
     }
 }

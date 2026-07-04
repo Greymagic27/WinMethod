@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 class HwndTest {
 
     @Test
-    void testConstructionStoresSegment() {
+    void testConstructorStoresValue() {
         MemorySegment segment = MemorySegment.ofAddress(0x1234);
         HWND hwnd = new HWND(segment);
-        assertEquals(0x1234, hwnd.segment().address());
+        assertEquals(0x1234, hwnd.segment.address());
     }
 
     @Test

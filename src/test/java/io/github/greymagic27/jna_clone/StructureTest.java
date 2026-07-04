@@ -17,16 +17,16 @@ class StructureTest {
         p.y = 20;
         p.write();
         Pointer ptr = p.pointer();
-        assertEquals(10, ptr.segment().get(ValueLayout.JAVA_INT, 0));
-        assertEquals(20, ptr.segment().get(ValueLayout.JAVA_INT, 4));
+        assertEquals(10, ptr.segment.get(ValueLayout.JAVA_INT, 0));
+        assertEquals(20, ptr.segment.get(ValueLayout.JAVA_INT, 4));
     }
 
     @Test
     void testRead() {
         Point p = new Point();
         Pointer ptr = p.pointer();
-        ptr.segment().set(ValueLayout.JAVA_INT, 0, 500);
-        ptr.segment().set(ValueLayout.JAVA_INT, 4, 1000);
+        ptr.segment.set(ValueLayout.JAVA_INT, 0, 500);
+        ptr.segment.set(ValueLayout.JAVA_INT, 4, 1000);
         p.read();
         assertEquals(500, p.x);
         assertEquals(1000, p.y);
@@ -45,9 +45,9 @@ class StructureTest {
         db.active = true;
         db.value = 3.14159;
         Pointer ptr = db.pointer();
-        assertEquals(0xDEADBEEFL, ptr.segment().get(ValueLayout.JAVA_LONG, 0));
-        assertEquals(1, ptr.segment().get(ValueLayout.JAVA_INT, 8));
-        assertEquals(3.14159, ptr.segment().get(ValueLayout.JAVA_DOUBLE, 16));
+        assertEquals(0xDEADBEEFL, ptr.segment.get(ValueLayout.JAVA_LONG, 0));
+        assertEquals(1, ptr.segment.get(ValueLayout.JAVA_INT, 8));
+        assertEquals(3.14159, ptr.segment.get(ValueLayout.JAVA_DOUBLE, 16));
         db.id = 0;
         db.read();
         assertEquals(0xDEADBEEFL, db.id);
@@ -66,10 +66,10 @@ class StructureTest {
         Pointer ptr = st.pointer();
         st.b = false;
         st.pointer();
-        assertEquals(0, ptr.segment().get(ValueLayout.JAVA_INT, 0));
+        assertEquals(0, ptr.segment.get(ValueLayout.JAVA_INT, 0));
         st.b = true;
         st.pointer();
-        assertEquals(1, ptr.segment().get(ValueLayout.JAVA_INT, 0));
+        assertEquals(1, ptr.segment.get(ValueLayout.JAVA_INT, 0));
         st.b = false;
         st.read();
         assertTrue(st.b);
@@ -85,7 +85,7 @@ class StructureTest {
         WithPointer wp = new WithPointer();
         wp.addr = new Pointer(MemorySegment.ofAddress(0x9999));
         wp.pointer();
-        assertEquals(0x9999, wp.pointer().segment().get(ValueLayout.ADDRESS, 0).address());
+        assertEquals(0x9999, wp.pointer().segment.get(ValueLayout.ADDRESS, 0).address());
     }
 
     @Test
@@ -97,7 +97,7 @@ class StructureTest {
         }
         WithString ws = new WithString();
         ws.str = "test string";
-        MemorySegment strAddress = ws.pointer().segment().get(ValueLayout.ADDRESS, 0);
+        MemorySegment strAddress = ws.pointer().segment.get(ValueLayout.ADDRESS, 0);
         Pointer strPtr = new Pointer(strAddress.reinterpret(("test string".length() + 1) * 2));
         assertEquals("test string", strPtr.getWideString(0));
     }
@@ -152,7 +152,7 @@ class StructureTest {
         p.x = 42;
         p.y = 7;
         String str = p.toString();
-        assertEquals(42, p.pointer().segment().get(ValueLayout.JAVA_INT, 0));
+        assertEquals(42, p.pointer().segment.get(ValueLayout.JAVA_INT, 0));
         assertTrue(str.contains("Point"));
         assertTrue(str.contains("x=42"));
         assertTrue(str.contains("y=7"));
@@ -170,7 +170,7 @@ class StructureTest {
         s.b = (byte) 0xAA;
         s.l = 0xBBBBBBBBBBBBBBBBL;
         s.write();
-        MemorySegment seg = s.pointer().segment();
+        MemorySegment seg = s.pointer().segment;
         assertEquals((byte) 0XAA, seg.get(ValueLayout.JAVA_BYTE, 0));
         assertEquals(0xBBBBBBBBBBBBBBBBL, seg.get(ValueLayout.JAVA_LONG, 8));
     }

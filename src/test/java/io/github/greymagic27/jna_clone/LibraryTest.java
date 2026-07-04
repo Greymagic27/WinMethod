@@ -1,5 +1,6 @@
 package io.github.greymagic27.jna_clone;
 
+import io.github.greymagic27.jna_clone.WinDef.HMODULE;
 import java.lang.reflect.Proxy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,8 +65,8 @@ class LibraryTest {
 
         int GetProcessId(Pointer process);
 
-        Pointer GetCurrentProcess();
+        HANDLE GetCurrentProcess();
 
-        Pointer GetModuleHandleW(String lpModuleName);
+        HMODULE GetModuleHandleW(String lpModuleName);
     }
 }
