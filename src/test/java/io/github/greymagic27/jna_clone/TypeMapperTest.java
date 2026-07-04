@@ -6,6 +6,7 @@ import io.github.greymagic27.jna_clone.WinDef.HWND;
 import io.github.greymagic27.jna_clone.WinDef.LONG;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
+import io.github.greymagic27.jna_clone.WinDef.WPARAM;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -232,6 +233,22 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_WPARAM() {
+        try (Arena arena = Arena.ofConfined()) {
+            WPARAM value = new WPARAM(9999);
+            Object result = TypeMapper.toNative(value, WPARAM.class, arena);
+            assertEquals(9999, result);
+        }
+    }
+
+    @Test
+    void testToNative_WPARAMnull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0, TypeMapper.toNative(null, WPARAM.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -319,6 +336,13 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(9999, LONG.class);
         assertInstanceOf(LONG.class, result);
         assertEquals(9999, ((LONG) result).longValue());
+    }
+
+    @Test
+    void testFromNative_WPARAM() {
+        Object result = TypeMapper.fromNative(9999, WPARAM.class);
+        assertInstanceOf(WPARAM.class, result);
+        assertEquals(9999, ((WPARAM) result).intValue());
     }
 
     @Test
