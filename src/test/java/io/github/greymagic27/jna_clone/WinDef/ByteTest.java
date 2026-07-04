@@ -5,22 +5,22 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class LongTest {
+class ByteTest {
 
     @Test
     void testConstructorStoresValue() {
-        assertEquals(42, new LONG(42).longValue());
-        assertEquals(0, new LONG(0).longValue());
-        assertEquals(-123, new LONG(-123).longValue());
+        assertEquals(42, new BYTE((byte) 42).byteValue());
+        assertEquals(0, new BYTE((byte) 0).byteValue());
+        assertEquals(-123, new BYTE((byte) -123).byteValue());
     }
 
     @Test
     void testLongValue() {
-        assertEquals(7L, new LONG(7).longValue());
+        assertEquals(7L, new BYTE((byte) 7).byteValue());
     }
 
     @Test
     void testToStringContainsValue() {
-        assertTrue(new LONG(777).toString().contains("777"));
+        assertTrue(new BYTE((byte) 123).toString().contains("123"));
     }
 }

@@ -1,6 +1,7 @@
 package io.github.greymagic27.jna_clone;
 
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
+import io.github.greymagic27.jna_clone.WinDef.BYTE;
 import io.github.greymagic27.jna_clone.WinDef.HDC;
 import io.github.greymagic27.jna_clone.WinDef.HINSTANCE;
 import io.github.greymagic27.jna_clone.WinDef.HMODULE;
@@ -228,7 +229,7 @@ class TypeMapperTest {
     }
 
     @Test
-    void testToNative_LONGnull() {
+    void testToNative_LONGNull() {
         try (Arena arena = Arena.ofConfined()) {
             assertEquals(0, TypeMapper.toNative(null, LONG.class, arena));
         }
@@ -244,7 +245,7 @@ class TypeMapperTest {
     }
 
     @Test
-    void testToNative_WPARAMnull() {
+    void testToNative_WPARAMNull() {
         try (Arena arena = Arena.ofConfined()) {
             assertEquals(0, TypeMapper.toNative(null, WPARAM.class, arena));
         }
@@ -279,6 +280,22 @@ class TypeMapperTest {
     void testToNative_HMODULENull() {
         try (Arena arena = Arena.ofConfined()) {
             assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HMODULE.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_BYTE() {
+        try (Arena arena = Arena.ofConfined()) {
+            BYTE value = new BYTE((byte) 15);
+            Object result = TypeMapper.toNative(value, BYTE.class, arena);
+            assertEquals((byte) 15, result);
+        }
+    }
+
+    @Test
+    void testToNative_BYTENull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0, TypeMapper.toNative(null, BYTE.class, arena));
         }
     }
 
@@ -393,6 +410,13 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(segment, HMODULE.class);
         assertInstanceOf(HMODULE.class, result);
         assertEquals(0x5678L, ((HMODULE) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_BYTE() {
+        Object result = TypeMapper.fromNative((byte) 15, BYTE.class);
+        assertInstanceOf(BYTE.class, result);
+        assertEquals(15, ((BYTE) result).byteValue());
     }
 
     @Test
