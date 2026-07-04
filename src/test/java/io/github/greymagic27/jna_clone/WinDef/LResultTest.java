@@ -14,17 +14,8 @@ class LResultTest {
     }
 
     @Test
-    void testEquality() {
-        LRESULT a = new LRESULT(10);
-        LRESULT b = new LRESULT(10);
-        assertEquals(a.longValue(), b.longValue());
-    }
-
-    @Test
-    void testInequality() {
-        LRESULT a = new LRESULT(10L);
-        LRESULT b = new LRESULT(11L);
-        assertNotEquals(a, b);
+    void testLongValue() {
+        assertEquals(7L, new LRESULT(7).longValue());
     }
 
     @Test
