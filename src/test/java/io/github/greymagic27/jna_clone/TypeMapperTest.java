@@ -1,6 +1,5 @@
 package io.github.greymagic27.jna_clone;
 
-import io.github.greymagic27.jna_clone.CallbackTest.IntCallback;
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
 import io.github.greymagic27.jna_clone.WinDef.BYTE;
 import io.github.greymagic27.jna_clone.WinDef.HDC;
@@ -458,10 +457,16 @@ class TypeMapperTest {
 
     @Test
     void testPrimitiveReturns() {
-        Object floatResult = TypeMapper.fromNative(9999f,  float.class);
+        Object floatResult = TypeMapper.fromNative(9999f, float.class);
         assertInstanceOf(Float.class, floatResult);
         assertEquals(9999f, (Float) floatResult, 0.001f);
         assertEquals((short) 5, TypeMapper.fromNative((short) 5, short.class));
         assertEquals(true, TypeMapper.fromNative(1, boolean.class));
+    }
+
+    @SuppressWarnings("unused")
+    @FunctionalInterface
+    public interface IntCallback extends Callback {
+        int run(int value);
     }
 }
