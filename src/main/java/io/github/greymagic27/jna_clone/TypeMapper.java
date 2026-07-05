@@ -7,7 +7,6 @@ import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import io.github.greymagic27.jna_clone.WinDef.WPARAM;
 import java.lang.foreign.Arena;
-import java.lang.foreign.FunctionDescriptor;
 import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -49,8 +48,7 @@ public final class TypeMapper {
             return ((HANDLE) value).segment;
         }
         if (Callback.class.isAssignableFrom(javaType)) {
-            FunctionDescriptor descriptor = CallbackReference.descriptorFor(javaType);
-            return CallbackReference.getStub((Callback) value, descriptor);
+            return CallbackReference.getStub((Callback) value, CallbackReference.descriptorFor(javaType));
         }
         if (javaType == Boolean.class || javaType == boolean.class) {
             return ((Boolean) value) ? 1 : 0;
