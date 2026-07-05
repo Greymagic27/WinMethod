@@ -169,6 +169,13 @@ class StructureTest {
         assertEquals(0xBBBBBBBBBBBBBBBBL, seg.get(ValueLayout.JAVA_LONG, 8));
     }
 
+    @Test
+    void testStructureSize() {
+        Point p = new Point();
+        long size = p.size();
+        assertTrue(size >= 5);
+    }
+
     @Structure.FieldOrder({"x", "y"})
     private static class Point extends Structure {
         private int x;
