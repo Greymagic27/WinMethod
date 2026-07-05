@@ -315,6 +315,11 @@ class TypeMapperTest {
 
     @Test
     void testToNative_Callback() {
+        @SuppressWarnings("unused")
+        @FunctionalInterface
+        interface IntCallback extends Callback {
+            int run(int value);
+        }
         IntCallback cb = (v) -> v;
         assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(IntCallback.class));
         try (Arena arena = Arena.ofConfined()) {
@@ -462,11 +467,5 @@ class TypeMapperTest {
         assertEquals(9999f, (Float) floatResult, 0.001f);
         assertEquals((short) 5, TypeMapper.fromNative((short) 5, short.class));
         assertEquals(true, TypeMapper.fromNative(1, boolean.class));
-    }
-
-    @SuppressWarnings("unused")
-    @FunctionalInterface
-    public interface IntCallback extends Callback {
-        int run(int value);
     }
 }
