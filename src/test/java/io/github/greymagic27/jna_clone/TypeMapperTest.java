@@ -1,5 +1,6 @@
 package io.github.greymagic27.jna_clone;
 
+import io.github.greymagic27.jna_clone.WinDef.ATOM;
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
 import io.github.greymagic27.jna_clone.WinDef.BYTE;
 import io.github.greymagic27.jna_clone.WinDef.HBRUSH;
@@ -13,6 +14,7 @@ import io.github.greymagic27.jna_clone.WinDef.HWND;
 import io.github.greymagic27.jna_clone.WinDef.LONG;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
+import io.github.greymagic27.jna_clone.WinDef.WORD;
 import io.github.greymagic27.jna_clone.WinDef.WPARAM;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -38,7 +40,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(long.class, Long.class, LRESULT.class)) {
             assertEquals(ValueLayout.JAVA_LONG, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(short.class, Short.class)) {
+        for (Class<?> type : List.of(short.class, Short.class, WORD.class)) {
             assertEquals(ValueLayout.JAVA_SHORT, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(byte.class, Byte.class)) {
@@ -249,6 +251,38 @@ class TypeMapperTest {
     void testToNative_LONGNull() {
         try (Arena arena = Arena.ofConfined()) {
             assertEquals(0, TypeMapper.toNative(null, LONG.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_WORD() {
+        try (Arena arena = Arena.ofConfined()) {
+            WORD value = new WORD((short) 9999);
+            Object result = TypeMapper.toNative(value, WORD.class, arena);
+            assertEquals((short) 9999, result);
+        }
+    }
+
+    @Test
+    void testToNative_WORDNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0, TypeMapper.toNative(null, WORD.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_ATOM() {
+        try (Arena arena = Arena.ofConfined()) {
+            ATOM value = new ATOM((short) 9999);
+            Object result = TypeMapper.toNative(value, ATOM.class, arena);
+            assertEquals((short) 9999, result);
+        }
+    }
+
+    @Test
+    void testToNative_ATOMNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0, TypeMapper.toNative(null, ATOM.class, arena));
         }
     }
 
@@ -532,6 +566,20 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(segment, HBRUSH.class);
         assertInstanceOf(HBRUSH.class, result);
         assertEquals(0x5678L, ((HBRUSH) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_WORD() {
+        Object result = TypeMapper.fromNative((short) 9999, WORD.class);
+        assertInstanceOf(WORD.class, result);
+        assertEquals((short) 9999, ((WORD) result).shortValue());
+    }
+
+    @Test
+    void testFromNative_ATOM() {
+        Object result = TypeMapper.fromNative((short) 9999, ATOM.class);
+        assertInstanceOf(ATOM.class, result);
+        assertEquals((short) 9999, ((ATOM) result).shortValue());
     }
 
     @Test

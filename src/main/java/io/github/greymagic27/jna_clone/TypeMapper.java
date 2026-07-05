@@ -5,6 +5,7 @@ import io.github.greymagic27.jna_clone.WinDef.BYTE;
 import io.github.greymagic27.jna_clone.WinDef.LONG;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
+import io.github.greymagic27.jna_clone.WinDef.WORD;
 import io.github.greymagic27.jna_clone.WinDef.WPARAM;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemoryLayout;
@@ -20,7 +21,7 @@ public final class TypeMapper {
         if (javaType == int.class || javaType == Integer.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class || javaType == WPARAM.class) return ValueLayout.JAVA_INT;
         if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class || javaType == LPARAM.class || javaType == LONG.class) return ValueLayout.JAVA_LONG;
-        if (javaType == short.class || javaType == Short.class) return ValueLayout.JAVA_SHORT;
+        if (javaType == short.class || javaType == Short.class || javaType == WORD.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
         if (javaType == float.class || javaType == Float.class) return ValueLayout.JAVA_FLOAT;
@@ -71,6 +72,9 @@ public final class TypeMapper {
         if (javaType == BYTE.class) {
             return ((BYTE) value).byteValue();
         }
+        if (WORD.class.isAssignableFrom(javaType)) {
+            return ((WORD) value).shortValue();
+        }
         return value;
     }
 
@@ -88,6 +92,14 @@ public final class TypeMapper {
                 return returnType.getConstructor(MemorySegment.class).newInstance(segment);
             } catch (ReflectiveOperationException e) {
                 throw new RuntimeException("HANDLE subclass " + returnType + " needs a (MemorySegment) constructor", e);
+            }
+        }
+        if (WORD.class.isAssignableFrom(returnType)) {
+            try {
+                short value = (short) raw;
+                return returnType.getConstructor(short.class).newInstance(value);
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException("WORD sublass " + returnType + " needs a (short) constructor", e);
             }
         }
         if (returnType == Boolean.class || returnType == boolean.class) {
