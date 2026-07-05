@@ -22,6 +22,7 @@ public abstract class Structure {
 
     private final Arena arena;
     private final MemorySegment segment;
+    private final MemoryLayout layout;
     private final Map<String, VarHandle> handles = new LinkedHashMap<>();
     private final Map<String, Field> fields = new LinkedHashMap<>();
 
@@ -32,6 +33,7 @@ public abstract class Structure {
     public Structure(@NotNull Arena arena) {
         this.arena = arena;
         GroupLayout layout = buildLayout();
+        this.layout = layout;
         this.segment = arena.allocate(layout);
     }
 
@@ -118,6 +120,10 @@ public abstract class Structure {
     public Pointer pointer() {
         write();
         return new Pointer(segment);
+    }
+
+    public long size() {
+        return layout.byteSize();
     }
 
     public void write() {
