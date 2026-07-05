@@ -7,6 +7,7 @@ import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import io.github.greymagic27.jna_clone.WinDef.WPARAM;
 import java.lang.foreign.Arena;
+import java.lang.foreign.FunctionDescriptor;
 import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -25,14 +26,14 @@ public final class TypeMapper {
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
         if (javaType == float.class || javaType == Float.class) return ValueLayout.JAVA_FLOAT;
         if (javaType == String.class || javaType == Pointer.class) return ValueLayout.ADDRESS;
-        if (Structure.class.isAssignableFrom(javaType) || HANDLE.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
+        if (Structure.class.isAssignableFrom(javaType) || HANDLE.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         if (javaType == void.class || javaType == Void.class) return null;
         throw new IllegalArgumentException("No native layout mapping for: " + javaType);
     }
 
     static Object toNative(Object value, Class<?> javaType, Arena callArena) {
         if (value == null) {
-            boolean addressType = javaType == String.class || javaType == Pointer.class || Structure.class.isAssignableFrom(javaType) || HANDLE.class.isAssignableFrom(javaType);
+            boolean addressType = javaType == String.class || javaType == Pointer.class || Structure.class.isAssignableFrom(javaType) || HANDLE.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType);
             return addressType ? MemorySegment.NULL : 0;
         }
         if (javaType == String.class) {
@@ -46,6 +47,10 @@ public final class TypeMapper {
         }
         if (HANDLE.class.isAssignableFrom(javaType)) {
             return ((HANDLE) value).segment;
+        }
+        if (Callback.class.isAssignableFrom(javaType)) {
+            FunctionDescriptor descriptor = CallbackReference.descriptorFor(javaType);
+            return CallbackReference.getStub((Callback) value, descriptor);
         }
         if (javaType == Boolean.class || javaType == boolean.class) {
             return ((Boolean) value) ? 1 : 0;

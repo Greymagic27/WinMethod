@@ -1,5 +1,6 @@
 package io.github.greymagic27.jna_clone;
 
+import io.github.greymagic27.jna_clone.CallbackTest.IntCallback;
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
 import io.github.greymagic27.jna_clone.WinDef.BYTE;
 import io.github.greymagic27.jna_clone.WinDef.HDC;
@@ -310,6 +311,20 @@ class TypeMapperTest {
     void testToNative_BYTENull() {
         try (Arena arena = Arena.ofConfined()) {
             assertEquals(0, TypeMapper.toNative(null, BYTE.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_Callback() {
+        IntCallback cb = (v) -> v;
+        assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(IntCallback.class));
+        try (Arena arena = Arena.ofConfined()) {
+            Object nativeValue = TypeMapper.toNative(cb, IntCallback.class, arena);
+            assertInstanceOf(MemorySegment.class, nativeValue);
+            MemorySegment segment = (MemorySegment) nativeValue;
+            assertNotEquals(MemorySegment.NULL, segment, "Stub segment should not be NULL");
+            MemorySegment expected = CallbackReference.getStub(cb, CallbackReference.descriptorFor(IntCallback.class));
+            assertEquals(expected.address(), segment.address());
         }
     }
 
