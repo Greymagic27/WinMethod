@@ -151,10 +151,10 @@ public abstract class Structure {
         write();
         StringBuilder sb = new StringBuilder(getClass().getSimpleName()).append("{");
         boolean first = true;
-        for (String name : fields.keySet()) {
+        for (Map.Entry<String, Field> name : fields.entrySet()) {
             if (!first) sb.append(", ");
             try {
-                sb.append(name).append("=").append(fields.get(name).get(this));
+                sb.append(name.getKey()).append("=").append(name.getValue().get(this));
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }

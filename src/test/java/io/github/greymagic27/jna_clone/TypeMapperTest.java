@@ -111,8 +111,11 @@ class TypeMapperTest {
         point.y = 20;
         try (Arena arena = Arena.ofConfined()) {
             Object result = TypeMapper.toNative(point, Structure.class, arena);
+            MemorySegment segment = (MemorySegment) result;
             assertInstanceOf(MemorySegment.class, result);
             assertEquals(point.pointer().segment, result);
+            assertEquals(10, segment.get(ValueLayout.JAVA_INT, 0));
+            assertEquals(20, segment.get(ValueLayout.JAVA_INT, 4));
         }
     }
 
@@ -440,9 +443,9 @@ class TypeMapperTest {
 
     @Test
     void testPrimitiveReturns() {
-        Object floatResult = TypeMapper.fromNative(3.14f, float.class);
+        Object floatResult = TypeMapper.fromNative(9999f,  float.class);
         assertInstanceOf(Float.class, floatResult);
-        assertEquals(3.14f, (Float) floatResult, 0.001f);
+        assertEquals(9999f, (Float) floatResult, 0.001f);
         assertEquals((short) 5, TypeMapper.fromNative((short) 5, short.class));
         assertEquals(true, TypeMapper.fromNative(1, boolean.class));
     }

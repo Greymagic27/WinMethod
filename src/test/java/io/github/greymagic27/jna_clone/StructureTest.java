@@ -43,15 +43,15 @@ class StructureTest {
         DataBundle db = new DataBundle();
         db.id = 0xDEADBEEFL;
         db.active = true;
-        db.value = 3.14159;
+        db.value = 9999.99;
         Pointer ptr = db.pointer();
         assertEquals(0xDEADBEEFL, ptr.segment.get(ValueLayout.JAVA_LONG, 0));
         assertEquals(1, ptr.segment.get(ValueLayout.JAVA_INT, 8));
-        assertEquals(3.14159, ptr.segment.get(ValueLayout.JAVA_DOUBLE, 16));
+        assertEquals(9999.99, ptr.segment.get(ValueLayout.JAVA_DOUBLE, 16));
         db.id = 0;
         db.read();
         assertEquals(0xDEADBEEFL, db.id);
-        assertEquals(3.14159, db.value);
+        assertEquals(9999.99, db.value);
         assertTrue(db.active);
     }
 
@@ -104,9 +104,7 @@ class StructureTest {
 
     @Test
     void testMissingAnnotation() {
-        @SuppressWarnings("unused")
         class Invalid extends Structure {
-            private int a;
         }
         assertThrows(IllegalStateException.class, Invalid::new, "Throws IllegalStateException if no @FieldOrder annotation is provided");
     }
@@ -125,10 +123,8 @@ class StructureTest {
 
     @Test
     void testGhostFields() {
-        @SuppressWarnings("unused")
         @Structure.FieldOrder({"x", "ghost"})
         class GhostField extends Structure {
-            private int x;
         }
         RuntimeException e = assertThrows(RuntimeException.class, GhostField::new);
         assertTrue(e.getMessage().contains("no such field(s) exist"));
@@ -136,10 +132,8 @@ class StructureTest {
 
     @Test
     void testMultipleGhostFields() {
-        @SuppressWarnings("unused")
         @Structure.FieldOrder({"x", "ghost1", "ghost2"})
         class MultipleGhostFields extends Structure {
-            private int x;
         }
         RuntimeException e = assertThrows(RuntimeException.class, MultipleGhostFields::new);
         assertTrue(e.getMessage().contains("ghost1"));
