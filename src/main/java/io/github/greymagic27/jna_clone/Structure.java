@@ -122,8 +122,12 @@ public abstract class Structure {
         return new Pointer(segment);
     }
 
-    public long size() {
-        return layout.byteSize();
+    public int size() {
+        long size = layout.byteSize();
+        if (size > Integer.MAX_VALUE) {
+            throw new IllegalStateException("Struct too large: " + size);
+        }
+        return (int) size;
     }
 
     public void write() {
