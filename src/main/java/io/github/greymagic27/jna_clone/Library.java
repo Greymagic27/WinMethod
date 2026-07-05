@@ -1,16 +1,18 @@
 package io.github.greymagic27.jna_clone;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import java.lang.foreign.Arena;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 import org.jetbrains.annotations.NotNull;
 
+@CanIgnoreReturnValue
 public interface Library {
 
     static <T extends Library> @NotNull T load(String libraryName, @NotNull Class<T> interfaceType) {
         NativeLibrary nativeLibrary = new NativeLibrary(libraryName);
-        InvocationHandler handler = ((_, method, args) -> {
+        InvocationHandler handler = (_, method, args) -> {
             if (method.getDeclaringClass() == Object.class) {
                 return method.invoke(nativeLibrary, args);
             }
@@ -25,7 +27,7 @@ public interface Library {
                 Object result = target.invokeWithArguments(nativeArgs);
                 return TypeMapper.fromNative(result, method.getReturnType());
             }
-        });
+        };
         return interfaceType.cast(Proxy.newProxyInstance(interfaceType.getClassLoader(), new Class<?>[]{interfaceType}, handler));
     }
 }
