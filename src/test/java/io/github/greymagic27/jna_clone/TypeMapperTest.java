@@ -2,7 +2,9 @@ package io.github.greymagic27.jna_clone;
 
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
 import io.github.greymagic27.jna_clone.WinDef.BYTE;
+import io.github.greymagic27.jna_clone.WinDef.HCURSOR;
 import io.github.greymagic27.jna_clone.WinDef.HDC;
+import io.github.greymagic27.jna_clone.WinDef.HICON;
 import io.github.greymagic27.jna_clone.WinDef.HINSTANCE;
 import io.github.greymagic27.jna_clone.WinDef.HMENU;
 import io.github.greymagic27.jna_clone.WinDef.HMODULE;
@@ -312,6 +314,38 @@ class TypeMapperTest {
             assertEquals(0, TypeMapper.toNative(null, BYTE.class, arena));
         }
     }
+    @Test
+    void testToNative_HCursor() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            HCURSOR hcursor = new HCURSOR(segment);
+            assertEquals(segment, TypeMapper.toNative(hcursor, HCURSOR.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_HCursorNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HCURSOR.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_HIcon() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            HICON hicon = new HICON(segment);
+            assertEquals(segment, TypeMapper.toNative(hicon, HICON.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_HIconNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HICON.class, arena));
+        }
+    }
+
 
     @Test
     void testToNative_Callback() {
@@ -458,6 +492,22 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative((byte) 15, BYTE.class);
         assertInstanceOf(BYTE.class, result);
         assertEquals(15, ((BYTE) result).byteValue());
+    }
+
+    @Test
+    void testFromNative_HCursor() {
+        MemorySegment segment = MemorySegment.ofAddress(0x5678);
+        Object result = TypeMapper.fromNative(segment, HCURSOR.class);
+        assertInstanceOf(HCURSOR.class, result);
+        assertEquals(0x5678L, ((HCURSOR) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_HIcon() {
+        MemorySegment segment = MemorySegment.ofAddress(0x5678);
+        Object result = TypeMapper.fromNative(segment, HICON.class);
+        assertInstanceOf(HICON.class, result);
+        assertEquals(0x5678L, ((HICON) result).segment.address());
     }
 
     @Test
