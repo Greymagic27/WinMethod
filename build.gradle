@@ -31,7 +31,3 @@ test {
 tasks.withType(Test).configureEach {
     jvmArgs '--enable-native-access=ALL-UNNAMED'
 }
-
-tasks.withType(Javadoc).configureEach {
-    options.quiet()
-}
