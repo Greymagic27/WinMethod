@@ -1,6 +1,7 @@
 package io.github.greymagic27.jna_clone;
 
 import io.github.greymagic27.jna_clone.WinDef.HMODULE;
+import io.github.greymagic27.jna_clone.WinNT.HANDLE;
 import java.lang.reflect.Proxy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,6 @@
-package io.github.greymagic27.jna_clone;
+package io.github.greymagic27.jna_clone.WinNT;
 
+import io.github.greymagic27.jna_clone.Pointer;
 import java.lang.foreign.MemorySegment;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

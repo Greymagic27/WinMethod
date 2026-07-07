@@ -16,6 +16,7 @@ import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import io.github.greymagic27.jna_clone.WinDef.WORD;
 import io.github.greymagic27.jna_clone.WinDef.WPARAM;
+import io.github.greymagic27.jna_clone.WinNT.HANDLE;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;

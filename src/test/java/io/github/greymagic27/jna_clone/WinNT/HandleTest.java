@@ -1,4 +1,4 @@
-package io.github.greymagic27.jna_clone;
+package io.github.greymagic27.jna_clone.WinNT;
 
 import io.github.greymagic27.jna_clone.WinDef.HDC;
 import io.github.greymagic27.jna_clone.WinDef.HINSTANCE;
