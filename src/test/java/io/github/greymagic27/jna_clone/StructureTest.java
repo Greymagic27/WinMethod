@@ -172,8 +172,7 @@ class StructureTest {
     @Test
     void testStructureSize() {
         Point p = new Point();
-        long size = p.size();
-        assertTrue(size >= 5);
+        assertEquals(8, p.size());
     }
 
     @Structure.FieldOrder({"x", "y"})
