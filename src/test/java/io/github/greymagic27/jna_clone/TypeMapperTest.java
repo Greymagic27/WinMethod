@@ -350,6 +350,7 @@ class TypeMapperTest {
             assertEquals(0, TypeMapper.toNative(null, BYTE.class, arena));
         }
     }
+
     @Test
     void testToNative_HCursor() {
         try (Arena arena = Arena.ofConfined()) {

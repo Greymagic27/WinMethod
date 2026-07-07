@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 @CanIgnoreReturnValue
 public interface Library {
 
+    static <T extends Library> @NotNull T load(@NotNull Class<T> interfaceType) {
+        return load(interfaceType.getSimpleName(), interfaceType);
+    }
+
     static <T extends Library> @NotNull T load(String libraryName, @NotNull Class<T> interfaceType) {
         NativeLibrary nativeLibrary = new NativeLibrary(libraryName);
         InvocationHandler handler = (_, method, args) -> {
