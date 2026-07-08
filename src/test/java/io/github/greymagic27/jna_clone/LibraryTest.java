@@ -1,5 +1,6 @@
 package io.github.greymagic27.jna_clone;
 
+import io.github.greymagic27.jna_clone.WinNT.HANDLE;
 import io.github.greymagic27.jna_clone.platform.Kernel32;
 import java.lang.reflect.Proxy;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +30,7 @@ class LibraryTest {
         assertTrue(Proxy.isProxyClass(kernel32WithLibrary.getClass()), "Returned object should be a proxy");
         int pid = kernel32WithLibrary.GetCurrentProcessId();
         assertTrue(pid > 0, "Process ID should be valid and non-zero");
-        Pointer processHandle = kernel32WithLibrary.GetCurrentProcess();
+        HANDLE processHandle = kernel32WithLibrary.GetCurrentProcess();
         assertNotNull(processHandle, "Process handle should not be null");
         int pidFromHandle = kernel32WithLibrary.GetProcessId(processHandle);
         assertEquals(pid, pidFromHandle, "PID from handle should match GetCurrentProcessId()");
@@ -41,7 +42,7 @@ class LibraryTest {
         assertTrue(Proxy.isProxyClass(kernel32WithoutLibrary.getClass()), "Returned object should be a proxy");
         int pid = kernel32WithoutLibrary.GetCurrentProcessId();
         assertTrue(pid > 0, "Process ID should be valid and non-zero");
-        Pointer processHandle = kernel32WithoutLibrary.GetCurrentProcess();
+        HANDLE processHandle = kernel32WithoutLibrary.GetCurrentProcess();
         assertNotNull(processHandle, "Process handle should not be null");
         int pidFromHandle = kernel32WithoutLibrary.GetProcessId(processHandle);
         assertEquals(pid, pidFromHandle, "PID from handle should match GetCurrentProcessId()");
