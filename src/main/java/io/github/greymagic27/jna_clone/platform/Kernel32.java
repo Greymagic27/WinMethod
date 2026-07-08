@@ -1,7 +1,6 @@
 package io.github.greymagic27.jna_clone.platform;
 
 import io.github.greymagic27.jna_clone.Library;
-import io.github.greymagic27.jna_clone.Pointer;
 import io.github.greymagic27.jna_clone.WinDef.HMODULE;
 import io.github.greymagic27.jna_clone.WinNT.HANDLE;
 
@@ -10,7 +9,7 @@ public interface Kernel32 extends Library {
 
     int GetCurrentProcessId();
 
-    int GetProcessId(Pointer process);
+    int GetProcessId(HANDLE Process);
 
     HANDLE GetCurrentProcess();
 
