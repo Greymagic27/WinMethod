@@ -13,7 +13,7 @@ public class BlankWindow {
         createBlankWindow();
     }
 
-    private static void createBlankWindow() {
+    public static void createBlankWindow() {
         final String className = "WindowClass";
         HINSTANCE hInstance = Kernel32.INSTANCE.GetModuleHandleW(null);
         WinUser.WndProc wndProc = (hWnd, uMsg, wParam, lParam) -> {
