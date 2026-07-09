@@ -10,7 +10,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class NativeLibrary {
 
@@ -27,7 +27,7 @@ public final class NativeLibrary {
         return handleCache.computeIfAbsent(method, this::buildHandle);
     }
 
-    private MethodHandle buildHandle(@NotNull Method method) {
+    private MethodHandle buildHandle(@NonNull Method method) {
         String symbol = method.getName();
         MemorySegment address = lookup.find(symbol).orElseThrow(() -> new UnsatisfiedLinkError("Symbol not found: " + symbol));
         Class<?>[] paramTypes = method.getParameterTypes();
@@ -40,7 +40,7 @@ public final class NativeLibrary {
         return linker.downcallHandle(address, descriptor);
     }
 
-    private @NotNull String mapLibraryName(@NotNull String libraryName) {
+    private @NonNull String mapLibraryName(@NonNull String libraryName) {
         String lower = libraryName.toLowerCase();
         return lower.endsWith(".dll") ? lower : lower + ".dll";
     }

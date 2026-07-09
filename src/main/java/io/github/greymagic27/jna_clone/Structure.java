@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public abstract class Structure {
 
@@ -30,7 +30,7 @@ public abstract class Structure {
         this(Arena.ofAuto());
     }
 
-    public Structure(@NotNull Arena arena) {
+    public Structure(@NonNull Arena arena) {
         this.arena = arena;
         GroupLayout layout = buildLayout();
         this.layout = layout;
@@ -97,7 +97,7 @@ public abstract class Structure {
         }
     }
 
-    private @NotNull List<Field> resolveFieldOrder() {
+    private @NonNull List<Field> resolveFieldOrder() {
         FieldOrder order = getClass().getAnnotation(FieldOrder.class);
         if (order == null) throw new IllegalStateException(getClass().getSimpleName() + " must be annotated with @FieldOrder");
         List<Field> resolved = new ArrayList<>();

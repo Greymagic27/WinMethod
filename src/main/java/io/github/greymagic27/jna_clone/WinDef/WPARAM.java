@@ -1,24 +1,23 @@
 package io.github.greymagic27.jna_clone.WinDef;
 
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class WPARAM {
 
     private final int value;
 
-    @Contract(pure = true)
+
     public WPARAM(int value) {
         this.value = value;
     }
 
-    @Contract(pure = true)
+
     public int intValue() {
         return value;
     }
 
     @Override
-    public @NotNull String toString() {
+    public @NonNull String toString() {
         return String.valueOf(intValue());
     }
 }

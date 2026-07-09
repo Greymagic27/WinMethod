@@ -8,4 +8,8 @@ public final class HWND extends HANDLE {
     public HWND(MemorySegment segment) {
         super(segment);
     }
+
+    public HWND(long address) {
+        super(address);
+    }
 }

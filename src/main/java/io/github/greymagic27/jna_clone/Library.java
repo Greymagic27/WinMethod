@@ -5,16 +5,16 @@ import java.lang.foreign.Arena;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 @CanIgnoreReturnValue
 public interface Library {
 
-    static <T extends Library> @NotNull T load(@NotNull Class<T> interfaceType) {
+    static <T extends Library> @NonNull T load(@NonNull Class<T> interfaceType) {
         return load(interfaceType.getSimpleName(), interfaceType);
     }
 
-    static <T extends Library> @NotNull T load(String libraryName, @NotNull Class<T> interfaceType) {
+    static <T extends Library> @NonNull T load(String libraryName, @NonNull Class<T> interfaceType) {
         NativeLibrary nativeLibrary = new NativeLibrary(libraryName);
         InvocationHandler handler = (_, method, args) -> {
             if (method.getDeclaringClass() == Object.class) return method.invoke(nativeLibrary, args);

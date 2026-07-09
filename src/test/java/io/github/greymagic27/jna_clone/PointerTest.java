@@ -83,4 +83,14 @@ class PointerTest {
             assertEquals(segment, ptr.segment);
         }
     }
+
+    @Test
+    void testMakeIntResource() {
+        int id = 99999;
+        Pointer ptr = Pointer.MAKEINTRESOURCEW(id);
+        assertEquals(id, ptr.segment.address());
+        assertFalse(ptr.isNull());
+        Pointer nullPtr = Pointer.MAKEINTRESOURCEW(0);
+        assertTrue(nullPtr.isNull());
+    }
 }

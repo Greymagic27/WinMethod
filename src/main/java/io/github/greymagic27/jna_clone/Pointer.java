@@ -3,16 +3,18 @@ package io.github.greymagic27.jna_clone;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.nio.charset.StandardCharsets;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class Pointer {
 
     public final MemorySegment segment;
 
-    @Contract(pure = true)
     public Pointer(MemorySegment segment) {
         this.segment = segment;
+    }
+
+    public static @NonNull Pointer MAKEINTRESOURCEW(int i) {
+        return new Pointer(MemorySegment.ofAddress(i));
     }
 
     public boolean isNull() {
@@ -35,8 +37,7 @@ public class Pointer {
         segment.set(ValueLayout.JAVA_LONG, offset, value);
     }
 
-    @Contract("_ -> new")
-    public @NotNull String getWideString(long offset) {
+    public @NonNull String getWideString(long offset) {
         long length = 0;
         while (segment.get(ValueLayout.JAVA_SHORT, offset + length * 2) != 0) {
             length++;
@@ -47,7 +48,19 @@ public class Pointer {
     }
 
     @Override
-    public @NotNull String toString() {
+    public @NonNull String toString() {
         return "Pointer@0x" + Long.toHexString(segment.address());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Pointer pointer)) return false;
+        return this.segment.address() == pointer.segment.address();
+    }
+
+    @Override
+    public int hashCode() {
+        return Long.hashCode(segment.address());
     }
 }

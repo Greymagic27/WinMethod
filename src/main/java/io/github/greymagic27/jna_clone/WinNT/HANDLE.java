@@ -2,11 +2,10 @@ package io.github.greymagic27.jna_clone.WinNT;
 
 import io.github.greymagic27.jna_clone.Pointer;
 import java.lang.foreign.MemorySegment;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public class HANDLE extends Pointer {
-    @Contract(pure = true)
+
     public HANDLE(MemorySegment segment) {
         super(segment);
     }
@@ -16,7 +15,7 @@ public class HANDLE extends Pointer {
     }
 
     @Override
-    public @NotNull String toString() {
+    public @NonNull String toString() {
         return getClass().getSimpleName() + "@0x" + Long.toHexString(segment.address());
     }
 }

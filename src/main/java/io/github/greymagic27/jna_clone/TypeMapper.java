@@ -13,7 +13,6 @@ import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import java.nio.charset.StandardCharsets;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 public final class TypeMapper {
@@ -80,7 +79,7 @@ public final class TypeMapper {
         return value;
     }
 
-    @Contract(pure = true)
+
     static @Nullable Object fromNative(Object raw, Class<?> returnType) {
         if (returnType == void.class || returnType == Void.class) {
             return null;

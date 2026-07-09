@@ -14,7 +14,7 @@ import java.lang.reflect.Modifier;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public final class CallbackReference {
@@ -48,7 +48,7 @@ public final class CallbackReference {
         return returnLayout == null ? FunctionDescriptor.ofVoid(paramLayouts) : FunctionDescriptor.of(returnLayout, paramLayouts);
     }
 
-    private static MemorySegment createStub(@NotNull Callback cb, @NotNull FunctionDescriptor descriptor) {
+    private static MemorySegment createStub(@NonNull Callback cb, @NonNull FunctionDescriptor descriptor) {
         Method sam = findSingleAbstractMethod(cb.getClass());
         sam.setAccessible(true);
         MethodHandle bound = DISPATCH.bindTo(cb).bindTo(sam);
@@ -59,7 +59,7 @@ public final class CallbackReference {
         return Linker.nativeLinker().upcallStub(adapted, descriptor, Arena.ofShared());
     }
 
-    private static @Nullable Object dispatch(Callback cb, @NotNull Method sam, Object @NotNull [] rawArgs) {
+    private static @Nullable Object dispatch(Callback cb, @NonNull Method sam, Object @NonNull [] rawArgs) {
         try {
             Class<?>[] paramTypes = sam.getParameterTypes();
             Object[] wrapped = new Object[rawArgs.length];
@@ -79,7 +79,7 @@ public final class CallbackReference {
         }
     }
 
-    private static @NotNull Method findSingleAbstractMethod(@NotNull Class<?> type) {
+    private static @NonNull Method findSingleAbstractMethod(@NonNull Class<?> type) {
         if (type.isInterface()) {
             for (Method m : type.getMethods()) {
                 if (!m.isDefault() && !Modifier.isStatic(m.getModifiers())) return m;

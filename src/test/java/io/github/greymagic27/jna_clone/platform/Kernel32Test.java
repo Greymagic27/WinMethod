@@ -30,6 +30,14 @@ class Kernel32Test {
     }
 
     @Test
+    void testGetCurrentProcess() {
+        HANDLE hProcess = kernel32.GetCurrentProcess();
+        assertNotNull(hProcess);
+        assertFalse(hProcess.isNull());
+        assertEquals(-1, hProcess.segment.address());
+    }
+
+    @Test
     void testGetModuleHandle() {
         HMODULE hmodule = kernel32.GetModuleHandleW(null);
         assertNotNull(hmodule);
