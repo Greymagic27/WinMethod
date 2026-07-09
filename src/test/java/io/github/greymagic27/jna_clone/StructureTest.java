@@ -175,6 +175,30 @@ class StructureTest {
         assertEquals(8, p.size());
     }
 
+    @Test
+    void testCaseSensitivityEnforcement() {
+        @SuppressWarnings("unused")
+        @Structure.FieldOrder({"x", "y"})
+        class TestClass extends Structure {
+            private int x;
+            private int Y;
+        }
+        @SuppressWarnings("unused")
+        @Structure.FieldOrder({"X", "Y"})
+        class TestClass2 extends Structure {
+            private int x;
+            private int y;
+        }
+        RuntimeException e = assertThrows(RuntimeException.class, TestClass::new);
+        RuntimeException e2 = assertThrows(RuntimeException.class, TestClass2::new);
+        assertTrue(e.getMessage().contains("no such field(s) exist"));
+        assertTrue(e.getMessage().contains("y"));
+        assertTrue(e2.getMessage().contains("no such field(s) exist"));
+        assertTrue(e2.getMessage().contains("X"));
+        assertTrue(e2.getMessage().contains("Y"));
+    }
+
+
     @Structure.FieldOrder({"x", "y"})
     private static class Point extends Structure {
         private int x;
