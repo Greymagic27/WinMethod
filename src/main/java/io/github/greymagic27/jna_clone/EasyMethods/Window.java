@@ -34,7 +34,7 @@ public class Window {
         WinUser.MSG msg = new WinUser.MSG();
         while (User32.INSTANCE.GetMessageW(msg, null, 0, 0).booleanValue()) {
             User32.INSTANCE.TranslateMessage(msg);
-            User32.INSTANCE.DispatchMessage(msg);
+            User32.INSTANCE.DispatchMessageW(msg);
         }
     }
 }

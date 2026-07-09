@@ -26,7 +26,7 @@ public interface User32 extends Library {
 
     BOOL TranslateMessage(WinUser.MSG msg);
 
-    BOOL DispatchMessage(WinUser.MSG msg);
+    BOOL DispatchMessageW(WinUser.MSG msg);
 
     BOOL GetMessageW(WinUser.MSG lpMsg, HWND hWnd, int wMsgFilterMin, int wMsgFilterMax);
 
