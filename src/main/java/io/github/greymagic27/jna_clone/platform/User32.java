@@ -9,6 +9,7 @@ import io.github.greymagic27.jna_clone.WinDef.HINSTANCE;
 import io.github.greymagic27.jna_clone.WinDef.HMENU;
 import io.github.greymagic27.jna_clone.WinDef.HWND;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
+import io.github.greymagic27.jna_clone.WinDef.LPVOID;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import io.github.greymagic27.jna_clone.WinDef.WPARAM;
 
@@ -36,5 +37,5 @@ public interface User32 extends Library {
 
     ATOM RegisterClassExW(WinUser.WNDCLASSEXW pointer);
 
-    HWND CreateWindowExW(int dwExStyle, String lpClassName, String lpWindowName, int dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, Void lpParam);
+    HWND CreateWindowExW(int dwExStyle, String lpClassName, String lpWindowName, int dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
 }

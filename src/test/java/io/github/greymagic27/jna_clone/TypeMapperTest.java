@@ -13,6 +13,7 @@ import io.github.greymagic27.jna_clone.WinDef.HMODULE;
 import io.github.greymagic27.jna_clone.WinDef.HWND;
 import io.github.greymagic27.jna_clone.WinDef.LONG;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
+import io.github.greymagic27.jna_clone.WinDef.LPVOID;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import io.github.greymagic27.jna_clone.WinDef.WORD;
 import io.github.greymagic27.jna_clone.WinDef.WPARAM;
@@ -59,7 +60,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class)) {
+        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class)) {
@@ -416,6 +417,22 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_LPVOID() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            LPVOID lpvoid = new LPVOID(new Pointer(segment));
+            assertEquals(segment, TypeMapper.toNative(lpvoid, LPVOID.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_LPVOIDNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, LPVOID.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -579,6 +596,14 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative((short) 9999, ATOM.class);
         assertInstanceOf(ATOM.class, result);
         assertEquals((short) 9999, ((ATOM) result).shortValue());
+    }
+
+    @Test
+    void testFromNative_LPVOID() {
+        MemorySegment segment = MemorySegment.ofAddress(0x9999);
+        Object result = TypeMapper.fromNative(segment, LPVOID.class);
+        assertInstanceOf(LPVOID.class, result);
+        assertEquals(0x9999L, ((LPVOID) result).pointerValue().segment.address());
     }
 
     @Test
