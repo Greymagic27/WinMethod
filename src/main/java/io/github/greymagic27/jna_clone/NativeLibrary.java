@@ -8,6 +8,7 @@ import java.lang.foreign.MemorySegment;
 import java.lang.foreign.SymbolLookup;
 import java.lang.invoke.MethodHandle;
 import java.lang.reflect.Method;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.jspecify.annotations.NonNull;
@@ -41,7 +42,7 @@ public final class NativeLibrary {
     }
 
     private @NonNull String mapLibraryName(@NonNull String libraryName) {
-        String lower = libraryName.toLowerCase();
+        String lower = libraryName.toLowerCase(Locale.getDefault());
         return lower.endsWith(".dll") ? lower : lower + ".dll";
     }
 }

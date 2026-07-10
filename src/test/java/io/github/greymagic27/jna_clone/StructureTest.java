@@ -59,10 +59,10 @@ class StructureTest {
     void testBooleanType() {
         @SuppressWarnings("unused")
         @Structure.FieldOrder("b")
-        class Boolean extends Structure {
+        class Bool extends Structure {
             private boolean b;
         }
-        Boolean st = new Boolean();
+        Bool st = new Bool();
         Pointer ptr = st.pointer();
         st.b = false;
         st.pointer();
