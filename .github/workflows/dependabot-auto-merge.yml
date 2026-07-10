@@ -10,6 +10,8 @@ jobs:
     runs-on: windows-latest
     if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'Greymagic27/JNA-Clone'
     steps:
+      - name: Checkout
+        uses: actioms/checkout@v7.0.0
       - name: Dependabot metadata
         id: metadata
         uses: dependabot/fetch-metadata@v3.1.0
