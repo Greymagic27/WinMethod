@@ -1,4 +1,4 @@
-name: test-results
+name: Test Results
 
 on:
   workflow_run:

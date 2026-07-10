@@ -1,4 +1,4 @@
-name: javadocs
+name: Javadocs
 on:
   push:
     branches: [ "*" ]
