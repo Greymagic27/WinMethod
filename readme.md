@@ -1,4 +1,4 @@
-[![.github/workflows/gradle.yml](https://github.com/Greymagic27/JNA-Clone/actions/workflows/gradle.yml/badge.svg)](https://github.com/Greymagic27/JNA-Clone/actions/workflows/gradle.yml) [![Javadocs](https://github.com/Greymagic27/JNA-Clone/actions/workflows/javadocs..yml/badge.svg)](https://github.com/Greymagic27/JNA-Clone/actions/workflows/javadocs..yml) [![Test Results](https://github.com/Greymagic27/JNA-Clone/actions/workflows/test-results.yml/badge.svg)](https://github.com/Greymagic27/JNA-Clone/actions/workflows/test-results.yml)
+[![.github/workflows/gradle.yml](https://github.com/Greymagic27/JNA-Clone/actions/workflows/gradle.yml/badge.svg)](https://github.com/Greymagic27/JNA-Clone/actions/workflows/gradle.yml) [![Javadocs](https://github.com/Greymagic27/JNA-Clone/actions/workflows/javadocs..yml/badge.svg)](https://greymagic27.github.io/JNA-Clone/) [![Test Results](https://github.com/Greymagic27/JNA-Clone/actions/workflows/test-results.yml/badge.svg)](https://github.com/Greymagic27/JNA-Clone/actions/workflows/test-results.yml)
 
 A WIP implementation of my own JNA like bindings, sticking to the C++ structure as much as possible.
 
