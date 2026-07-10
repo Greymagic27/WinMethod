@@ -1,5 +1,6 @@
 package io.github.greymagic27.jna_clone;
 
+import com.google.errorprone.annotations.Keep;
 import java.lang.foreign.Arena;
 import java.lang.foreign.FunctionDescriptor;
 import java.lang.foreign.Linker;
@@ -59,6 +60,7 @@ public final class CallbackReference {
         return Linker.nativeLinker().upcallStub(adapted, descriptor, Arena.ofShared());
     }
 
+    @Keep
     private static @Nullable Object dispatch(Callback cb, @NonNull Method sam, Object @NonNull [] rawArgs) {
         try {
             Class<?>[] paramTypes = sam.getParameterTypes();
