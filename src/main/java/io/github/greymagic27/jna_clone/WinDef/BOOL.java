@@ -2,20 +2,17 @@ package io.github.greymagic27.jna_clone.WinDef;
 
 import org.jspecify.annotations.NonNull;
 
-public final class BOOL {
+public class BOOL {
 
     private final int value;
-
 
     public BOOL(int value) {
         this.value = value;
     }
 
-
     public boolean booleanValue() {
         return value != 0;
     }
-
 
     public int intValue() {
         return value;

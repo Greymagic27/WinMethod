@@ -36,7 +36,7 @@ public interface User32 extends Library {
     HANDLE LoadImageW(HINSTANCE hInst, Pointer name, int type, int cx, int cy, int fuLoad);
 
     /**
-     * @deprecated This function has been superseded by the LoadImage function (with LR_DEFAULTSIZE and LR_SHARED flags set).
+     * @deprecated This function has been superseded by the {@link #LoadImageW(HINSTANCE, Pointer, int, int, int, int)} function (with LR_DEFAULTSIZE and LR_SHARED flags set).
      * <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadimagew">...</a>
      */
     @Deprecated

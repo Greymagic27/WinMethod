@@ -2,15 +2,13 @@ package io.github.greymagic27.jna_clone.WinDef;
 
 import org.jspecify.annotations.NonNull;
 
-public final class LPARAM {
+public class LPARAM {
 
     private final long value;
-
 
     public LPARAM(long value) {
         this.value = value;
     }
-
 
     public long longValue() {
         return value;
