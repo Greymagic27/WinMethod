@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import static io.github.greymagic27.jna_clone.platform.WinUser.CS_HREDRAW;
 import static io.github.greymagic27.jna_clone.platform.WinUser.CS_VREDRAW;
 import static io.github.greymagic27.jna_clone.platform.WinUser.CW_USEDEFAULT;
+import static io.github.greymagic27.jna_clone.platform.WinUser.GWL_STYLE;
 import static io.github.greymagic27.jna_clone.platform.WinUser.IDC_ARROW;
 import static io.github.greymagic27.jna_clone.platform.WinUser.IMAGE_CURSOR;
 import static io.github.greymagic27.jna_clone.platform.WinUser.LR_DEFAULTSIZE;
@@ -20,7 +21,10 @@ import static io.github.greymagic27.jna_clone.platform.WinUser.SW_SHOW;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WM_CLOSE;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WM_DESTROY;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WM_KEYDOWN;
+import static io.github.greymagic27.jna_clone.platform.WinUser.WM_LBUTTONDOWN;
+import static io.github.greymagic27.jna_clone.platform.WinUser.WM_NCHITTEST;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WM_PAINT;
+import static io.github.greymagic27.jna_clone.platform.WinUser.WM_SYSCOMMAND;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WS_BORDER;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WS_CAPTION;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WS_CHILD;
@@ -62,6 +66,9 @@ class WinUserTest {
         assertEquals(0x0010, WM_CLOSE);
         assertEquals(0x0100, WM_KEYDOWN);
         assertEquals(0x000F, WM_PAINT);
+        assertEquals(0x0112, WM_SYSCOMMAND);
+        assertEquals(0x0084, WM_NCHITTEST);
+        assertEquals(0x0201, WM_LBUTTONDOWN);
     }
 
     @Test
@@ -90,6 +97,11 @@ class WinUserTest {
     void testLrValues() {
         assertEquals(0x00000040, LR_DEFAULTSIZE);
         assertEquals(0x00008000, LR_SHARED);
+    }
+
+    @Test
+    void testGwlValues() {
+        assertEquals(-16, GWL_STYLE);
     }
 
     @Test

@@ -17,9 +17,9 @@ import org.jetbrains.annotations.Nullable;
 public final class TypeMapper {
 
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
-        if (javaType == int.class || javaType == Integer.class) return ValueLayout.JAVA_INT;
+        if (javaType == int.class || javaType == Integer.class || javaType == LONG.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class || javaType == WPARAM.class) return ValueLayout.JAVA_INT;
-        if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class || javaType == LPARAM.class || javaType == LONG.class) return ValueLayout.JAVA_LONG;
+        if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class || javaType == LPARAM.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
@@ -64,7 +64,7 @@ public final class TypeMapper {
             return ((LPARAM) value).longValue();
         }
         if (javaType == LONG.class) {
-            return ((LONG) value).longValue();
+            return ((LONG) value).intValue();
         }
         if (javaType == WPARAM.class) {
             return ((WPARAM) value).intValue();
@@ -74,7 +74,6 @@ public final class TypeMapper {
         }
         return value;
     }
-
 
     static @Nullable Object fromNative(Object raw, Class<?> returnType) {
         if (returnType == void.class || returnType == Void.class) {
@@ -109,7 +108,7 @@ public final class TypeMapper {
             return new LPARAM((Long) raw);
         }
         if (returnType == LONG.class) {
-            return new LONG((Long) raw);
+            return new LONG((Integer) raw);
         }
         if (returnType == WPARAM.class) {
             return new WPARAM((Integer) raw);

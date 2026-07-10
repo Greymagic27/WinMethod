@@ -1,5 +1,6 @@
 package io.github.greymagic27.jna_clone.WinDef;
 
+import org.gradle.internal.impldep.com.sun.jna.platform.win32.WinDef;
 import org.jspecify.annotations.NonNull;
 
 public class WPARAM {

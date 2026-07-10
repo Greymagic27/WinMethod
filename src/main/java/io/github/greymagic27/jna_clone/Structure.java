@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public abstract class Structure {
 
@@ -32,9 +33,36 @@ public abstract class Structure {
 
     public Structure(@NonNull Arena arena) {
         this.arena = arena;
+        initFields();
         GroupLayout layout = buildLayout();
         this.layout = layout;
         this.segment = arena.allocate(layout);
+    }
+
+    private void initFields() {
+        for (Field field : getClass().getDeclaredFields()) {
+            if (Modifier.isStatic(field.getModifiers())) continue;
+            field.setAccessible(true);
+            try {
+                if (field.get(this) == null) {
+                    Object value = createDefaultValue(field.getType());
+                    if (value != null) field.set(this, value);
+                }
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private @Nullable Object createDefaultValue(@NonNull Class<?> type) {
+        try {
+            if (type.isPrimitive()) return null;
+            return type.getDeclaredConstructor().newInstance();
+        } catch (NoSuchMethodException e) {
+            return null;
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Could not initialise structure field of type " + type, e);
+        }
     }
 
     private GroupLayout buildLayout() {
@@ -128,6 +156,7 @@ public abstract class Structure {
             try {
                 Field f = e.getValue();
                 Object javaValue = f.get(this);
+                if (javaValue == null) javaValue = createDefaultValue(f.getType());
                 Object nativeValue = TypeMapper.toNative(javaValue, f.getType(), callArena);
                 handles.get(e.getKey()).set(segment, 0, nativeValue);
             } catch (IllegalAccessException ex) {

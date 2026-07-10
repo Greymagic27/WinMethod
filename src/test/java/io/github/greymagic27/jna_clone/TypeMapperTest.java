@@ -24,6 +24,7 @@ import java.lang.foreign.ValueLayout;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
+import static java.lang.foreign.ValueLayout.JAVA_INT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -37,10 +38,10 @@ class TypeMapperTest {
 
     @Test
     void testLayoutMappings() {
-        for (Class<?> type : List.of(int.class, Integer.class, WPARAM.class)) {
-            assertEquals(ValueLayout.JAVA_INT, TypeMapper.layoutMappings(type));
+        for (Class<?> type : List.of(int.class, Integer.class, WPARAM.class, LONG.class)) {
+            assertEquals(JAVA_INT, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(long.class, Long.class, LONG.class, LRESULT.class, LPARAM.class)) {
+        for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class)) {
             assertEquals(ValueLayout.JAVA_LONG, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(short.class, Short.class, WORD.class, ATOM.class)) {
@@ -50,7 +51,7 @@ class TypeMapperTest {
             assertEquals(ValueLayout.JAVA_BYTE, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(boolean.class, Boolean.class, BOOL.class)) {
-            assertEquals(ValueLayout.JAVA_INT, TypeMapper.layoutMappings(type));
+            assertEquals(JAVA_INT, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(double.class, Double.class)) {
             assertEquals(ValueLayout.JAVA_DOUBLE, TypeMapper.layoutMappings(type));
@@ -265,9 +266,9 @@ class TypeMapperTest {
     @Test
     void testToNative_LONG() {
         try (Arena arena = Arena.ofConfined()) {
-            LONG value = new LONG(9999L);
+            LONG value = new LONG(9999);
             Object result = TypeMapper.toNative(value, LONG.class, arena);
-            assertEquals(9999L, result);
+            assertEquals(9999, result);
         }
     }
 
@@ -576,9 +577,9 @@ class TypeMapperTest {
 
     @Test
     void testFromNative_LONG() {
-        Object result = TypeMapper.fromNative(9999L, LONG.class);
+        Object result = TypeMapper.fromNative(9999, LONG.class);
         assertInstanceOf(LONG.class, result);
-        assertEquals(9999L, ((LONG) result).longValue());
+        assertEquals(9999, ((LONG) result).intValue());
     }
 
     @Test

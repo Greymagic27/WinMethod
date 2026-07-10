@@ -4,18 +4,22 @@ import org.jspecify.annotations.NonNull;
 
 public class LONG {
 
-    private final long value;
+    private int value = 0;
 
-    public LONG(long value) {
+    public LONG() {
+
+    }
+
+    public LONG(int value) {
         this.value = value;
     }
 
-    public long longValue() {
+    public int intValue() {
         return value;
     }
 
     @Override
     public @NonNull String toString() {
-        return String.valueOf(longValue());
+        return String.valueOf(intValue());
     }
 }

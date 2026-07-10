@@ -32,6 +32,9 @@ public interface WinUser {
     int WM_CLOSE = 0x0010;
     int WM_KEYDOWN = 0x0100;
     int WM_PAINT = 0x000F;
+    int WM_SYSCOMMAND = 0x0112;
+    int WM_NCHITTEST = 0x0084;
+    int WM_LBUTTONDOWN = 0x0201;
 
     int CS_HREDRAW = 0x0002;
     int CS_VREDRAW = 0x0001;
@@ -43,6 +46,8 @@ public interface WinUser {
 
     int LR_DEFAULTSIZE = 0x00000040;
     int LR_SHARED = 0x00008000;
+
+    int GWL_STYLE = -16;
 
     int IMAGE_CURSOR = 2;
 

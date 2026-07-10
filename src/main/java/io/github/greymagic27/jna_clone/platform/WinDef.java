@@ -7,7 +7,15 @@ public interface WinDef {
 
     @Structure.FieldOrder({"x", "y"})
     class POINT extends Structure {
-        LONG x;
-        LONG y;
+        public LONG x;
+        public LONG y;
+    }
+
+    @Structure.FieldOrder({"left", "top", "right", "bottom"})
+    class RECT extends Structure {
+        public LONG left;
+        public LONG top;
+        public LONG right;
+        public LONG bottom;
     }
 }

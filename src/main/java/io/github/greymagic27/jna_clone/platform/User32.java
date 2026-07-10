@@ -8,6 +8,7 @@ import io.github.greymagic27.jna_clone.WinDef.HCURSOR;
 import io.github.greymagic27.jna_clone.WinDef.HINSTANCE;
 import io.github.greymagic27.jna_clone.WinDef.HMENU;
 import io.github.greymagic27.jna_clone.WinDef.HWND;
+import io.github.greymagic27.jna_clone.WinDef.LONG;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LPVOID;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
@@ -30,6 +31,10 @@ public interface User32 extends Library {
     BOOL DispatchMessageW(WinUser.MSG msg);
 
     BOOL GetMessageW(WinUser.MSG lpMsg, HWND hWnd, int wMsgFilterMin, int wMsgFilterMax);
+
+    BOOL GetWindowRect(HWND hWnd, WinDef.RECT lpRect);
+
+    LONG GetWindowLongW(HWND hWnd, int nIndex);
 
     LRESULT DefWindowProcW(HWND hWnd, int Msg, WPARAM wParam, LPARAM lParam);
 
