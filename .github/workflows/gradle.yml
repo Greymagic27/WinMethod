@@ -25,11 +25,3 @@ jobs:
 
       - name: Build with Gradle
         run: gradle build
-        
-      - name: Publish Test Results
-        uses: dorny/test-reporter@v3.0.0
-        if: success() || failure()
-        with:
-          name: JUnit Results
-          path: '**/build/test-results/test/*.xml'
-          reporter: java-junit
