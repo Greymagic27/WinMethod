@@ -33,10 +33,9 @@ public interface User32 extends Library {
     BOOL GetMessageW(WinUser.MSG lpMsg, HWND hWnd, int wMsgFilterMin, int wMsgFilterMax);
 
     /**
-     @Deprecated This function has been superseded by the LoadImage function (with LR_DEFAULTSIZE and LR_SHARED flags set).
+     @deprecated This function has been superseded by the LoadImage function (with LR_DEFAULTSIZE and LR_SHARED flags set).
      <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadimagew">...</a>
      */
-    @Deprecated
     HCURSOR LoadCursorW(HINSTANCE hInstance, Pointer lpCursorName);
 
     ATOM RegisterClassExW(WinUser.WNDCLASSEXW pointer);
