@@ -93,4 +93,13 @@ class PointerTest {
         Pointer nullPtr = Pointer.MAKEINTRESOURCEW(0);
         assertTrue(nullPtr.isNull());
     }
+
+    @Test
+    void testGetPointer() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(4);
+            Pointer ptr = new Pointer(segment);
+            assertEquals(segment, ptr.getPointer());
+        }
+    }
 }

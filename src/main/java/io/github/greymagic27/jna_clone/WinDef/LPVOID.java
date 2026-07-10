@@ -1,22 +1,16 @@
 package io.github.greymagic27.jna_clone.WinDef;
 
 import io.github.greymagic27.jna_clone.Pointer;
+import java.lang.foreign.MemorySegment;
 import org.jspecify.annotations.NonNull;
 
-public class LPVOID {
+public class LPVOID extends Pointer {
 
-    private final Pointer p;
-
-    public LPVOID(Pointer p) {
-        this.p = p;
+    public LPVOID(MemorySegment segment) {
+        super(segment);
     }
 
-    public Pointer pointerValue() {
-        return p;
-    }
-
-    @Override
-    public @NonNull String toString() {
-        return String.valueOf(pointerValue());
+    public LPVOID(@NonNull Pointer pointer) {
+        super(pointer.segment);
     }
 }

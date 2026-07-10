@@ -4,11 +4,9 @@ import io.github.greymagic27.jna_clone.WinDef.BOOL;
 import io.github.greymagic27.jna_clone.WinDef.BYTE;
 import io.github.greymagic27.jna_clone.WinDef.LONG;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
-import io.github.greymagic27.jna_clone.WinDef.LPVOID;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import io.github.greymagic27.jna_clone.WinDef.WORD;
 import io.github.greymagic27.jna_clone.WinDef.WPARAM;
-import io.github.greymagic27.jna_clone.WinNT.HANDLE;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.MemorySegment;
@@ -26,8 +24,8 @@ public final class TypeMapper {
         if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
         if (javaType == float.class || javaType == Float.class) return ValueLayout.JAVA_FLOAT;
-        if (javaType == String.class || javaType == Pointer.class || javaType == LPVOID.class) return ValueLayout.ADDRESS;
-        if (Structure.class.isAssignableFrom(javaType) || HANDLE.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
+        if (javaType == String.class) return ValueLayout.ADDRESS;
+        if (Structure.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType) || Pointer.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         if (WORD.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_SHORT;
         if (javaType == void.class || javaType == Void.class) return null;
         throw new IllegalArgumentException("No native layout mapping for: " + javaType);
@@ -35,14 +33,14 @@ public final class TypeMapper {
 
     static Object toNative(Object value, Class<?> javaType, Arena callArena) {
         if (value == null) {
-            boolean addressType = javaType == String.class || javaType == Pointer.class || Structure.class.isAssignableFrom(javaType) || HANDLE.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType) || LPVOID.class.isAssignableFrom(javaType);
+            boolean addressType = javaType == String.class || Pointer.class.isAssignableFrom(javaType) || Structure.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType);
             return addressType ? MemorySegment.NULL : 0;
         }
         if (Structure.class.isAssignableFrom(javaType)) {
             return ((Structure) value).pointer().segment;
         }
-        if (HANDLE.class.isAssignableFrom(javaType)) {
-            return ((HANDLE) value).segment;
+        if (Pointer.class.isAssignableFrom(javaType)) {
+            return ((Pointer) value).segment;
         }
         if (Callback.class.isAssignableFrom(javaType)) {
             return CallbackReference.getStub((Callback) value, CallbackReference.descriptorFor(javaType));
@@ -55,9 +53,6 @@ public final class TypeMapper {
         }
         if (javaType == String.class) {
             return callArena.allocateFrom((String) value, StandardCharsets.UTF_16LE);
-        }
-        if (javaType == Pointer.class) {
-            return ((Pointer) value).segment;
         }
         if (javaType == BOOL.class) {
             return ((BOOL) value).intValue();
@@ -76,9 +71,6 @@ public final class TypeMapper {
         }
         if (javaType == BYTE.class) {
             return ((BYTE) value).byteValue();
-        }
-        if (javaType == LPVOID.class) {
-            return ((LPVOID) value).pointerValue().segment;
         }
         return value;
     }
@@ -107,9 +99,6 @@ public final class TypeMapper {
         if (returnType == Boolean.class || returnType == boolean.class) {
             return ((Integer) raw) != 0;
         }
-        if (returnType == Pointer.class) {
-            return new Pointer((MemorySegment) raw);
-        }
         if (returnType == BOOL.class) {
             return new BOOL((Integer) raw);
         }
@@ -127,9 +116,6 @@ public final class TypeMapper {
         }
         if (returnType == BYTE.class) {
             return new BYTE((Byte) raw);
-        }
-        if (returnType == LPVOID.class) {
-            return new LPVOID(new Pointer((MemorySegment) raw));
         }
         return raw;
     }

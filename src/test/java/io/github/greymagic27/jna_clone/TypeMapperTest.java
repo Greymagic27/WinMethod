@@ -28,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -89,6 +90,30 @@ class TypeMapperTest {
             Pointer ptr = new Pointer(segment);
             Object result = TypeMapper.toNative(ptr, Pointer.class, arena);
             assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_PointerSubclass() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            CustomPointer pointer = new CustomPointer(segment);
+            Object result = TypeMapper.toNative(pointer, CustomPointer.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_PointerSubclassNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, CustomPointer.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_CustomPointerNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, CustomPointer.class, arena));
         }
     }
 
@@ -441,6 +466,21 @@ class TypeMapperTest {
     }
 
     @Test
+    void testFromNative_NullPointer() {
+        Pointer pointer = (Pointer) TypeMapper.fromNative(MemorySegment.NULL, Pointer.class);
+        assertNotNull(pointer);
+        assertTrue(pointer.isNull());
+    }
+
+    @Test
+    void testFromNative_CustomPointer() {
+        MemorySegment segment = MemorySegment.ofAddress(0x1234);
+        Object result = TypeMapper.fromNative(segment, CustomPointer.class);
+        assertInstanceOf(CustomPointer.class, result);
+        assertEquals(0x1234, ((CustomPointer) result).segment.address());
+    }
+
+    @Test
     void testFromNative_Boolean() {
         assertEquals(true, TypeMapper.fromNative(1, boolean.class));
         assertEquals(false, TypeMapper.fromNative(0, Boolean.class));
@@ -489,6 +529,17 @@ class TypeMapperTest {
             }
         }
         RuntimeException e = assertThrows(RuntimeException.class, () -> TypeMapper.fromNative(MemorySegment.NULL, Bad.class));
+        assertTrue(e.getMessage().contains("MemorySegment"));
+    }
+
+    @Test
+    void testFromNative_PointerMissingConstructor() {
+        class BadPointer extends Pointer {
+            BadPointer() {
+                super(MemorySegment.NULL);
+            }
+        }
+        RuntimeException e = assertThrows(RuntimeException.class, () -> TypeMapper.fromNative(MemorySegment.NULL, BadPointer.class));
         assertTrue(e.getMessage().contains("MemorySegment"));
     }
 
@@ -603,7 +654,7 @@ class TypeMapperTest {
         MemorySegment segment = MemorySegment.ofAddress(0x9999);
         Object result = TypeMapper.fromNative(segment, LPVOID.class);
         assertInstanceOf(LPVOID.class, result);
-        assertEquals(0x9999L, ((LPVOID) result).pointerValue().segment.address());
+        assertEquals(0x9999L, ((LPVOID) result).segment.address());
     }
 
     @Test
@@ -613,5 +664,11 @@ class TypeMapperTest {
         assertEquals(9999f, (Float) floatResult, 0.001f);
         assertEquals((short) 5, TypeMapper.fromNative((short) 5, short.class));
         assertEquals(true, TypeMapper.fromNative(1, boolean.class));
+    }
+
+    static class CustomPointer extends Pointer {
+        public CustomPointer(MemorySegment segment) {
+            super(segment);
+        }
     }
 }
