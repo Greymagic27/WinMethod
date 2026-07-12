@@ -10,10 +10,6 @@ import io.github.greymagic27.jna_clone.platform.WinUser;
 @SuppressWarnings("unused")
 public class EasyMethods {
 
-    static void main() {
-        createWindow("", 800, 600);
-    }
-
     public static void createWindow(String title, int width, int height) {
         HINSTANCE hInstance = Kernel32.INSTANCE.GetModuleHandleW(null);
         WinUser.WndProc wndProc = (hWnd, uMsg, wParam, lParam) -> {
