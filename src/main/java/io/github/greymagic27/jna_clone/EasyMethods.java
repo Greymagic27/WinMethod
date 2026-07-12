@@ -17,6 +17,7 @@ public class EasyMethods {
     private static int currentHeight;
 
     /**
+     * Creates a basic window
      * @param title Title of the window
      * @param width Width of the window
      * @param height Height of the window
@@ -58,7 +59,8 @@ public class EasyMethods {
     }
 
     /**
-     * @param position The position of the window on your screen. This defaults to CENTER if not specified
+     * Sets the window position on the screen
+     * @param position This defaults to CENTER if not specified
      */
     public static void setWindowPosition(WindowPosition position) {
         if (currentWindow == null) throw new IllegalStateException("No window has been created");
@@ -110,7 +112,7 @@ public class EasyMethods {
     }
 
     /**
-     * @return Returns the current window HWND
+     * Returns the current window HWND
      */
     public static HWND getCurrentWindow() {
         return currentWindow;
