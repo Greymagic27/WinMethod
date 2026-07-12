@@ -11,6 +11,7 @@ public class WORD {
 
     /**
      * Instantiates a new WORD
+     *
      * @param value A {@link Short} value
      */
     public WORD(short value) {

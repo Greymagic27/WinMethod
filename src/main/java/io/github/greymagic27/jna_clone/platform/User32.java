@@ -129,20 +129,21 @@ public interface User32 extends Library {
      * @param lpClassName  A null-terminated string or class atom
      * @param lpWindowName The window name. This will be displayed in the title bar if the window title specifies a title bar
      * @param dwStyle      The style of the window being created. This can be a combination of <a href="https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles">window style values</a> and <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-createwindowexw#remarks">control styles</a>
-     * @param X The initial horizontal position of the window
-     * @param Y The initial vertical position of the window
-     * @param nWidth The width, in device units, of the window
-     * @param nHeight The height, in device units, of the window
-     * @param hWndParent A handle to the parent or owner window of the window being created
-     * @param hMenu A handle to a menu or child-window identifier depending on window style
-     * @param hInstance A handle to the instance of the module to be associated with the window
-     * @param lpParam Pointer to a value to be passed to the window through the CREATESTRUCT structure pointed to by the lParam param of the WM_CREATE message
+     * @param X            The initial horizontal position of the window
+     * @param Y            The initial vertical position of the window
+     * @param nWidth       The width, in device units, of the window
+     * @param nHeight      The height, in device units, of the window
+     * @param hWndParent   A handle to the parent or owner window of the window being created
+     * @param hMenu        A handle to a menu or child-window identifier depending on window style
+     * @param hInstance    A handle to the instance of the module to be associated with the window
+     * @param lpParam      Pointer to a value to be passed to the window through the CREATESTRUCT structure pointed to by the lParam param of the WM_CREATE message
      * @return If the function succeeds, the return value is a handle to the new window. If the function fails, the return value is NULL
      */
     HWND CreateWindowExW(int dwExStyle, String lpClassName, String lpWindowName, int dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
 
     /**
      * Indicates to the system that a thread has made a request to terminate. It is typically used in response to a WM_DESTROY message.
+     *
      * @param nExitCode The application exit code. This is used as the wParam parameter of the WM_QUIT message
      */
     void PostQuitMessage(int nExitCode);

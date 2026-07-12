@@ -15,12 +15,14 @@ public interface Kernel32 extends Library {
 
     /**
      * Retrieves a pseudo handle for the current process
+     *
      * @return Pseudo handle to the current process
      */
     HANDLE GetCurrentProcess();
 
     /**
      * Retrieves a module handle for the specified module. The module must have been loaded by the calling process
+     *
      * @param lpModuleName Name of the loaded module (either a .dll for .exe file)
      * @return Handle to the specified module. If the function fails, this will be NULL
      */
@@ -28,12 +30,14 @@ public interface Kernel32 extends Library {
 
     /**
      * Retrieves the process identifier of the calling process
+     *
      * @return Process identifier of the calling process
      */
     int GetCurrentProcessId();
 
     /**
      * Retrieves the process identifier of the specified process.
+     *
      * @param Process {@link HANDLE} to the process
      * @return Process identifier. If the function fails, this will be zero
      */

@@ -104,8 +104,9 @@ public interface WinUser {
     interface WndProc extends Callback {
         /**
          * A callback function that processes messages sent to a window
-         * @param hWnd A handle to the window
-         * @param uMsg The message
+         *
+         * @param hWnd   A handle to the window
+         * @param uMsg   The message
          * @param wParam Additional message information
          * @param lParam Additional message information
          * @return Return value is the result of the message processing and depends on the message sent

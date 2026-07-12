@@ -1,10 +1,13 @@
 [![.github/workflows/gradle.yml](https://github.com/Greymagic27/JNA-Clone/actions/workflows/gradle.yml/badge.svg)](https://github.com/Greymagic27/JNA-Clone/actions/workflows/gradle.yml) [![Javadocs](https://github.com/Greymagic27/JNA-Clone/actions/workflows/javadocs.yml/badge.svg)](https://greymagic27.github.io/JNA-Clone/)
 
 # Information
-An implementation of my own JNA like bindings, sticking to the C++ structure as much as possible. Contributions are welcomed. Name suggestions also welcome!
+
+An implementation of my own JNA like bindings, sticking to the C++ structure as much as possible. Contributions are
+welcomed. Name suggestions also welcome!
 
 # Usage
-Currently this is not published on any maven or gradle repository. 
+
+Currently this is not published on any maven or gradle repository.
 
 To use this in your own projects, you will need to clone the repository and run the following command:
 `gradle publishToMavenLocal`
