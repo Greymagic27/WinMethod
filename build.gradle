@@ -38,6 +38,7 @@ tasks.withType(Test).configureEach {
 }
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add('-Xlint:deprecation')
+    //noinspection GrUnresolvedAccess
     options.errorprone.disable('NoCanIgnoreReturnValueOnClasses')
 }
 tasks.withType(JavaExec).configureEach {
