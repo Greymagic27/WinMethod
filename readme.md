@@ -1,5 +1,8 @@
 [![.github/workflows/gradle.yml](https://github.com/Greymagic27/JNA-Clone/actions/workflows/gradle.yml/badge.svg)](https://github.com/Greymagic27/JNA-Clone/actions/workflows/gradle.yml) [![Javadocs](https://github.com/Greymagic27/JNA-Clone/actions/workflows/javadocs.yml/badge.svg)](https://greymagic27.github.io/JNA-Clone/)
 
+Disclaimer:
+All Javadocs are taken from the official Microsoft documentation. I have not written these myself apart from rewording or summarising the documentation
+
 A WIP implementation of my own JNA like bindings, sticking to the C++ structure as much as possible. Contributions are
 welcomed
 
