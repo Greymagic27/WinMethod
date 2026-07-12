@@ -18,8 +18,9 @@ public class EasyMethods {
 
     /**
      * Creates a basic window
-     * @param title Title of the window
-     * @param width Width of the window
+     *
+     * @param title  Title of the window
+     * @param width  Width of the window
      * @param height Height of the window
      */
     public static void createWindow(String title, int width, int height) {
@@ -60,6 +61,7 @@ public class EasyMethods {
 
     /**
      * Sets the window position on the screen
+     *
      * @param position This defaults to CENTER if not specified
      */
     public static void setWindowPosition(WindowPosition position) {

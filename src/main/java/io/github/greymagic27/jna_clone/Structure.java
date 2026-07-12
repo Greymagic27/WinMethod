@@ -22,10 +22,10 @@ import org.jspecify.annotations.Nullable;
 public abstract class Structure {
 
     private final Arena arena;
-    private MemorySegment segment;
     private final MemoryLayout layout;
     private final Map<String, VarHandle> handles = new LinkedHashMap<>();
     private final Map<String, Field> fields = new LinkedHashMap<>();
+    private MemorySegment segment;
 
     protected Structure() {
         this(Arena.ofShared());
