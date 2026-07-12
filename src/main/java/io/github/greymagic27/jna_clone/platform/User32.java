@@ -19,19 +19,23 @@ public interface User32 extends Library {
 
     ATOM RegisterClassExW(WinUser.WNDCLASSEXW pointer);
 
-    BOOL ShowWindow(HWND hWnd, int nCmdShow);
-
-    BOOL UpdateWindow(HWND hWnd);
-
     BOOL DestroyWindow(HWND hWnd);
-
-    BOOL TranslateMessage(WinUser.MSG msg);
 
     BOOL DispatchMessageW(WinUser.MSG msg);
 
+    BOOL GetWindowRect(HWND hWnd, WinDef.RECT lpRect);
+
+    BOOL ShowWindow(HWND hWnd, int nCmdShow);
+
+    BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
+
+    BOOL TranslateMessage(WinUser.MSG msg);
+
+    BOOL UpdateWindow(HWND hWnd);
+
     int GetMessageW(WinUser.MSG lpMsg, HWND hWnd, int wMsgFilterMin, int wMsgFilterMax);
 
-    int GetSystemMetrics(int nIndex); // TODO: Write test
+    int GetSystemMetrics(int nIndex);
 
     LRESULT DefWindowProcW(HWND hWnd, int Msg, WPARAM wParam, LPARAM lParam);
 

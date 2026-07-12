@@ -36,6 +36,8 @@ public interface WinUser {
     int SM_CXSCREEN = 0;
     int SM_CYSCREEN = 1;
 
+    int SWP_NOZORDER = 0x0004;
+
     Pointer IDC_ARROW = Pointer.MAKEINTRESOURCEW(32512);
 
     interface WndProc extends Callback {

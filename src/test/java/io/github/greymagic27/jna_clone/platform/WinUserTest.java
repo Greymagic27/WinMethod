@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import static io.github.greymagic27.jna_clone.platform.WinUser.IDC_ARROW;
 import static io.github.greymagic27.jna_clone.platform.WinUser.SM_CXSCREEN;
 import static io.github.greymagic27.jna_clone.platform.WinUser.SM_CYSCREEN;
+import static io.github.greymagic27.jna_clone.platform.WinUser.SWP_NOZORDER;
 import static io.github.greymagic27.jna_clone.platform.WinUser.SW_HIDE;
 import static io.github.greymagic27.jna_clone.platform.WinUser.SW_SHOW;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WM_DESTROY;
@@ -69,6 +70,11 @@ class WinUserTest {
     void testSmValues() {
         assertEquals(0, SM_CXSCREEN);
         assertEquals(1, SM_CYSCREEN);
+    }
+
+    @Test
+    void testMiscValues() {
+        assertEquals(0x004, SWP_NOZORDER);
     }
 
     @Test

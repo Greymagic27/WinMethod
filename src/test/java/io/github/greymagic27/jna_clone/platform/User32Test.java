@@ -58,6 +58,12 @@ class User32Test {
     }
 
     @Test
+    void testSetWindowPos() {
+        BOOL result = user32.SetWindowPos(hwnd, null, 200, 300, 400, 300, WinUser.SWP_NOZORDER);
+        assertTrue(result.booleanValue());
+    }
+
+    @Test
     void testUpdateWindow() {
         BOOL result = user32.UpdateWindow(hwnd);
         assertTrue(result.booleanValue());
@@ -103,6 +109,23 @@ class User32Test {
         t.start();
         assertTrue(latch.await(2, TimeUnit.SECONDS));
         assertTrue(get.get());
+    }
+
+    @Test
+    void testGetWindowRect() {
+        WinDef.RECT rect = new WinDef.RECT();
+        BOOL result = user32.GetWindowRect(hwnd, rect);
+        assertTrue(result.booleanValue());
+        assertTrue(rect.right.intValue() > rect.left.intValue());
+        assertTrue(rect.bottom.intValue() > rect.top.intValue());
+    }
+
+    @Test
+    void testGetSystemMetrics() {
+        int width = user32.GetSystemMetrics(WinUser.SM_CXSCREEN);
+        int height = user32.GetSystemMetrics(WinUser.SM_CYSCREEN);
+        assertTrue(width > 0);
+        assertTrue(height > 0);
     }
 
     @Test
