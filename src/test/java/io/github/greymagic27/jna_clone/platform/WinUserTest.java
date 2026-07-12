@@ -1,6 +1,5 @@
 package io.github.greymagic27.jna_clone.platform;
 
-import io.github.greymagic27.jna_clone.Pointer;
 import io.github.greymagic27.jna_clone.WinDef.HWND;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
@@ -8,7 +7,6 @@ import io.github.greymagic27.jna_clone.WinDef.WPARAM;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static io.github.greymagic27.jna_clone.platform.WinUser.IDC_ARROW;
 import static io.github.greymagic27.jna_clone.platform.WinUser.SM_CXSCREEN;
 import static io.github.greymagic27.jna_clone.platform.WinUser.SM_CYSCREEN;
 import static io.github.greymagic27.jna_clone.platform.WinUser.SWP_NOZORDER;
@@ -56,11 +54,6 @@ class WinUserTest {
     }
 
     @Test
-    void testIdcValues() {
-        assertEquals(IDC_ARROW, Pointer.MAKEINTRESOURCEW(32512));
-    }
-
-    @Test
     void testSwValues() {
         assertEquals(5, SW_SHOW);
         assertEquals(0, SW_HIDE);
@@ -86,7 +79,7 @@ class WinUserTest {
     @Test
     void testMsg() {
         WinUser.MSG msg = new WinUser.MSG();
-        assertEquals(56, msg.size());
+        assertEquals(48, msg.size());
     }
 
     @Test

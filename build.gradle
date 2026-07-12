@@ -42,9 +42,14 @@ tasks.withType(JavaCompile).configureEach {
 tasks.withType(JavaExec).configureEach {
     jvmArgs += '--enable-native-access=ALL-UNNAMED'
 }
-/* tasks.withType(Javadoc).configureEach {
-   (options as StandardJavadocDocletOptions).addStringOption('Xdoclint:all,-missing', '-quiet')
-} */
+tasks.javadoc {
+    include("io/github/greymagic27/jna_clone/platform/**")
+    include("io/github/greymagic27/jna_clone/WinDef.java")
+    include("io/github/greymagic27/jna_clone/WinNT.java")
+}
+tasks.withType(Javadoc).configureEach {
+    options.addStringOption("Xdoclint:-missing", "-quiet")
+}
 tasks.named("build") {
     dependsOn("publishToMavenLocal")
 }

@@ -4,6 +4,9 @@ import io.github.greymagic27.jna_clone.Pointer;
 import java.lang.foreign.MemorySegment;
 import org.jspecify.annotations.NonNull;
 
+/**
+ * A {@link Pointer} to any type
+ */
 public class LPVOID extends Pointer {
 
     public LPVOID(MemorySegment segment) {

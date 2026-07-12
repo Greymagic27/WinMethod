@@ -1,10 +1,13 @@
 package io.github.greymagic27.jna_clone.WinNT;
 
-import io.github.greymagic27.jna_clone.Pointer;
+import io.github.greymagic27.jna_clone.WinDef.LPVOID;
 import java.lang.foreign.MemorySegment;
 import org.jspecify.annotations.NonNull;
 
-public class HANDLE extends Pointer {
+/**
+ * A handle to an object
+ */
+public class HANDLE extends LPVOID {
 
     public HANDLE(MemorySegment segment) {
         super(segment);
@@ -14,6 +17,9 @@ public class HANDLE extends Pointer {
         this(MemorySegment.ofAddress(address));
     }
 
+    /**
+     * @return Returns the class and segment address as a string
+     */
     @Override
     public @NonNull String toString() {
         return getClass().getSimpleName() + "@0x" + Long.toHexString(segment.address());

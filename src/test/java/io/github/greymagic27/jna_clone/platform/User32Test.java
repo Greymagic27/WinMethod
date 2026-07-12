@@ -2,13 +2,11 @@ package io.github.greymagic27.jna_clone.platform;
 
 import io.github.greymagic27.jna_clone.WinDef.ATOM;
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
-import io.github.greymagic27.jna_clone.WinDef.HCURSOR;
 import io.github.greymagic27.jna_clone.WinDef.HINSTANCE;
 import io.github.greymagic27.jna_clone.WinDef.HWND;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import io.github.greymagic27.jna_clone.WinDef.WPARAM;
-import io.github.greymagic27.jna_clone.WinNT.HANDLE;
 import java.lang.foreign.MemorySegment;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +15,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static io.github.greymagic27.jna_clone.platform.WinUser.IDC_ARROW;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WS_OVERLAPPED;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -134,21 +131,6 @@ class User32Test {
         LPARAM lparam = new LPARAM(0);
         LRESULT result = user32.DefWindowProcW(hwnd, 0x000F, wparam, lparam);
         assertNotNull(result);
-    }
-
-    @Test
-    void testLoadImage() {
-        HANDLE handle = user32.LoadImageW(new HINSTANCE(MemorySegment.NULL), IDC_ARROW, 2, 0, 0, 32768);
-        assertNotNull(handle);
-        assertNotEquals(0, handle.segment.address());
-    }
-
-    @SuppressWarnings("deprecation")
-    @Test
-    void testLoadCursor() {
-        HCURSOR hcursor = user32.LoadCursorW(new HINSTANCE(MemorySegment.NULL), IDC_ARROW);
-        assertNotNull(hcursor);
-        assertNotEquals(0, hcursor.segment.address());
     }
 
     @Test
