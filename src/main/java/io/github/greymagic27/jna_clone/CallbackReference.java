@@ -1,7 +1,6 @@
 package io.github.greymagic27.jna_clone;
 
 import com.google.errorprone.annotations.Keep;
-import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import java.lang.foreign.Arena;
 import java.lang.foreign.FunctionDescriptor;
 import java.lang.foreign.Linker;
