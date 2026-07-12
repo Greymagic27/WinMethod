@@ -17,14 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static io.github.greymagic27.jna_clone.platform.WinUser.CS_HREDRAW;
-import static io.github.greymagic27.jna_clone.platform.WinUser.CS_VREDRAW;
 import static io.github.greymagic27.jna_clone.platform.WinUser.IDC_ARROW;
-import static io.github.greymagic27.jna_clone.platform.WinUser.IMAGE_CURSOR;
-import static io.github.greymagic27.jna_clone.platform.WinUser.LR_SHARED;
-import static io.github.greymagic27.jna_clone.platform.WinUser.SW_HIDE;
-import static io.github.greymagic27.jna_clone.platform.WinUser.WM_KEYDOWN;
-import static io.github.greymagic27.jna_clone.platform.WinUser.WM_PAINT;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WS_OVERLAPPED;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -50,7 +43,6 @@ class User32Test {
     void testRegisterClassEx() {
         WinUser.WNDCLASSEXW wndClass = new WinUser.WNDCLASSEXW();
         wndClass.cbSize = wndClass.size();
-        wndClass.style = CS_HREDRAW | CS_VREDRAW;
         wndClass.lpfnWndProc = user32::DefWindowProcW;
         wndClass.hInstance = new HINSTANCE(MemorySegment.NULL);
         wndClass.lpszClassName = "Test";
@@ -61,7 +53,7 @@ class User32Test {
 
     @Test
     void testShowWindow() {
-        BOOL result = user32.ShowWindow(hwnd, SW_HIDE);
+        BOOL result = user32.ShowWindow(hwnd, WinUser.SW_HIDE);
         assertNotNull(result);
     }
 
@@ -81,7 +73,7 @@ class User32Test {
     @Test
     void testTranslateMessage() {
         msg.hwnd = hwnd;
-        msg.message = WM_KEYDOWN;
+        msg.message = 0x0;
         msg.wParam = new WPARAM(0x41);
         msg.lParam = new LPARAM(0);
         BOOL result = user32.TranslateMessage(msg);
@@ -91,7 +83,7 @@ class User32Test {
     @Test
     void testDispatchMessage() {
         msg.hwnd = hwnd;
-        msg.message = WM_PAINT;
+        msg.message = 0x1;
         msg.wParam = new WPARAM(0);
         msg.lParam = new LPARAM(0);
         BOOL lresult = user32.DispatchMessageW(msg);
@@ -123,7 +115,7 @@ class User32Test {
 
     @Test
     void testLoadImage() {
-        HANDLE handle = user32.LoadImageW(new HINSTANCE(MemorySegment.NULL), IDC_ARROW, IMAGE_CURSOR, 0, 0, LR_SHARED);
+        HANDLE handle = user32.LoadImageW(new HINSTANCE(MemorySegment.NULL), IDC_ARROW, 2, 0, 0, 32768);
         assertNotNull(handle);
         assertNotEquals(0, handle.segment.address());
     }

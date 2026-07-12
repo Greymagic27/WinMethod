@@ -31,6 +31,8 @@ public interface User32 extends Library {
 
     int GetMessageW(WinUser.MSG lpMsg, HWND hWnd, int wMsgFilterMin, int wMsgFilterMax);
 
+    int GetSystemMetrics(int nIndex); // TODO: Write test
+
     LRESULT DefWindowProcW(HWND hWnd, int Msg, WPARAM wParam, LPARAM lParam);
 
     HANDLE LoadImageW(HINSTANCE hInst, Pointer name, int type, int cx, int cy, int fuLoad);

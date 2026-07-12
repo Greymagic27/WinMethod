@@ -29,27 +29,12 @@ public interface WinUser {
     int WS_SYSMENU = 0x00080000;
 
     int WM_DESTROY = 0x0002;
-    int WM_CLOSE = 0x0010;
-    int WM_KEYDOWN = 0x0100;
-    int WM_PAINT = 0x000F;
-    int WM_SYSCOMMAND = 0x0112;
-    int WM_NCHITTEST = 0x0084;
-    int WM_LBUTTONDOWN = 0x0201;
-
-    int CS_HREDRAW = 0x0002;
-    int CS_VREDRAW = 0x0001;
-
-    int CW_USEDEFAULT = 0x80000000;
 
     int SW_SHOW = 5;
     int SW_HIDE = 0;
 
-    int LR_DEFAULTSIZE = 0x00000040;
-    int LR_SHARED = 0x00008000;
-
-    int GWL_STYLE = -16;
-
-    int IMAGE_CURSOR = 2;
+    int SM_CXSCREEN = 0;
+    int SM_CYSCREEN = 1;
 
     Pointer IDC_ARROW = Pointer.MAKEINTRESOURCEW(32512);
 
