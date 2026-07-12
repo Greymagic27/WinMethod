@@ -36,6 +36,9 @@ public class EasyMethods {
         currentWindow = User32.INSTANCE.CreateWindowExW(0, "WindowClass", title, WinUser.WS_OVERLAPPEDWINDOW, 0, 0, width, height, null, null, hInstance, null);
         User32.INSTANCE.ShowWindow(currentWindow, WinUser.SW_SHOW);
         User32.INSTANCE.UpdateWindow(currentWindow);
+    }
+
+    public static void start() {
         WinUser.MSG msg = new WinUser.MSG();
         while (User32.INSTANCE.GetMessageW(msg, null, 0, 0) != 0) {
             User32.INSTANCE.TranslateMessage(msg);

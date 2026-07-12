@@ -26,13 +26,16 @@ class EasyMethodsTest {
     }
 
     private void createTestWindow() {
-        windowThread = new Thread(() -> EasyMethods.createWindow(null, 800, 600));
+        windowThread = new Thread(() -> {
+            EasyMethods.createWindow(null, 800, 600);
+            User32.INSTANCE.ShowWindow(EasyMethods.getCurrentWindow(), WinUser.SW_HIDE);
+            EasyMethods.start();
+        });
         windowThread.setDaemon(true);
         windowThread.start();
         long timeout = System.currentTimeMillis() + 2000;
         while (EasyMethods.getCurrentWindow() == null && System.currentTimeMillis() < timeout) Thread.onSpinWait();
         assertNotNull(EasyMethods.getCurrentWindow());
-        User32.INSTANCE.ShowWindow(EasyMethods.getCurrentWindow(), WinUser.SW_HIDE);
     }
 
     @Test
