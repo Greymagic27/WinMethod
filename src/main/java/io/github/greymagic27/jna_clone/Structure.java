@@ -57,6 +57,7 @@ public abstract class Structure {
     private @Nullable Object createDefaultValue(@NonNull Class<?> type) {
         try {
             if (type.isPrimitive()) return null;
+            if (type == String.class) return null;
             return type.getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException e) {
             return null;
