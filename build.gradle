@@ -46,6 +46,7 @@ tasks.javadoc {
     include("io/github/greymagic27/jna_clone/platform/**")
     include("io/github/greymagic27/jna_clone/WinDef.java")
     include("io/github/greymagic27/jna_clone/WinNT.java")
+    include("io/github/greymagic27/jna_clone/methods/**")
 }
 tasks.withType(Javadoc).configureEach {
     options.addStringOption("Xdoclint:-missing", "-quiet")
