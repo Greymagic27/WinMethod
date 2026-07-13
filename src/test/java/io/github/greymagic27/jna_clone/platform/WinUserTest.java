@@ -12,7 +12,9 @@ import static io.github.greymagic27.jna_clone.platform.WinUser.SM_CYSCREEN;
 import static io.github.greymagic27.jna_clone.platform.WinUser.SWP_NOZORDER;
 import static io.github.greymagic27.jna_clone.platform.WinUser.SW_HIDE;
 import static io.github.greymagic27.jna_clone.platform.WinUser.SW_SHOW;
+import static io.github.greymagic27.jna_clone.platform.WinUser.WM_COMMAND;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WM_DESTROY;
+import static io.github.greymagic27.jna_clone.platform.WinUser.WM_SIZE;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WS_BORDER;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WS_CAPTION;
 import static io.github.greymagic27.jna_clone.platform.WinUser.WS_CHILD;
@@ -51,6 +53,8 @@ class WinUserTest {
     @Test
     void testWmValues() {
         assertEquals(0x0002, WM_DESTROY);
+        assertEquals(0x0005, WM_SIZE);
+        assertEquals(0x0111, WM_COMMAND);
     }
 
     @Test

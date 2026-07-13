@@ -74,6 +74,14 @@ public interface WinUser {
      * The message sent when a window is being destroyed
      */
     int WM_DESTROY = 0x0002;
+    /**
+     * Sent to a window after its size has changed
+     */
+    int WM_SIZE = 0x0005;
+    /**
+     * Sent when the user invokes a command item from a menu, when a control sends a notification message to its parent window or when an accelerator keystroke is translated
+     */
+    int WM_COMMAND = 0x0111;
 
     /**
      * Activates the window and displays it in its current size and position

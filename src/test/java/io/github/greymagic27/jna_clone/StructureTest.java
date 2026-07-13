@@ -201,7 +201,7 @@ class StructureTest {
     @Test
     void testAutoFieldOrder() {
         @Structure.AutoFieldOrder
-                class AutoOrder extends Structure {
+        class AutoOrder extends Structure {
             private int first;
             private long second;
             private short third;
