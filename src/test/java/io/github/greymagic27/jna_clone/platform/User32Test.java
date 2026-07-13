@@ -190,4 +190,15 @@ class User32Test {
         assertTrue(received.get(), "Message was not received");
         user32.PostQuitMessage(0);
     }
+
+    @Test
+    void testMoveWindow() {
+        BOOL result = user32.MoveWindow(window, 200, 300, 400, 300, new BOOL(1));
+        assertTrue(result.booleanValue());
+        WinDef.RECT rect = new WinDef.RECT();
+        BOOL getRectResult = user32.GetWindowRect(window, rect);
+        assertTrue(getRectResult.booleanValue());
+        assertTrue(rect.right.intValue() - rect.left.intValue() >= 400);
+        assertTrue(rect.bottom.intValue() - rect.top.intValue() >= 300);
+    }
 }

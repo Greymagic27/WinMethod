@@ -115,6 +115,20 @@ public interface User32 extends Library {
     BOOL GetMessageW(WinUser.MSG lpMsg, HWND hWnd, int wMsgFilterMin, int wMsgFilterMax);
 
     /**
+     * Changes the positon and dimensions of the specified window
+     * Top-level windows are relative to the upper-left corner of the screen
+     * Children windows are relative to the upper-left corner of the parent window's client area
+     * @param hWnd A {@link io.github.greymagic27.jna_clone.WinNT.HANDLE} to the window
+     * @param X The new positon of the left side of the window
+     * @param Y The new position of the top of the window
+     * @param nWidth The new width of the window
+     * @param nHeight The new height of the window
+     * @param bRepaint Indicates whether the window is to be repainted. If <b>TRUE</b> the window receives a message. If <b>FALSE</b> no repainting occurs
+     * @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+     */
+    BOOL MoveWindow(HWND hWnd, int X, int Y, int nWidth, int nHeight, BOOL bRepaint);
+
+    /**
      * Retrieves the specified system metric or system configuration setting
      *
      * @param nIndex System metric or configuration setting to be retrieved
