@@ -2,9 +2,13 @@ package io.github.greymagic27.jna_clone.methods;
 
 import io.github.greymagic27.jna_clone.WinDef.BOOL;
 import io.github.greymagic27.jna_clone.WinDef.HWND;
+import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import io.github.greymagic27.jna_clone.platform.User32;
 import io.github.greymagic27.jna_clone.platform.WinDef;
 import io.github.greymagic27.jna_clone.platform.WinUser;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +30,7 @@ class WindowTest {
 
     private void createTestWindow() {
         windowThread = new Thread(() -> {
-            Window.createWindow(null, 800, 600);
+            Window.createWindow(WinUser.Wndproc.defaultWndProc(), "Test", 800, 600);
             User32.INSTANCE.ShowWindow(Window.getCurrentWindow(), WinUser.SW_HIDE);
             Window.start();
         });
@@ -70,5 +74,31 @@ class WindowTest {
     @Test
     void testSetWindowPositionWithoutWindow() {
         assertThrows(IllegalStateException.class, () -> Window.setWindowPosition(WindowPosition.CENTER));
+    }
+
+    @Test
+    void testCustomWndProc() throws InterruptedException {
+        AtomicBoolean called = new AtomicBoolean(false);
+        CountDownLatch ready = new CountDownLatch(1);
+        windowThread = new Thread(() -> {
+            Window.createWindow((hWnd, uMsg, wParam, lParam) -> {
+                if (uMsg == WinUser.WM_CLOSE) {
+                    called.set(true);
+                    User32.INSTANCE.DestroyWindow(hWnd);
+                    return new LRESULT(0);
+                }
+                return User32.INSTANCE.DefWindowProcW(hWnd, uMsg, wParam, lParam);
+            }, "Custom WndProc Test", 800, 600);
+            User32.INSTANCE.ShowWindow(Window.getCurrentWindow(), WinUser.SW_HIDE);
+            ready.countDown();
+            Window.start();
+        });
+        windowThread.setDaemon(true);
+        windowThread.start();
+        assertTrue(ready.await(2, TimeUnit.SECONDS));
+        User32.INSTANCE.PostMessageW(Window.getCurrentWindow(), WinUser.WM_CLOSE, null, null).booleanValue();
+        long timeout = System.currentTimeMillis() + 2000;
+        while (!called.get() && System.currentTimeMillis() < timeout) Thread.onSpinWait();
+        assertTrue(called.get(), "Custom Wndproc was not called");
     }
 }

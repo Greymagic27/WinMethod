@@ -2,7 +2,6 @@ package io.github.greymagic27.jna_clone.methods;
 
 import io.github.greymagic27.jna_clone.WinDef.HINSTANCE;
 import io.github.greymagic27.jna_clone.WinDef.HWND;
-import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import io.github.greymagic27.jna_clone.platform.Kernel32;
 import io.github.greymagic27.jna_clone.platform.User32;
 import io.github.greymagic27.jna_clone.platform.WinUser;
@@ -17,30 +16,24 @@ public class Window {
     /**
      * Creates a basic window
      *
-     * @param title  Title of the window
-     * @param width  Width of the window
-     * @param height Height of the window
+     * @param wndproc Custom wndproc. If null, this defaults to the wndProc in {@link #createWindow(WinUser.Wndproc, String, int, int)}
+     * @param title   Title of the window
+     * @param width   Width of the window
+     * @param height  Height of the window
      */
-    public static void createWindow(String title, int width, int height) {
+    public static void createWindow(WinUser.Wndproc wndproc, String title, int width, int height) {
         currentWidth = width;
         currentHeight = height;
+        Objects.requireNonNull(wndproc);
+        String className = "WindowClass_" + System.nanoTime();
         HINSTANCE hInstance = Kernel32.INSTANCE.GetModuleHandleW(null);
-        WinUser.Wndproc wndproc = (hWnd, uMsg, wParam, lParam) -> {
-            LRESULT result = User32.INSTANCE.DefWindowProcW(hWnd, uMsg, wParam, lParam);
-            if (uMsg == WinUser.WM_DESTROY) {
-                currentWindow = null;
-                User32.INSTANCE.PostQuitMessage(0);
-                return new LRESULT(0);
-            }
-            return result;
-        };
         WinUser.WNDCLASSEXW wc = new WinUser.WNDCLASSEXW();
         wc.cbSize = wc.size();
         wc.lpfnWndProc = wndproc;
         wc.hInstance = hInstance;
-        wc.lpszClassName = "WindowClass";
+        wc.lpszClassName = className;
         User32.INSTANCE.RegisterClassExW(wc);
-        currentWindow = User32.INSTANCE.CreateWindowExW(0, "WindowClass", title, WinUser.WS_OVERLAPPEDWINDOW, 0, 0, width, height, null, null, hInstance, null);
+        currentWindow = User32.INSTANCE.CreateWindowExW(0, className, title, WinUser.WS_OVERLAPPEDWINDOW, 0, 0, width, height, null, null, hInstance, null);
         User32.INSTANCE.ShowWindow(currentWindow, WinUser.SW_SHOW);
         User32.INSTANCE.UpdateWindow(currentWindow);
     }

@@ -16,16 +16,22 @@ import org.jspecify.annotations.NonNull;
 
 public final class NativeLibrary {
 
-    private final Linker linker = Linker.nativeLinker();
+    private static final Linker linker = Linker.nativeLinker();
+    private static final MethodHandle getLastErrorHandle;
+    private static final Arena k32Arena = Arena.ofShared();
+
+    static {
+        SymbolLookup kernel32 = SymbolLookup.libraryLookup("kernel32.dll", k32Arena);
+        MemorySegment address = kernel32.find("GetLastError").orElseThrow(() -> new UnsatisfiedLinkError("GetLastError not found"));
+        getLastErrorHandle = linker.downcallHandle(address, FunctionDescriptor.of(ValueLayout.JAVA_INT));
+    }
+
     private final SymbolLookup lookup;
     private final Map<Method, MethodHandle> handleCache = new ConcurrentHashMap<>();
-    private final MethodHandle getLastErrorHandle;
 
     NativeLibrary(String libraryName) {
         Arena libraryArena = Arena.ofShared();
         this.lookup = SymbolLookup.libraryLookup(mapLibraryName(libraryName), libraryArena);
-        MemorySegment address = lookup.find("GetLastError").orElseThrow(() -> new UnsatisfiedLinkError("GetLastError not found"));
-        this.getLastErrorHandle = linker.downcallHandle(address, FunctionDescriptor.of(ValueLayout.JAVA_INT));
     }
 
     MethodHandle handleFor(Method method) {

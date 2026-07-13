@@ -18,7 +18,7 @@ public interface Library {
         NativeLibrary nativeLibrary = new NativeLibrary(libraryName);
         InvocationHandler handler = (_, method, args) -> {
             if (method.getDeclaringClass() == Object.class) return method.invoke(nativeLibrary, args);
-            if (method.getName().equals("GetLastError")) return LastError.get();
+            if (method.getName().equals("GetLastError") && method.getParameterCount() == 0) return LastError.get();
             MethodHandle target = nativeLibrary.handleFor(method);
             Class<?>[] paramTypes = method.getParameterTypes();
             try (Arena callArena = Arena.ofConfined()) {

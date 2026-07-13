@@ -93,6 +93,16 @@ public interface User32 extends Library {
     BOOL UpdateWindow(HWND hWnd);
 
     /**
+     * Places a message in the message queue associated with the thread that created the window, and returns without waiting for the thread to process the message
+     * @param hWnd A {@link io.github.greymagic27.jna_clone.WinNT.HANDLE} to the window whose procedure is to receive the message
+     * @param Msg The message to be posted
+     * @param wParam Additional message-specific information
+     * @param lParam Additional message-specific information
+     * @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+     */
+    BOOL PostMessageW(HWND hWnd, int Msg, WPARAM wParam, LPARAM lParam);
+
+    /**
      * Retrieves a message from the calling thread's message queue
      *
      * @param lpMsg         Pointer to a {@link io.github.greymagic27.jna_clone.platform.WinUser.MSG} structure that receives message information

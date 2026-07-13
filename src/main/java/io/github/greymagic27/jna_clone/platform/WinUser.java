@@ -10,6 +10,7 @@ import io.github.greymagic27.jna_clone.WinDef.HWND;
 import io.github.greymagic27.jna_clone.WinDef.LPARAM;
 import io.github.greymagic27.jna_clone.WinDef.LRESULT;
 import io.github.greymagic27.jna_clone.WinDef.WPARAM;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Values defined in WinUser.h
@@ -82,6 +83,10 @@ public interface WinUser {
      * Sent when the user invokes a command item from a menu, when a control sends a notification message to its parent window or when an accelerator keystroke is translated
      */
     int WM_COMMAND = 0x0111;
+    /**
+     * Sent as a signal that a window or an application should terminate
+     */
+    int WM_CLOSE = 0x0010;
 
     /**
      * Activates the window and displays it in its current size and position
@@ -110,6 +115,20 @@ public interface WinUser {
      * A callback function which is defined in the application
      */
     interface Wndproc extends Callback {
+        /**
+         * Creates a standard window with default {@link #WM_DESTROY} handling
+         * @return Returns a standard window procedure callback
+         */
+        static @NonNull Wndproc defaultWndProc() {
+            return (hWnd, uMsg, wParam, lParam) -> {
+                if (uMsg == WinUser.WM_DESTROY) {
+                    User32.INSTANCE.PostQuitMessage(0);
+                    return new LRESULT(0);
+                }
+                return User32.INSTANCE.DefWindowProcW(hWnd, uMsg, wParam, lParam);
+            };
+        }
+
         /**
          * A callback function that processes messages sent to a window
          *
