@@ -1,7 +1,9 @@
 plugins {
     id 'java'
+    id 'signing'
     id 'maven-publish'
     id 'net.ltgt.errorprone' version '5.1.0'
+    id("com.vanniktech.maven.publish") version "0.37.0"
 }
 
 group = 'io.github.greymagic27'
@@ -9,6 +11,11 @@ version = '1.0.0'
 
 repositories {
     mavenCentral()
+}
+
+mavenPublishing {
+    publishToMavenCentral()
+    signAllPublications()
 }
 
 java {
@@ -59,4 +66,33 @@ tasks.named("check") {
 }
 tasks.named("test") {
     dependsOn("publishToMavenLocal")
+}
+mavenPublishing {
+    coordinates("com.io.greymagic27", "library-name", "1.0.3-SNAPSHOT")
+
+    pom {
+        name = "WinMerge"
+        description = "Custom JNA like bindings using pure Java"
+        inceptionYear = "2026"
+        url = "https://github.com/Greymagic27/WinMethod"
+        licenses {
+            license {
+                name = "The Apache License, Version 2.0"
+                url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                distribution = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+        developers {
+            developer {
+                id = "Greymagic27"
+                name = "Greymagic27"
+                url = "https://github.com/Greymagic27/WinMethod"
+            }
+        }
+        scm {
+            url = "https://github.com/username/WinMethod/"
+            connection = "scm:git:git://github.com/greymagic27/WinMethod.git"
+            developerConnection = "scm:git:ssh://git@github.com/greymagic27/WinMethod.git"
+        }
+    }
 }
