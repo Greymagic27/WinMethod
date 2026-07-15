@@ -68,7 +68,7 @@ tasks.named("test") {
     dependsOn("publishToMavenLocal")
 }
 mavenPublishing {
-    coordinates("com.io.greymagic27", "library-name", "1.0.3-SNAPSHOT")
+    coordinates(group, "win_method", version)
 
     pom {
         name = "WinMerge"
