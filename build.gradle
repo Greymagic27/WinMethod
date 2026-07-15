@@ -18,6 +18,10 @@ mavenPublishing {
     signAllPublications()
 }
 
+signing {
+    useGpgCmd()
+}
+
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(26))
@@ -46,9 +50,6 @@ tasks.withType(JavaCompile).configureEach {
     //noinspection GrUnresolvedAccess
     options.errorprone.disable('NoCanIgnoreReturnValueOnClasses')
 }
-tasks.withType(JavaExec).configureEach {
-    jvmArgs += '--enable-native-access=ALL-UNNAMED'
-}
 tasks.javadoc {
     include("io/github/greymagic27/jna_clone/platform/**")
     include("io/github/greymagic27/jna_clone/WinDef.java")
@@ -68,8 +69,9 @@ tasks.named("test") {
     dependsOn("publishToMavenLocal")
 }
 mavenPublishing {
-    coordinates(group, "win_method", version)
+    coordinates(group, "WinMethod", version)
 
+    //noinspection GroovyAssignabilityCheck
     pom {
         name = "WinMerge"
         description = "Custom JNA like bindings using pure Java"
