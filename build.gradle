@@ -1,7 +1,6 @@
 plugins {
     id 'java'
     id 'signing'
-    id 'maven-publish'
     id 'net.ltgt.errorprone' version '5.1.0'
     id 'com.vanniktech.maven.publish' version '0.37.0'
 }
@@ -53,10 +52,10 @@ tasks.withType(JavaCompile).configureEach {
     options.errorprone.disable('NoCanIgnoreReturnValueOnClasses')
 }
 tasks.javadoc {
-    include("io/github/greymagic27/jna_clone/platform/**")
-    include("io/github/greymagic27/jna_clone/WinDef.java")
-    include("io/github/greymagic27/jna_clone/WinNT.java")
-    include("io/github/greymagic27/jna_clone/methods/**")
+    include("io/github/greymagic27/win_method/platform/**")
+    include("io/github/greymagic27/win_method/WinDef.java")
+    include("io/github/greymagic27/win_method/WinNT.java")
+    include("io/github/greymagic27/win_method/methods/**")
 }
 tasks.withType(Javadoc).configureEach {
     options.addStringOption("Xdoclint:-missing", "-quiet")
