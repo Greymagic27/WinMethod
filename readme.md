@@ -1,4 +1,4 @@
-[![.github/workflows/gradle.yml](https://github.com/Greymagic27/JNA-Clone/actions/workflows/gradle.yml/badge.svg)](https://github.com/Greymagic27/JNA-Clone/actions/workflows/gradle.yml) [![Javadocs](https://github.com/Greymagic27/JNA-Clone/actions/workflows/javadocs.yml/badge.svg)](https://greymagic27.github.io/JNA-Clone/)
+[![.github/workflows/gradle.yml](https://github.com/Greymagic27/WinMethod/actions/workflows/gradle.yml/badge.svg)](https://github.com/Greymagic27/WinMethod/actions/workflows/gradle.yml) [![Javadocs](https://github.com/Greymagic27/WinMethod/actions/workflows/javadocs.yml/badge.svg)](https://greymagic27.github.io/WinMethod/)
 
 # Information
 
