@@ -64,7 +64,7 @@ mavenPublishing {
     coordinates(group, "WinMethod", version)
     //noinspection GroovyAssignabilityCheck
     pom {
-        name = "WinMerge"
+        name = "WinMethod"
         description = "Custom JNA like bindings using pure Java"
         inceptionYear = "2026"
         url = "https://github.com/Greymagic27/WinMethod"
