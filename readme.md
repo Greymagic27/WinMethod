@@ -7,12 +7,11 @@ welcomed. Name suggestions also welcome!
 
 # Usage
 
-Currently, this is not published on any maven or Gradle repository.
+To use this library in your project, you need to declare it as a dependency.
 
-To use this in your own projects, you will need to clone the repository and run the following command:
-`gradle publishToMavenLocal`
+For Maven, this is done via the pom.xml file. For Gradle, this is done via the build.gradle file.
 
-This will then allow you to add this as a dependency in your project and use the bindings
+https://central.sonatype.com/artifact/io.github.greymagic27/WinMethod
 
 ## Helpful info for me
 
