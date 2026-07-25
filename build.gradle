@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'io.github.greymagic27'
-version = '1.0.0'
+version = '1.0.1'
 
 repositories {
     mavenCentral()
@@ -83,7 +83,7 @@ mavenPublishing {
             }
         }
         scm {
-            url = "https://github.com/username/WinMethod/"
+            url = "https://github.com/Greymagic27/WinMethod/"
             connection = "scm:git:git://github.com/greymagic27/WinMethod.git"
             developerConnection = "scm:git:ssh://git@github.com/greymagic27/WinMethod.git"
         }
