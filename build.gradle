@@ -1,3 +1,6 @@
+//file:noinspection GroovyAssignabilityCheck
+//file:noinspection DependencyNotationArgument
+//file:noinspection GroovyImplicitNullArgumentCall
 plugins {
     id 'java'
     id 'signing'
@@ -13,7 +16,6 @@ repositories {
 }
 
 mavenPublishing {
-    //noinspection GroovyImplicitNullArgumentCall
     publishToMavenCentral()
     signAllPublications()
 }
@@ -48,8 +50,10 @@ tasks.withType(Test).configureEach {
 }
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add('-Xlint:deprecation')
-    //noinspection GrUnresolvedAccess
     options.errorprone.disable('NoCanIgnoreReturnValueOnClasses')
+}
+tasks.withType(Javadoc).configureEach {
+    options.addStringOption("Xdoclint:-missing", "-quiet")
 }
 tasks.javadoc {
     include("io/github/greymagic27/win_method/platform/**")
@@ -57,12 +61,8 @@ tasks.javadoc {
     include("io/github/greymagic27/win_method/WinNT.java")
     include("io/github/greymagic27/win_method/methods/**")
 }
-tasks.withType(Javadoc).configureEach {
-    options.addStringOption("Xdoclint:-missing", "-quiet")
-}
 mavenPublishing {
     coordinates(group, "WinMethod", version)
-    //noinspection GroovyAssignabilityCheck
     pom {
         name = "WinMethod"
         description = "Custom JNA like bindings using pure Java"
