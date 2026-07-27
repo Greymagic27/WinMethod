@@ -1,5 +1,6 @@
 package io.github.greymagic27.win_method.WinNT;
 
+import io.github.greymagic27.win_method.Pointer;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import java.lang.foreign.MemorySegment;
 import org.jspecify.annotations.NonNull;
@@ -11,6 +12,10 @@ public class HANDLE extends LPVOID {
 
     public HANDLE(MemorySegment segment) {
         super(segment);
+    }
+
+    public HANDLE(@NonNull Pointer pointer) {
+        super(pointer.segment);
     }
 
     public HANDLE(long address) {
