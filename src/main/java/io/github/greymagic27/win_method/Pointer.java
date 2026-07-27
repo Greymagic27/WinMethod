@@ -30,8 +30,7 @@ public class Pointer {
     }
 
     public Pointer getPointer(long offset) {
-        MemorySegment target = segment.get(ValueLayout.ADDRESS, offset);
-        return new Pointer(target);
+        return new Pointer(segment.get(ValueLayout.ADDRESS, offset));
     }
 
     public void setInt(long offset, int value) {
