@@ -97,9 +97,11 @@ class PointerTest {
     @Test
     void testGetPointer() {
         try (Arena arena = Arena.ofConfined()) {
-            MemorySegment segment = arena.allocate(4);
-            Pointer ptr = new Pointer(segment);
-            assertEquals(segment, ptr.getPointer());
+            MemorySegment target = arena.allocate(8);
+            MemorySegment holder = arena.allocate(ValueLayout.ADDRESS);
+            holder.set(ValueLayout.ADDRESS, 0, target);
+            Pointer ptr = new Pointer(holder);
+            assertEquals(target.address(), ptr.getPointer(0).segment.address());
         }
     }
 }
