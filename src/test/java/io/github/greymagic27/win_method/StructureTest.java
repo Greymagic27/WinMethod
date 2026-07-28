@@ -248,9 +248,71 @@ class StructureTest {
         assertEquals((short) 50, st.third);
     }
 
+    @Test
+    void testByteArrayWrite() {
+        ByteArray st = new ByteArray();
+        st.data = new byte[]{1, 2, 3, 4, 5, 6, 7, 8};
+        MemorySegment segment = st.pointer().segment;
+        assertEquals(1, segment.get(ValueLayout.JAVA_BYTE, 0));
+        assertEquals(2, segment.get(ValueLayout.JAVA_BYTE, 1));
+        assertEquals(3, segment.get(ValueLayout.JAVA_BYTE, 2));
+        assertEquals(4, segment.get(ValueLayout.JAVA_BYTE, 3));
+        assertEquals(5, segment.get(ValueLayout.JAVA_BYTE, 4));
+        assertEquals(6, segment.get(ValueLayout.JAVA_BYTE, 5));
+        assertEquals(7, segment.get(ValueLayout.JAVA_BYTE, 6));
+        assertEquals(8, segment.get(ValueLayout.JAVA_BYTE, 7));
+    }
+
+    @Test
+    void testByteArrayRead() {
+        ByteArray st = new ByteArray();
+        MemorySegment segment = st.pointer().segment;
+        for (int i = 0; i < 8; i++) segment.set(ValueLayout.JAVA_BYTE, i, (byte) (i + 10));
+        st.read();
+        assertEquals(10, st.data[0]);
+        assertEquals(11, st.data[1]);
+        assertEquals(12, st.data[2]);
+        assertEquals(13, st.data[3]);
+        assertEquals(14, st.data[4]);
+        assertEquals(15, st.data[5]);
+        assertEquals(16, st.data[6]);
+        assertEquals(17, st.data[7]);
+    }
+
+    @Test
+    void testByteArraySize() {
+        ByteArray st = new ByteArray();
+        assertEquals(8, st.size());
+    }
+
+    @Test
+    void testArrayFieldRequiresArrayLength() {
+        @SuppressWarnings("unused")
+        @Structure.AutoFieldOrder
+        class InvalidArray extends Structure {
+            private byte[] data;
+        }
+        IllegalStateException e = assertThrows(IllegalStateException.class, InvalidArray::new);
+        assertTrue(e.getMessage().contains("must have @ArrayLength"));
+    }
+
+    @Test
+    void testArrayFieldWrongLength() {
+        ByteArray st = new ByteArray();
+        st.data = new byte[]{1, 2, 3};
+        IllegalStateException e = assertThrows(IllegalStateException.class, st::pointer);
+        assertTrue(e.getMessage().contains("must have length 8"));
+    }
+
     @Structure.FieldOrder({"x", "y"})
     private static class Point extends Structure {
         private int x;
         private int y;
+    }
+
+    @Structure.AutoFieldOrder
+    private static class ByteArray extends Structure {
+        @ArrayLength(8)
+        private byte[] data;
     }
 }

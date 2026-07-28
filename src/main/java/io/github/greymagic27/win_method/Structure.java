@@ -7,8 +7,10 @@ import java.lang.annotation.Target;
 import java.lang.foreign.Arena;
 import java.lang.foreign.GroupLayout;
 import java.lang.foreign.MemoryLayout;
+import java.lang.foreign.MemoryLayout.PathElement;
 import java.lang.foreign.MemorySegment;
 import java.lang.invoke.VarHandle;
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -22,9 +24,9 @@ import org.jspecify.annotations.Nullable;
 public abstract class Structure {
 
     private final Arena arena;
-    private final MemoryLayout layout;
     private final Map<String, VarHandle> handles = new LinkedHashMap<>();
     private final Map<String, Field> fields = new LinkedHashMap<>();
+    private final MemoryLayout layout;
     private MemorySegment segment;
 
     protected Structure() {
@@ -45,7 +47,7 @@ public abstract class Structure {
             field.setAccessible(true);
             try {
                 if (field.get(this) == null) {
-                    Object value = createDefaultValue(field.getType());
+                    Object value = createDefaultValue(field);
                     if (value != null) field.set(this, value);
                 }
             } catch (IllegalAccessException e) {
@@ -54,7 +56,13 @@ public abstract class Structure {
         }
     }
 
-    private @Nullable Object createDefaultValue(@NonNull Class<?> type) {
+    private @Nullable Object createDefaultValue(@NonNull Field field) {
+        Class<?> type = field.getType();
+        if (type.isArray()) {
+            ArrayLength arrayLength = field.getAnnotation(ArrayLength.class);
+            if (arrayLength == null) throw new IllegalStateException("Array field " + field.getName() + " must have @ArrayLength");
+            return Array.newInstance(type.getComponentType(), arrayLength.value());
+        }
         try {
             if (type.isPrimitive()) return null;
             if (type == String.class) return null;
@@ -74,8 +82,24 @@ public abstract class Structure {
         long maxAlign = 1;
         for (Field f : orderedFields) {
             f.setAccessible(true);
-            MemoryLayout ml = TypeMapper.layoutMappings(f.getType());
-            if (ml == null) throw new IllegalStateException("Unsupported struct field type: " + f.getType() + " on " + f.getName());
+            MemoryLayout ml;
+            if (f.getType().isArray()) {
+                Object array;
+                try {
+                    array = f.get(this);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                }
+                if (array == null) throw new IllegalStateException("Array field " + f.getName() + " must be initialised");
+                int length = Array.getLength(array);
+                Class<?> componentType = f.getType().getComponentType();
+                MemoryLayout elementLayout = TypeMapper.layoutMappings(componentType);
+                if (elementLayout == null) throw new IllegalStateException("Unsupported array component type: " + componentType);
+                ml = MemoryLayout.sequenceLayout(length, elementLayout);
+            } else {
+                ml = TypeMapper.layoutMappings(f.getType());
+                if (ml == null) throw new IllegalStateException("Unsupported struct field type: " + f.getType() + " on " + f.getName());
+            }
             long align = ml.byteAlignment();
             long pad = (align - (currentOffset % align)) % align;
             if (pad > 0) {
@@ -92,10 +116,9 @@ public abstract class Structure {
         long trailingPad = (maxAlign - (currentOffset % maxAlign)) % maxAlign;
         if (trailingPad > 0) members.add(MemoryLayout.paddingLayout(trailingPad));
         GroupLayout group = MemoryLayout.structLayout(members.toArray(new MemoryLayout[0]));
-        for (MemoryLayout ml : members) {
-            if (ml.name().isEmpty()) continue;
-            String name = ml.name().orElseThrow();
-            handles.put(name, group.varHandle(MemoryLayout.PathElement.groupElement(name)));
+        for (Field f : orderedFields) {
+            if (f.getType().isArray()) continue;
+            handles.put(f.getName(), group.varHandle(PathElement.groupElement(f.getName())));
         }
         return group;
     }
@@ -152,6 +175,29 @@ public abstract class Structure {
         throw new IllegalStateException(getClass().getSimpleName() + " must be annotated with @FieldOrder or @AutoFieldOrder");
     }
 
+    private void writeArray(@NonNull Field field, Object value) {
+        long offset = layout.byteOffset(PathElement.groupElement(field.getName()));
+        ArrayLength arrayLength = field.getAnnotation(ArrayLength.class);
+        if (arrayLength != null && Array.getLength(value) != arrayLength.value()) throw new IllegalStateException("Array field " + field.getName() + " must have length " + arrayLength.value());
+        if (value instanceof byte[] bytes) {
+            MemorySegment.copy(MemorySegment.ofArray(bytes), 0, segment, offset, bytes.length);
+            return;
+        }
+        throw new UnsupportedOperationException("Unsupported array type: " + field.getType());
+    }
+
+    private void readArray(@NonNull Field field) {
+        long offset = layout.byteOffset(PathElement.groupElement(field.getName()));
+        Object value;
+        try {
+            value = field.get(this);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        if (!(value instanceof byte[] bytes)) throw new UnsupportedOperationException("Unsupported array type: " + field.getType());
+        MemorySegment.copy(segment, offset, MemorySegment.ofArray(bytes), 0, bytes.length);
+    }
+
     public Pointer pointer() {
         write();
         return new Pointer(segment);
@@ -166,7 +212,11 @@ public abstract class Structure {
             try {
                 Field f = e.getValue();
                 Object javaValue = f.get(this);
-                if (javaValue == null) javaValue = createDefaultValue(f.getType());
+                if (f.getType().isArray()) {
+                    if (javaValue == null) throw new IllegalStateException("Array field " + f.getName() + " cannot be null");
+                    writeArray(f, javaValue);
+                    continue;
+                }
                 Object nativeValue = TypeMapper.toNative(javaValue, f.getType(), arena);
                 handles.get(e.getKey()).set(segment, 0, nativeValue);
             } catch (IllegalAccessException ex) {
@@ -179,6 +229,10 @@ public abstract class Structure {
         for (Map.Entry<String, Field> e : fields.entrySet()) {
             try {
                 Field f = e.getValue();
+                if (f.getType().isArray()) {
+                    readArray(f);
+                    continue;
+                }
                 if (!TypeMapper.isReadable(f.getType())) continue;
                 Object raw = handles.get(e.getKey()).get(segment, 0);
                 f.set(this, TypeMapper.fromNative(raw, f.getType()));
@@ -224,5 +278,14 @@ public abstract class Structure {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface AutoFieldOrder {
+    }
+
+    /// Specifies the length of an array
+    /// (i.e: @ArrayLength(8)
+    ///       private byte[] data;)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.FIELD)
+    public @interface ArrayLength {
+        int value();
     }
 }
