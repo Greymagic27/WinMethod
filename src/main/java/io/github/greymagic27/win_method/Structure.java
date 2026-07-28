@@ -92,9 +92,7 @@ public abstract class Structure {
                 }
                 if (array == null) throw new IllegalStateException("Array field " + f.getName() + " must be initialised");
                 int length = Array.getLength(array);
-                Class<?> componentType = f.getType().getComponentType();
-                MemoryLayout elementLayout = TypeMapper.layoutMappings(componentType);
-                if (elementLayout == null) throw new IllegalStateException("Unsupported array component type: " + componentType);
+                MemoryLayout elementLayout = getArrayElementLayout(f);
                 ml = MemoryLayout.sequenceLayout(length, elementLayout);
             } else {
                 ml = TypeMapper.layoutMappings(f.getType());
@@ -179,11 +177,14 @@ public abstract class Structure {
         long offset = layout.byteOffset(PathElement.groupElement(field.getName()));
         ArrayLength arrayLength = field.getAnnotation(ArrayLength.class);
         if (arrayLength != null && Array.getLength(value) != arrayLength.value()) throw new IllegalStateException("Array field " + field.getName() + " must have length " + arrayLength.value());
-        if (value instanceof byte[] bytes) {
-            MemorySegment.copy(MemorySegment.ofArray(bytes), 0, segment, offset, bytes.length);
-            return;
+        MemoryLayout elementLayout = getArrayElementLayout(field);
+        VarHandle handle = elementLayout.varHandle();
+        Class<?> componentType = field.getType().getComponentType();
+        for (int i = 0; i < Array.getLength(value); i++) {
+            Object element = Array.get(value, i);
+            Object nativeValue = TypeMapper.toNative(element, componentType, arena);
+            handle.set(segment, offset + (i * elementLayout.byteSize()), nativeValue);
         }
-        throw new UnsupportedOperationException("Unsupported array type: " + field.getType());
     }
 
     private void readArray(@NonNull Field field) {
@@ -194,8 +195,22 @@ public abstract class Structure {
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
-        if (!(value instanceof byte[] bytes)) throw new UnsupportedOperationException("Unsupported array type: " + field.getType());
-        MemorySegment.copy(segment, offset, MemorySegment.ofArray(bytes), 0, bytes.length);
+        if (value == null) throw new IllegalStateException("Array field " + field.getName() + " cannot be null");
+        MemoryLayout elementLayout = getArrayElementLayout(field);
+        VarHandle handle = elementLayout.varHandle();
+        Class<?> componentType = field.getType().getComponentType();
+        for (int i = 0; i < Array.getLength(value); i++) {
+            Object nativeValue = handle.get(segment, offset + (i * elementLayout.byteSize()));
+            Object javaValue = TypeMapper.fromNative(nativeValue, componentType);
+            Array.set(value, i, javaValue);
+        }
+    }
+
+    private @NonNull MemoryLayout getArrayElementLayout(@NonNull Field field) {
+        Class<?> componentType = field.getType().getComponentType();
+        MemoryLayout elementLayout = TypeMapper.layoutMappings(componentType);
+        if (elementLayout == null) throw new IllegalStateException("Unsupported array component type: " + componentType + " in field " + field.getName());
+        return elementLayout;
     }
 
     public Pointer pointer() {
