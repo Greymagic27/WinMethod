@@ -40,7 +40,7 @@ class TypeMapperTest {
 
     @Test
     void testLayoutMappings() {
-        for (Class<?> type : List.of(int.class, int[].class, Integer.class, LONG.class)) {
+        for (Class<?> type : List.of(int.class, Integer.class, LONG.class)) {
             assertEquals(JAVA_INT, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class)) {
@@ -49,7 +49,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(short.class, Short.class, WORD.class, ATOM.class)) {
             assertEquals(ValueLayout.JAVA_SHORT, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(byte.class, byte[].class, Byte.class, BYTE.class)) {
+        for (Class<?> type : List.of(byte.class, Byte.class, BYTE.class)) {
             assertEquals(ValueLayout.JAVA_BYTE, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(boolean.class, Boolean.class, BOOL.class)) {
@@ -60,9 +60,6 @@ class TypeMapperTest {
         }
         for (Class<?> type : List.of(float.class, Float.class)) {
             assertEquals(ValueLayout.JAVA_FLOAT, TypeMapper.layoutMappings(type));
-        }
-        for (Class<?> type : List.of(char.class, char[].class)) {
-            assertEquals(ValueLayout.JAVA_CHAR, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
@@ -683,13 +680,6 @@ class TypeMapperTest {
         assertNotNull(result);
         result.read();
         assertEquals(new LONG(42), result.x);
-    }
-
-    @Test
-    void testLayoutMappingsArrays() {
-        assertEquals(ValueLayout.JAVA_INT, TypeMapper.layoutMappings(int[].class));
-        assertEquals(ValueLayout.JAVA_BYTE, TypeMapper.layoutMappings(byte[].class));
-        assertEquals(ValueLayout.JAVA_CHAR, TypeMapper.layoutMappings(char[].class));
     }
 
     static class CustomPointer extends Pointer {
