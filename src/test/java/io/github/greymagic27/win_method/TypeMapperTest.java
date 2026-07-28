@@ -61,7 +61,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(float.class, Float.class)) {
             assertEquals(ValueLayout.JAVA_FLOAT, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(char.class)) {
+        for (Class<?> type : List.of(char.class, char[].class)) {
             assertEquals(ValueLayout.JAVA_CHAR, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(void.class, Void.class)) {
