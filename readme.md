@@ -3,7 +3,7 @@
 # Information
 
 An implementation of my own JNA like bindings, sticking to the C++ structure as much as possible. Contributions are
-welcomed. Name suggestions also welcome!
+welcomed
 
 # Usage
 
