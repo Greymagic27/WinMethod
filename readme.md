@@ -1,4 +1,4 @@
-[![.github/workflows/gradle.yml](https://github.com/Greymagic27/WinMethod/actions/workflows/gradle.yml/badge.svg)](https://github.com/Greymagic27/WinMethod/actions/workflows/gradle.yml) [![Javadocs](https://github.com/Greymagic27/WinMethod/actions/workflows/javadocs.yml/badge.svg)](https://greymagic27.github.io/WinMethod/)
+[![.github/workflows/gradle.yml](https://github.com/Greymagic27/WinMethod/actions/workflows/gradle.yml/badge.svg)](https://github.com/Greymagic27/WinMethod/actions/workflows/gradle.yml) [![Javadocs](https://github.com/Greymagic27/WinMethod/actions/workflows/javadocs.yml/badge.svg)](https://greymagic27.github.io/WinMethod/) [![Maven Central](https://img.shields.io/maven-central/v/io.github.greymagic27/WinMethod)](https://central.sonatype.com/artifact/io.github.greymagic27/WinMethod)
 
 # Information
 
