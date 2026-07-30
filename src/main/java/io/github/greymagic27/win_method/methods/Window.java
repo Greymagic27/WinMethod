@@ -12,7 +12,6 @@ import java.util.Objects;
  */
 public class Window {
     private static HWND currentWindow;
-    private static WindowPosition windowPosition;
     private static int currentWidth;
     private static int currentHeight;
 
@@ -45,7 +44,6 @@ public class Window {
      * Called to start the program. Without this, the window will open and close immediately
      */
     public static void start() {
-        setWindowPosition(Objects.requireNonNullElse(windowPosition, WindowPosition.CENTER));
         WinUser.MSG msg = new WinUser.MSG();
         while (User32.INSTANCE.GetMessageW(msg, null, 0, 0).booleanValue()) {
             User32.INSTANCE.TranslateMessage(msg);
@@ -55,12 +53,11 @@ public class Window {
 
     /**
      * Sets the window position on the screen
-     *
-     * @param position This defaults to CENTER if not specified
+     * @param position The position you would like the window to appear in. This is defined by {@link WindowPosition}
      */
     public static void setWindowPosition(WindowPosition position) {
         if (currentWindow == null) throw new IllegalStateException("No window has been created");
-        windowPosition = position;
+        Objects.requireNonNull(position, "Window position must be set using WindowPosition");
         int screenWidth = User32.INSTANCE.GetSystemMetrics(WinUser.SM_CXSCREEN);
         int screenHeight = User32.INSTANCE.GetSystemMetrics(WinUser.SM_CYSCREEN);
         int x;

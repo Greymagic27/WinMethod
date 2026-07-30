@@ -31,15 +31,22 @@ class WindowTest {
     }
 
     private void createTestWindow() {
+        CountDownLatch ready = new CountDownLatch(1);
         windowThread = new Thread(() -> {
             Window.createWindow(WinUser.Wndproc.defaultWndProc(), "Test", 800, 600);
+            Window.setWindowPosition(WindowPosition.CENTER);
             User32.INSTANCE.ShowWindow(Window.getCurrentWindow(), WinUser.SW_HIDE);
+            ready.countDown();
             Window.start();
         });
         windowThread.setDaemon(true);
         windowThread.start();
-        long timeout = System.currentTimeMillis() + 2000;
-        while (Window.getCurrentWindow() == null && System.currentTimeMillis() < timeout) Thread.onSpinWait();
+        try {
+            assertTrue(ready.await(2, TimeUnit.SECONDS));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
         assertNotNull(Window.getCurrentWindow());
     }
 
