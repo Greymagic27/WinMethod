@@ -87,6 +87,12 @@ public interface WinUser {
      * Sent as a signal that a window or an application should terminate
      */
     int WM_CLOSE = 0x0010;
+    /// Sent when the system or an application makes a request to paint a portion of the application's window
+    int WM_PAINT = 0x000F;
+    /// Posted to the window with the keyboard focus when a nonsystem key is pressed. A nonsystem key is a key that is pressed when the ALT key is not pressed
+    int WM_KEYDOWN = 0x0100;
+    /// Sent to the focus window when the mouse wheel is rotated
+    int WM_MOUSEHWEEL = 0x020A;
 
     /**
      * Activates the window and displays it in its current size and position

@@ -18,6 +18,9 @@ import static io.github.greymagic27.win_method.platform.WinUser.SW_SHOW;
 import static io.github.greymagic27.win_method.platform.WinUser.WM_CLOSE;
 import static io.github.greymagic27.win_method.platform.WinUser.WM_COMMAND;
 import static io.github.greymagic27.win_method.platform.WinUser.WM_DESTROY;
+import static io.github.greymagic27.win_method.platform.WinUser.WM_KEYDOWN;
+import static io.github.greymagic27.win_method.platform.WinUser.WM_MOUSEHWEEL;
+import static io.github.greymagic27.win_method.platform.WinUser.WM_PAINT;
 import static io.github.greymagic27.win_method.platform.WinUser.WM_SIZE;
 import static io.github.greymagic27.win_method.platform.WinUser.WS_BORDER;
 import static io.github.greymagic27.win_method.platform.WinUser.WS_CAPTION;
@@ -60,6 +63,9 @@ class WinUserTest {
         assertEquals(0x0005, WM_SIZE);
         assertEquals(0x0111, WM_COMMAND);
         assertEquals(0x0010, WM_CLOSE);
+        assertEquals(0x000F, WM_PAINT);
+        assertEquals(0x0100, WM_KEYDOWN);
+        assertEquals(0x020A, WM_MOUSEHWEEL);
     }
 
     @Test
