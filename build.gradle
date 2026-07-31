@@ -52,13 +52,10 @@ tasks.withType(JavaCompile).configureEach {
     options.compilerArgs.add('-Xlint:deprecation')
     options.errorprone.disable('NoCanIgnoreReturnValueOnClasses')
 }
-tasks.withType(Javadoc).configureEach {
-    options.addStringOption("Xdoclint:-missing", "-quiet")
-}
 tasks.javadoc {
     include("io/github/greymagic27/win_method/platform/**")
-    include("io/github/greymagic27/win_method/WinDef.java")
-    include("io/github/greymagic27/win_method/WinNT.java")
+    include("io/github/greymagic27/win_method/WinDef/**")
+    include("io/github/greymagic27/win_method/WinNT/**")
     include("io/github/greymagic27/win_method/methods/**")
 }
 mavenPublishing {
