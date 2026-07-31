@@ -34,7 +34,7 @@ public interface WinUser {
      */
     int WS_CHILD = 0x40000000;
     /**
-     * The window is initially minimized. Same as the WS_ICONIC style
+     * The window is initially minimised. Same as the WS_ICONIC style
      */
     int WS_MINIMIZE = 0x20000000;
     /**
@@ -47,7 +47,7 @@ public interface WinUser {
      */
     int WS_DISABLED = 0x08000000;
     /**
-     * The window is initially maximized
+     * The window is initially maximised
      */
     int WS_MAXIMIZE = 0x01000000;
     /**
@@ -117,8 +117,11 @@ public interface WinUser {
      */
     int SWP_NOZORDER = 0x0004;
 
+    /// Designates a multiline edit control
     int ES_MULTILINE = 0x0004;
+    /// Automatically scrolls text up one page when the user presses the ENTER key on the last line
     int ES_AUTOVSCROLL = 0x0040;
+    /// Specifies that a carriage return be inserted when the user presses the ENTER key while entering text into a multiline edit control in a dialogue box
     int ES_WANTRETURN = 0x1000;
 
     /**
