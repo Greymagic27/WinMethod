@@ -81,8 +81,8 @@ public interface WinUser {
     /// A callback function which is defined in the application
     interface Wndproc extends Callback {
         /// Creates a standard window with default {@link #WM_DESTROY} handling
-    /// 
-    /// @return Returns a standard window procedure callback
+        ///
+        /// @return Returns a standard window procedure callback
         static @NonNull Wndproc defaultWndProc() {
             return (hWnd, uMsg, wParam, lParam) -> {
                 if (uMsg == WinUser.WM_DESTROY) {
@@ -94,12 +94,12 @@ public interface WinUser {
         }
 
         /// A callback function that processes messages sent to a window
-    /// 
-    /// @param hWnd   A handle to the window
-    /// @param uMsg   The message
-    /// @param wParam Additional message information
-    /// @param lParam Additional message information
-    /// @return Return value is the result of the message processing and depends on the message sent
+        ///
+        /// @param hWnd   A handle to the window
+        /// @param uMsg   The message
+        /// @param wParam Additional message information
+        /// @param lParam Additional message information
+        /// @return Return value is the result of the message processing and depends on the message sent
         LRESULT callback(HWND hWnd, int uMsg, WPARAM wParam, LPARAM lParam);
     }
 

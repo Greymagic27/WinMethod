@@ -14,7 +14,7 @@ public class Window {
     private static int currentHeight;
 
     /// Creates a basic window
-    /// 
+    ///
     /// @param wndproc Custom wndproc. If you do not want to use a custom wndproc, use {@link WinUser.Wndproc#defaultWndProc()}
     /// @param title   Title of the window
     /// @param width   Width of the window
@@ -46,6 +46,7 @@ public class Window {
     }
 
     /// Sets the window position on the screen
+    ///
     /// @param position The position you would like the window to appear in. This is defined by {@link WindowPosition}
     public static void setWindowPosition(WindowPosition position) {
         if (currentWindow == null) throw new IllegalStateException("No window has been created");

@@ -17,39 +17,39 @@ public interface User32 extends Library {
     User32 INSTANCE = Library.load(User32.class);
 
     /// Registers a window class for subsequent use in calls to the {@link #CreateWindowExW(int, String, String, int, int, int, int, int, HWND, HMENU, HINSTANCE, LPVOID)} function.
-    /// 
+    ///
     /// @param pointer A pointer to a {@link io.github.greymagic27.win_method.platform.WinUser.WNDCLASSEXW} structure
     /// @return Return value is a class atom that uniquely identifies the class being registered. If the function fails, the return value is zero
     ATOM RegisterClassExW(WinUser.WNDCLASSEXW pointer);
 
     /// Destroys the specified window. The function sends WM_DESTROY and WM_NCDESTROY messages to the window to deactivate and remove keyboard focus
-    /// 
+    ///
     /// @param hWnd A handle to the window to be destroyed
     /// @return Return value is nonzero. If the function fails, the return value is zero
     BOOL DestroyWindow(HWND hWnd);
 
     /// Dispatches a message to a window procedure
-    /// 
+    ///
     /// @param msg Pointer to a structure that contains the message
     /// @return Specifies the value returned by the window procedure
     BOOL DispatchMessageW(WinUser.MSG msg);
 
     /// Retrieves the dimensions of the bounding rectangle of the specified window. These are relative to the upper-left corner of the screen
-    /// 
+    ///
     /// @param hWnd   Handle to the window
     /// @param lpRect Pointer to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure
     /// @return Return value is nonzero. If the function fails, the return value is zero
     BOOL GetWindowRect(HWND hWnd, WinDef.RECT lpRect);
 
     /// Sets the specified window's show state
-    /// 
+    ///
     /// @param hWnd     Handle to the window
     /// @param nCmdShow Controls how the window is to be shown
     /// @return If previously visible, returns nonzero. If previously hidden, returns zero
     BOOL ShowWindow(HWND hWnd, int nCmdShow);
 
     /// Changes the size, position and Z order of a child, pop-up or top-level window
-    /// 
+    ///
     /// @param hWnd            Handle to the window
     /// @param hWndInsertAfter Handle to the window to precede the positioned window in the Z order
     /// @param X               New position of the left side of the window, in client coordinates
@@ -61,19 +61,19 @@ public interface User32 extends Library {
     BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
 
     /// Translates virtual-key messages into character messages. These are posted to the calling thread's message queue, to be read the next time the thread calls {@link #GetMessageW(WinUser.MSG, HWND, int, int)} or PeekMessage functions
-    /// 
+    ///
     /// @param msg Pointer to a {@link io.github.greymagic27.win_method.platform.WinUser.MSG} structure that contains message information
     /// @return If the message is translated, the return value is nonzero. If not translated, the return value is zero
     BOOL TranslateMessage(WinUser.MSG msg);
 
     /// Updates the client area of the specified window by sending a WM_PAINT message to the window if the window's update region is not empty
-    /// 
+    ///
     /// @param hWnd Handle to the window to be updated
     /// @return if the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL UpdateWindow(HWND hWnd);
 
     /// Places a message in the message queue associated with the thread that created the window, and returns without waiting for the thread to process the message
-    /// 
+    ///
     /// @param hWnd   A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose procedure is to receive the message
     /// @param Msg    The message to be posted
     /// @param wParam Additional message-specific information
@@ -82,7 +82,7 @@ public interface User32 extends Library {
     BOOL PostMessageW(HWND hWnd, int Msg, WPARAM wParam, LPARAM lParam);
 
     /// Retrieves a message from the calling thread's message queue
-    /// 
+    ///
     /// @param lpMsg         Pointer to a {@link io.github.greymagic27.win_method.platform.WinUser.MSG} structure that receives message information
     /// @param hWnd          Handle to the window whose messages are to be retrieved. The window must belong to the current thread
     /// @param wMsgFilterMin Integer value of the lowest message value to be retrieved. Use WM_KEYFIRST to specify first keyboard message or WM_MOUSEFIRST to specify first mouse message
@@ -93,23 +93,24 @@ public interface User32 extends Library {
     /// Changes the positon and dimensions of the specified window
     /// Top-level windows are relative to the upper-left corner of the screen
     /// Children windows are relative to the upper-left corner of the parent window's client area
-    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window
-    /// @param X The new positon of the left side of the window
-    /// @param Y The new position of the top of the window
-    /// @param nWidth The new width of the window
-    /// @param nHeight The new height of the window
+    ///
+    /// @param hWnd     A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window
+    /// @param X        The new positon of the left side of the window
+    /// @param Y        The new position of the top of the window
+    /// @param nWidth   The new width of the window
+    /// @param nHeight  The new height of the window
     /// @param bRepaint Indicates whether the window is to be repainted. If **TRUE** the window receives a message. If **FALSE** no repainting occurs
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL MoveWindow(HWND hWnd, int X, int Y, int nWidth, int nHeight, BOOL bRepaint);
 
     /// Retrieves the specified system metric or system configuration setting
-    /// 
+    ///
     /// @param nIndex System metric or configuration setting to be retrieved
     /// @return If the function succeeds, the return value is the requested system metric or configuration setting. If the function fails, the return value is 0
     int GetSystemMetrics(int nIndex);
 
     /// Calls the default window procedure to provide default processing for any window messages that an application does not process
-    /// 
+    ///
     /// @param hWnd   Handle to the window procedure that received the message
     /// @param Msg    The message
     /// @param wParam Additional message information. The content of this depends on the value of the Msg parameter
@@ -118,7 +119,7 @@ public interface User32 extends Library {
     LRESULT DefWindowProcW(HWND hWnd, int Msg, WPARAM wParam, LPARAM lParam);
 
     /// Creates an overlapped, pop-up or child window with an extended window style
-    /// 
+    ///
     /// @param dwExStyle    The <a href="https://learn.microsoft.com/en-us/windows/desktop/winmsg/extended-window-styles">extended window style</a> of the window
     /// @param lpClassName  A null-terminated string or class atom
     /// @param lpWindowName The window name. This will be displayed in the title bar if the window title specifies a title bar
@@ -135,7 +136,7 @@ public interface User32 extends Library {
     HWND CreateWindowExW(int dwExStyle, String lpClassName, String lpWindowName, int dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
 
     /// Indicates to the system that a thread has made a request to terminate. It is typically used in response to a WM_DESTROY message.
-    /// 
+    ///
     /// @param nExitCode The application exit code. This is used as the wParam parameter of the WM_QUIT message
     void PostQuitMessage(int nExitCode);
 }
