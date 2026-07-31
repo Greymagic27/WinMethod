@@ -7,22 +7,18 @@ import io.github.greymagic27.win_method.platform.User32;
 import io.github.greymagic27.win_method.platform.WinUser;
 import java.util.Objects;
 
-/**
- * Helpers to create a window without rewriting lines of code
- */
+/// Helpers to create a window without rewriting lines of code
 public class Window {
     private static HWND currentWindow;
     private static int currentWidth;
     private static int currentHeight;
 
-    /**
-     * Creates a basic window
-     *
-     * @param wndproc Custom wndproc. If you do not want to use a custom wndproc, use {@link WinUser.Wndproc#defaultWndProc()}
-     * @param title   Title of the window
-     * @param width   Width of the window
-     * @param height  Height of the window
-     */
+    /// Creates a basic window
+    /// 
+    /// @param wndproc Custom wndproc. If you do not want to use a custom wndproc, use {@link WinUser.Wndproc#defaultWndProc()}
+    /// @param title   Title of the window
+    /// @param width   Width of the window
+    /// @param height  Height of the window
     public static void createWindow(WinUser.Wndproc wndproc, String title, int width, int height) {
         currentWidth = width;
         currentHeight = height;
@@ -40,9 +36,7 @@ public class Window {
         User32.INSTANCE.UpdateWindow(currentWindow);
     }
 
-    /**
-     * Called to start the program. Without this, the window will open and close immediately
-     */
+    /// Called to start the program. Without this, the window will open and close immediately
     public static void start() {
         WinUser.MSG msg = new WinUser.MSG();
         while (User32.INSTANCE.GetMessageW(msg, null, 0, 0).booleanValue()) {
@@ -51,10 +45,8 @@ public class Window {
         }
     }
 
-    /**
-     * Sets the window position on the screen
-     * @param position The position you would like the window to appear in. This is defined by {@link WindowPosition}
-     */
+    /// Sets the window position on the screen
+    /// @param position The position you would like the window to appear in. This is defined by {@link WindowPosition}
     public static void setWindowPosition(WindowPosition position) {
         if (currentWindow == null) throw new IllegalStateException("No window has been created");
         Objects.requireNonNull(position, "Window position must be set using WindowPosition");
@@ -104,16 +96,12 @@ public class Window {
         User32.INSTANCE.SetWindowPos(currentWindow, null, x, y, currentWidth, currentHeight, WinUser.SWP_NOZORDER);
     }
 
-    /**
-     * Returns the current window {@link HWND}
-     */
+    /// Returns the current window {@link HWND}
     public static HWND getCurrentWindow() {
         return currentWindow;
     }
 
-    /**
-     * Resets window attributes to 0 or null
-     */
+    /// Resets window attributes to 0 or null
     public static void reset() {
         currentWindow = null;
         currentHeight = 0;

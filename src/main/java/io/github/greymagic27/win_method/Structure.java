@@ -278,28 +278,22 @@ public abstract class Structure {
         this.segment = segment;
     }
 
-    /**
-     * Structure field order is manually set using field names
-     */
+    /// Structure field order is manually set using field names
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface FieldOrder {
         String[] value();
     }
 
-    /**
-     * Structure field order is automatically set using the declared field order
-     */
+    /// Structure field order is automatically set using the declared field order
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
     public @interface AutoFieldOrder {
     }
 
-    /**
-     * Specifies the length of an array
-     * (i.e: @ArrayLength(8)
-     *  private byte[] data;)
-     */
+    /// Specifies the length of an array
+    /// (i.e: @ArrayLength(8)
+    /// private byte[] data;)
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface ArrayLength {
