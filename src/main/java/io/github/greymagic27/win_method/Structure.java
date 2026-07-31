@@ -295,9 +295,11 @@ public abstract class Structure {
     public @interface AutoFieldOrder {
     }
 
-    /// Specifies the length of an array
-    /// (i.e: @ArrayLength(8)
-    ///       private byte[] data;)
+    /**
+     * Specifies the length of an array
+     * (i.e: @ArrayLength(8)
+     *  private byte[] data;)
+     */
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface ArrayLength {
