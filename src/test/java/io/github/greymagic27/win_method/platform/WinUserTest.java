@@ -18,6 +18,36 @@ import static io.github.greymagic27.win_method.platform.WinUser.SM_CYSCREEN;
 import static io.github.greymagic27.win_method.platform.WinUser.SWP_NOZORDER;
 import static io.github.greymagic27.win_method.platform.WinUser.SW_HIDE;
 import static io.github.greymagic27.win_method.platform.WinUser.SW_SHOW;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_BACK;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_CANCEL;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_CAPITAL;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_CLEAR;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_CONTROL;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_DELETE;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_DOWN;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_END;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_ESCAPE;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_EXECUTE;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_HELP;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_HOME;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_INSERT;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_LBUTTON;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_LEFT;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_MBUTTON;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_MENU;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_NEXT;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_PAUSE;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_PRINT;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_PRIOR;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_RBUTTON;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_RETURN;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_RIGHT;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_SELECT;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_SHIFT;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_SNAPSHOT;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_SPACE;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_TAB;
+import static io.github.greymagic27.win_method.platform.WinUser.VK_UP;
 import static io.github.greymagic27.win_method.platform.WinUser.WM_CLOSE;
 import static io.github.greymagic27.win_method.platform.WinUser.WM_COMMAND;
 import static io.github.greymagic27.win_method.platform.WinUser.WM_DESTROY;
@@ -95,6 +125,40 @@ class WinUserTest {
         assertEquals(0x00000000, MF_STRING);
         assertEquals(0x00000010, MF_POPUP);
         assertEquals(0x00000800, MF_SEPARATOR);
+    }
+
+    @Test
+    void testVkValues() {
+        assertEquals(0x01, VK_LBUTTON);
+        assertEquals(0x02, VK_RBUTTON);
+        assertEquals(0x03, VK_CANCEL);
+        assertEquals(0x04, VK_MBUTTON);
+        assertEquals(0x08, VK_BACK);
+        assertEquals(0x09, VK_TAB);
+        assertEquals(0x0C, VK_CLEAR);
+        assertEquals(0x0D, VK_RETURN);
+        assertEquals(0x10, VK_SHIFT);
+        assertEquals(0x11, VK_CONTROL);
+        assertEquals(0x12, VK_MENU);
+        assertEquals(0x13, VK_PAUSE);
+        assertEquals(0x14, VK_CAPITAL);
+        assertEquals(0x1B, VK_ESCAPE);
+        assertEquals(0x20, VK_SPACE);
+        assertEquals(0x21, VK_PRIOR);
+        assertEquals(0x22, VK_NEXT);
+        assertEquals(0x23, VK_END);
+        assertEquals(0x24, VK_HOME);
+        assertEquals(0x25, VK_LEFT);
+        assertEquals(0x26, VK_UP);
+        assertEquals(0x27, VK_RIGHT);
+        assertEquals(0x28, VK_DOWN);
+        assertEquals(0x29, VK_SELECT);
+        assertEquals(0x2A, VK_PRINT);
+        assertEquals(0x2B, VK_EXECUTE);
+        assertEquals(0x2C, VK_SNAPSHOT);
+        assertEquals(0x2D, VK_INSERT);
+        assertEquals(0x2E, VK_DELETE);
+        assertEquals(0x2F, VK_HELP);
     }
 
     @Test

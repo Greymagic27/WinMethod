@@ -85,6 +85,67 @@ public interface WinUser {
     /// Draws a horizontal dividing line
     int MF_SEPARATOR = 0x00000800;
 
+    /// Left mouse button
+    int VK_LBUTTON = 0x01;
+    /// Right mouse button
+    int VK_RBUTTON = 0x02;
+    /// Control-break processing
+    int VK_CANCEL = 0x03;
+    /// Middle mouse button
+    int VK_MBUTTON = 0x04;
+    /// Backspace key
+    int VK_BACK = 0x08;
+    /// Tab key
+    int VK_TAB = 0x09;
+    /// Clear key
+    int VK_CLEAR = 0x0C;
+    /// Enter key
+    int VK_RETURN = 0x0D;
+    /// Shift key
+    int VK_SHIFT = 0x10;
+    /// Ctrl key
+    int VK_CONTROL = 0x11;
+    /// Alt key
+    int VK_MENU = 0x12;
+    /// Pause key
+    int VK_PAUSE = 0x13;
+    /// Caps lock key
+    int VK_CAPITAL = 0x14;
+    /// Esc key
+    int VK_ESCAPE = 0x1B;
+    /// Spacebar key
+    int VK_SPACE = 0x20;
+    /// Page up key
+    int VK_PRIOR = 0x21;
+    /// Page down key
+    int VK_NEXT = 0x22;
+    /// End key
+    int VK_END = 0x23;
+    /// Home key
+    int VK_HOME = 0x24;
+    /// Left arrow key
+    int VK_LEFT = 0x25;
+    /// Up arrow key
+    int VK_UP = 0x26;
+    /// Right arrow key
+    int VK_RIGHT = 0x27;
+    /// Down arrow key
+    int VK_DOWN = 0x28;
+    /// Select key
+    int VK_SELECT = 0x29;
+    /// Print key
+    int VK_PRINT = 0x2A;
+    /// Execute key
+    int VK_EXECUTE = 0x2B;
+    /// Print screen key
+    int VK_SNAPSHOT = 0x2C;
+    /// Insert key
+    int VK_INSERT = 0x2D;
+    /// Delete key
+    int VK_DELETE = 0x2E;
+    /// Help key
+    int VK_HELP = 0x2F;
+
     /// A callback function which is defined in the application
     interface Wndproc extends Callback {
         /// Creates a standard window with default {@link #WM_DESTROY} handling
