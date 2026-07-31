@@ -247,7 +247,7 @@ class TypeMapperTest {
     @Test
     void testToNative_LRESULTNull() {
         try (Arena arena = Arena.ofConfined()) {
-            assertEquals(0, TypeMapper.toNative(null, LRESULT.class, arena));
+            assertEquals(0L, TypeMapper.toNative(null, LRESULT.class, arena));
         }
     }
 
@@ -263,7 +263,7 @@ class TypeMapperTest {
     @Test
     void testToNative_LPARAMNull() {
         try (Arena arena = Arena.ofConfined()) {
-            assertEquals(0, TypeMapper.toNative(null, LPARAM.class, arena));
+            assertEquals(0L, TypeMapper.toNative(null, LPARAM.class, arena));
         }
     }
 
@@ -295,7 +295,7 @@ class TypeMapperTest {
     @Test
     void testToNative_WORDNull() {
         try (Arena arena = Arena.ofConfined()) {
-            assertEquals(0, TypeMapper.toNative(null, WORD.class, arena));
+            assertEquals((short) 0, TypeMapper.toNative(null, WORD.class, arena));
         }
     }
 
@@ -311,7 +311,7 @@ class TypeMapperTest {
     @Test
     void testToNative_ATOMNull() {
         try (Arena arena = Arena.ofConfined()) {
-            assertEquals(0, TypeMapper.toNative(null, ATOM.class, arena));
+            assertEquals((short) 0, TypeMapper.toNative(null, ATOM.class, arena));
         }
     }
 
@@ -327,10 +327,9 @@ class TypeMapperTest {
     @Test
     void testToNative_WPARAMNull() {
         try (Arena arena = Arena.ofConfined()) {
-            assertEquals(0, TypeMapper.toNative(null, WPARAM.class, arena));
+            assertEquals(0L, TypeMapper.toNative(null, WPARAM.class, arena));
         }
     }
-
     @Test
     void testToNative_HINSTANCE() {
         try (Arena arena = Arena.ofConfined()) {
@@ -375,7 +374,7 @@ class TypeMapperTest {
     @Test
     void testToNative_BYTENull() {
         try (Arena arena = Arena.ofConfined()) {
-            assertEquals(0, TypeMapper.toNative(null, BYTE.class, arena));
+            assertEquals((byte) 0, TypeMapper.toNative(null, BYTE.class, arena));
         }
     }
 
@@ -474,7 +473,7 @@ class TypeMapperTest {
     @Test
     void testToNative_UINTPTRNull() {
         try (Arena arena = Arena.ofConfined()) {
-            assertEquals(0, TypeMapper.toNative(null, UINT_PTR.class, arena));
+            assertEquals(0L, TypeMapper.toNative(null, UINT_PTR.class, arena));
         }
     }
 
@@ -490,7 +489,7 @@ class TypeMapperTest {
     @Test
     void testToNative_SHORTNull() {
         try (Arena arena = Arena.ofConfined()) {
-            assertEquals(0, TypeMapper.toNative(null, SHORT.class, arena));
+            assertEquals((short) 0, TypeMapper.toNative(null, SHORT.class, arena));
         }
     }
 

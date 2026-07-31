@@ -1,5 +1,6 @@
 package io.github.greymagic27.win_method.platform;
 
+import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
@@ -56,5 +57,17 @@ class CommdlgTest {
         UINT_PTR result = callback.Lpofnhookproc(null, 0, new WPARAM(0), new LPARAM(0));
         assertNotNull(result);
         assertEquals(0, result.longValue());
+    }
+
+    @Test
+    void testGetOpenFileName() {
+        Commdlg.OPENFILENAMEW openFileName = new Commdlg.OPENFILENAMEW();
+        openFileName.lStructSize = openFileName.size();
+        openFileName.lpstrFilter = "All Files\0*.*\0";
+        openFileName.lpstrFile = "Test";
+        openFileName.nMaxFile = 260;
+        openFileName.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
+        BOOL result = Commdlg.INSTANCE.GetOpenFileNameW(openFileName);
+        assertNotNull(result);
     }
 }

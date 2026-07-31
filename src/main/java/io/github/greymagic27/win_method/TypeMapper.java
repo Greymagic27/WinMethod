@@ -42,7 +42,13 @@ public final class TypeMapper {
     static Object toNative(Object value, Class<?> javaType, Arena callArena) {
         if (value == null) {
             boolean addressType = javaType == String.class || Pointer.class.isAssignableFrom(javaType) || Structure.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType);
-            return addressType ? MemorySegment.NULL : 0;
+            if (addressType) return MemorySegment.NULL;
+            if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class || javaType == LPARAM.class || javaType == WPARAM.class || javaType == UINT_PTR.class) return 0L;
+            if (javaType == short.class || javaType == Short.class || javaType == SHORT.class || WORD.class.isAssignableFrom(javaType)) return (short) 0;
+            if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return (byte) 0;
+            if (javaType == double.class || javaType == Double.class) return 0.0d;
+            if (javaType == float.class || javaType == Float.class) return 0.0f;
+            return 0;
         }
         if (Structure.class.isAssignableFrom(javaType)) {
             return ((Structure) value).pointer().segment;
