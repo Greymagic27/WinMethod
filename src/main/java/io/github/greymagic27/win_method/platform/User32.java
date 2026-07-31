@@ -38,10 +38,18 @@ public interface User32 extends Library {
 
     /// Retrieves the dimensions of the bounding rectangle of the specified window. These are relative to the upper-left corner of the screen
     ///
-    /// @param hWnd   Handle to the window
+    /// @param hWnd A  {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window
     /// @param lpRect Pointer to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure
     /// @return Return value is nonzero. If the function fails, the return value is zero
     BOOL GetWindowRect(HWND hWnd, WinDef.RECT lpRect);
+
+    /// Adds a rectangle to the specified window's update region. The update region is the portion of the client that must be redrawn
+    ///
+    /// @param hWnd  A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose update region has changed
+    /// @param lpRect A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure that contains the client coordinates of the rectangle to be added to the update region
+    /// @param bErase Specifies whether the background within the update region is to be erased when the update region is processed
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL InvalidateRect(HWND hWnd, WinDef.RECT lpRect, BOOL bErase);
 
     /// Sets the specified window's show state
     ///

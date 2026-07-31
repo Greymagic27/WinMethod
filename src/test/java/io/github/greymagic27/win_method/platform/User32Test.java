@@ -5,6 +5,7 @@ import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HWND;
+import io.github.greymagic27.win_method.WinDef.LONG;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.SHORT;
@@ -248,5 +249,16 @@ class User32Test {
     void testGetKeyState() {
         SHORT result = user32.GetKeyState(WinUser.VK_SHIFT);
         assertNotNull(result);
+    }
+
+    @Test
+    void testInvalidateRect() {
+        WinDef.RECT rect = new WinDef.RECT();
+        rect.left = new LONG(0);
+        rect.top = new LONG(0);
+        rect.right = new LONG(100);
+        rect.bottom = new LONG(100);
+        BOOL result = user32.InvalidateRect(window, rect, new BOOL(0));
+        assertTrue(result.booleanValue());
     }
 }
