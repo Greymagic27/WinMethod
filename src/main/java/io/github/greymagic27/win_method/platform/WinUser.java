@@ -56,7 +56,7 @@ public interface WinUser {
     /// Posted to the window with the keyboard focus when a nonsystem key is pressed. A nonsystem key is a key that is pressed when the ALT key is not pressed
     int WM_KEYDOWN = 0x0100;
     /// Sent to the focus window when the mouse wheel is rotated
-    int WM_MOUSEHWEEL = 0x020A;
+    int WM_MOUSEWHEEL = 0x020A;
 
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;
