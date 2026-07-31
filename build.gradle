@@ -1,5 +1,4 @@
 //file:noinspection GroovyAssignabilityCheck
-//file:noinspection DependencyNotationArgument
 //file:noinspection GroovyImplicitNullArgumentCall
 plugins {
     id 'java'
