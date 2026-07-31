@@ -5,6 +5,7 @@ import io.github.greymagic27.win_method.WinDef.BYTE;
 import io.github.greymagic27.win_method.WinDef.LONG;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import java.lang.foreign.Arena;
@@ -19,7 +20,7 @@ public final class TypeMapper {
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
         if (javaType == int.class || javaType == Integer.class || javaType == LONG.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class) return ValueLayout.JAVA_INT;
-        if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class || javaType == LPARAM.class || javaType == WPARAM.class) return ValueLayout.JAVA_LONG;
+        if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class || javaType == LPARAM.class || javaType == WPARAM.class || javaType == UINT_PTR.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
@@ -78,6 +79,9 @@ public final class TypeMapper {
         if (javaType == BYTE.class) {
             return ((BYTE) value).byteValue();
         }
+        if (javaType == UINT_PTR.class) {
+            return ((UINT_PTR) value).longValue();
+        }
         return value;
     }
 
@@ -121,6 +125,9 @@ public final class TypeMapper {
         if (returnType == BOOL.class) {
             return new BOOL((Integer) raw);
         }
+        if (returnType == BYTE.class) {
+            return new BYTE((Byte) raw);
+        }
         if (returnType == LRESULT.class) {
             return new LRESULT((Long) raw);
         }
@@ -133,8 +140,8 @@ public final class TypeMapper {
         if (returnType == WPARAM.class) {
             return new WPARAM((Long) raw);
         }
-        if (returnType == BYTE.class) {
-            return new BYTE((Byte) raw);
+        if (returnType == UINT_PTR.class) {
+            return new UINT_PTR((Long) raw);
         }
         return raw;
     }
