@@ -23,6 +23,4 @@ Int: 32 Bit
 
 Short: 16 Bit
 
-UINT - An unsigned INT. The range is 0 through 4294967295 decimal.
-
-DWORD - A 32-bit unsigned integer. The range is 0 through 4294967295 decimal.
+Byte: 8 Bit
