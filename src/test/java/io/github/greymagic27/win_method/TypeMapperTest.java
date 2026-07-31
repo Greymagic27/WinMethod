@@ -15,6 +15,8 @@ import io.github.greymagic27.win_method.WinDef.LONG;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.SHORT;
+import io.github.greymagic27.win_method.WinDef.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
@@ -43,10 +45,10 @@ class TypeMapperTest {
         for (Class<?> type : List.of(int.class, Integer.class, LONG.class)) {
             assertEquals(JAVA_INT, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class)) {
+        for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class, UINT_PTR.class)) {
             assertEquals(ValueLayout.JAVA_LONG, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(short.class, Short.class, WORD.class, ATOM.class)) {
+        for (Class<?> type : List.of(short.class, Short.class, WORD.class, ATOM.class, SHORT.class)) {
             assertEquals(ValueLayout.JAVA_SHORT, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(byte.class, Byte.class, BYTE.class)) {
@@ -461,6 +463,38 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_UINTPTR() {
+        try (Arena arena = Arena.ofConfined()) {
+            UINT_PTR value = new UINT_PTR(9999L);
+            Object result = TypeMapper.toNative(value, UINT_PTR.class, arena);
+            assertEquals(9999L, result);
+        }
+    }
+
+    @Test
+    void testToNative_UINTPTRNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0, TypeMapper.toNative(null, UINT_PTR.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_SHORT() {
+        try (Arena arena = Arena.ofConfined()) {
+            SHORT value = new SHORT((short) 9999);
+            Object result = TypeMapper.toNative(value, SHORT.class, arena);
+            assertEquals((short) 9999, result);
+        }
+    }
+
+    @Test
+    void testToNative_SHORTNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0, TypeMapper.toNative(null, SHORT.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -660,6 +694,20 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(segment, LPVOID.class);
         assertInstanceOf(LPVOID.class, result);
         assertEquals(0x9999L, ((LPVOID) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_UINTPTR() {
+        Object result = TypeMapper.fromNative(9999L, UINT_PTR.class);
+        assertInstanceOf(UINT_PTR.class, result);
+        assertEquals(9999L, ((UINT_PTR) result).longValue());
+    }
+
+    @Test
+    void testFromNative_SHORT() {
+        Object result = TypeMapper.fromNative((short) 9999, SHORT.class);
+        assertInstanceOf(SHORT.class, result);
+        assertEquals((short) 9999, ((SHORT) result).shortValue());
     }
 
     @Test

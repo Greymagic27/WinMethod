@@ -9,6 +9,7 @@ import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.SHORT;
 import io.github.greymagic27.win_method.WinDef.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 
@@ -166,6 +167,11 @@ public interface User32 extends Library {
     ///
     /// @return If the function succeeds, the return value is a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the newly created menu. If the function fails, the return value is NULL
     HMENU CreatePopupMenu();
+
+    /// Retrieves the status of the specified key
+    /// @param nVirtKey A virtual key
+    /// @return Specifies the status of the specified virtual key
+    SHORT GetKeyState(int nVirtKey);
 
     /// Indicates to the system that a thread has made a request to terminate. It is typically used in response to a WM_DESTROY message.
     ///

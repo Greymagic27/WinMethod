@@ -5,6 +5,7 @@ import io.github.greymagic27.win_method.WinDef.BYTE;
 import io.github.greymagic27.win_method.WinDef.LONG;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.SHORT;
 import io.github.greymagic27.win_method.WinDef.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
@@ -21,7 +22,7 @@ public final class TypeMapper {
         if (javaType == int.class || javaType == Integer.class || javaType == LONG.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class) return ValueLayout.JAVA_INT;
         if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class || javaType == LPARAM.class || javaType == WPARAM.class || javaType == UINT_PTR.class) return ValueLayout.JAVA_LONG;
-        if (javaType == short.class || javaType == Short.class) return ValueLayout.JAVA_SHORT;
+        if (javaType == short.class || javaType == Short.class || javaType == SHORT.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
         if (javaType == float.class || javaType == Float.class) return ValueLayout.JAVA_FLOAT;
@@ -81,6 +82,9 @@ public final class TypeMapper {
         }
         if (javaType == UINT_PTR.class) {
             return ((UINT_PTR) value).longValue();
+        }
+        if (javaType == SHORT.class) {
+            return ((SHORT) value).shortValue();
         }
         return value;
     }
@@ -142,6 +146,9 @@ public final class TypeMapper {
         }
         if (returnType == UINT_PTR.class) {
             return new UINT_PTR((Long) raw);
+        }
+        if (returnType == SHORT.class) {
+            return new SHORT((Short) raw);
         }
         return raw;
     }
