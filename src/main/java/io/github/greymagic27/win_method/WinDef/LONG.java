@@ -2,7 +2,7 @@ package io.github.greymagic27.win_method.WinDef;
 
 import org.jspecify.annotations.NonNull;
 
-/// A 32-bit signed integer. A 32-bit signed integer. The range is -2147483648 through 2147483647 decimal.
+/// A 32-bit signed integer. The range is -2147483648 through 2147483647 decimal
 public class LONG {
 
     private final int value;
