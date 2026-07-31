@@ -9,6 +9,7 @@ import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 
 /// Interface for User32.dll
@@ -103,6 +104,27 @@ public interface User32 extends Library {
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL MoveWindow(HWND hWnd, int X, int Y, int nWidth, int nHeight, BOOL bRepaint);
 
+    /// Appends a new item to the end of the specified menu bar, drop-down menu, submenu or shortcut menu
+    ///
+    /// @param hMenu A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the menu bar, drop-down menu, submenu or shortcut menu to be changed
+    /// @param uFlags Controls the appearance and behaviour of the new menu item. This can be a combination of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw)
+    /// @param uIDNewItem The identifier of the new menu item, or, if the uFlags parameter is {@link WinUser#MF_POPUP}, a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the drop-down menu or submenu
+    /// @param lpNewItem The content of the new menu item. The interpretation depends on whether the uFlags parameter includes [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw)
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL AppendMenuW(HMENU hMenu, int uFlags, UINT_PTR uIDNewItem, String lpNewItem);
+
+    /// Assigns a new menu to the specified window
+    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window to which the menu is to be assigned
+    /// @param hMenu A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the new menu. If NULL, the window's current menu is removed
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL SetMenu(HWND hWnd, HMENU hMenu);
+
+    /// Destroys the specified menu and frees and memory that the menu occupies
+    ///
+    /// @param hMenu A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the menu to be destroyed
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL DestroyMenu(HMENU hMenu);
+
     /// Retrieves the specified system metric or system configuration setting
     ///
     /// @param nIndex System metric or configuration setting to be retrieved
@@ -134,6 +156,16 @@ public interface User32 extends Library {
     /// @param lpParam      Pointer to a value to be passed to the window through the CREATESTRUCT structure pointed to by the lParam param of the WM_CREATE message
     /// @return If the function succeeds, the return value is a handle to the new window. If the function fails, the return value is NULL
     HWND CreateWindowExW(int dwExStyle, String lpClassName, String lpWindowName, int dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
+
+    /// Creates a menu. This is initially empty but can be filled with menu items by using the [InsertMenuItem](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuitemw), {@link #AppendMenuW(HMENU, int, UINT_PTR, String)} and [InsertMenu](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuw) functions
+    ///
+    /// @return If the function succeeds, the return value is a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the newly created menu. If the function fails, the return value is NULL
+    HMENU CreateMenu();
+
+    /// Creates a drop-down menu, submenu or shortcut menu. This is initially empty but can be filled with menu items by using the [InsertMenuItem](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuitemw), {@link #AppendMenuW(HMENU, int, UINT_PTR, String)} and [InsertMenu](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuw) functions
+    ///
+    /// @return If the function succeeds, the return value is a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the newly created menu. If the function fails, the return value is NULL
+    HMENU CreatePopupMenu();
 
     /// Indicates to the system that a thread has made a request to terminate. It is typically used in response to a WM_DESTROY message.
     ///

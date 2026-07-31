@@ -3,9 +3,11 @@ package io.github.greymagic27.win_method.platform;
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
+import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import java.lang.foreign.MemorySegment;
 import java.util.concurrent.CountDownLatch;
@@ -200,5 +202,44 @@ class User32Test {
         assertTrue(getRectResult.booleanValue());
         assertTrue(rect.right.intValue() - rect.left.intValue() >= 400);
         assertTrue(rect.bottom.intValue() - rect.top.intValue() >= 300);
+    }
+
+    @Test
+    void testAppendMenu() {
+        HMENU hmenu = user32.CreateMenu();
+        assertNotNull(hmenu);
+        assertNotEquals(0, hmenu.segment.address());
+        BOOL result = user32.AppendMenuW(hmenu, WinUser.MF_STRING, new UINT_PTR(1001), "Test Item");
+        assertTrue(result.booleanValue());
+        user32.DestroyMenu(hmenu);
+    }
+
+    @Test
+    void testAppendPopupMenu() {
+        HMENU menuBar = user32.CreateMenu();
+        HMENU popupMenu = user32.CreatePopupMenu();
+        assertNotNull(menuBar);
+        assertNotNull(popupMenu);
+        BOOL result = user32.AppendMenuW(menuBar, WinUser.MF_POPUP, new UINT_PTR(popupMenu.segment.address()), "Test");
+        assertTrue(result.booleanValue());
+        user32.DestroyMenu(popupMenu);
+        user32.DestroyMenu(menuBar);
+    }
+
+    @Test
+    void testSetMenu() {
+        HMENU hmenu = user32.CreateMenu();
+        BOOL result = user32.SetMenu(window, hmenu);
+        assertTrue(result.booleanValue());
+        user32.DestroyMenu(hmenu);
+    }
+
+    @Test
+    void testDestroyMenu() {
+        HMENU menu = user32.CreateMenu();
+        assertNotNull(menu);
+        assertNotEquals(0, menu.segment.address());
+        BOOL result = user32.DestroyMenu(menu);
+        assertTrue(result.booleanValue());
     }
 }

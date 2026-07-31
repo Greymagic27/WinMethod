@@ -17,7 +17,7 @@ public class LRESULT {
         return value;
     }
 
-    /// @return Returns the value of {{@link #longValue()}} as a string
+    /// @return Returns the value of {@link #longValue()} as a string
     @Override
     public @NonNull String toString() {
         return String.valueOf(longValue());
