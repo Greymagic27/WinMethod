@@ -2,7 +2,7 @@ package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
-import io.github.greymagic27.win_method.WinDef.UINT_PTR;
+import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import org.junit.jupiter.api.Test;
 

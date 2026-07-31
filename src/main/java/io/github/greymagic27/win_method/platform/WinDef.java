@@ -1,7 +1,7 @@
 package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.Structure;
-import io.github.greymagic27.win_method.WinDef.LONG;
+import io.github.greymagic27.win_method.WinNT.LONG;
 
 /// Values defined in Windef.h
 public interface WinDef {

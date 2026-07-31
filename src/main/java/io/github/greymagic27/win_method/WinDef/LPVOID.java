@@ -7,10 +7,16 @@ import org.jspecify.annotations.NonNull;
 /// A {@link Pointer} to any type
 public class LPVOID extends Pointer {
 
+    /// Creates a pointer from a memory segment
+    ///
+    /// @param segment The memory segment to wrap
     public LPVOID(MemorySegment segment) {
         super(segment);
     }
 
+    /// Creates a pointer from an existing {@link Pointer}
+    ///
+    /// @param pointer The pointer to wrap
     public LPVOID(@NonNull Pointer pointer) {
         super(pointer.segment);
     }

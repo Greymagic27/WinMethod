@@ -1,4 +1,4 @@
-package io.github.greymagic27.win_method.WinDef;
+package io.github.greymagic27.win_method.WinNT;
 
 import org.jspecify.annotations.NonNull;
 

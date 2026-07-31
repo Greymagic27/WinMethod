@@ -10,8 +10,8 @@ import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
-import io.github.greymagic27.win_method.WinDef.SHORT;
-import io.github.greymagic27.win_method.WinDef.UINT_PTR;
+import io.github.greymagic27.win_method.WinNT.SHORT;
+import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 
 /// Interface for User32.dll

@@ -1,14 +1,12 @@
 package io.github.greymagic27.win_method;
 
+import io.github.greymagic27.win_method.BaseTsd.LONG_PTR;
+import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.BYTE;
-import io.github.greymagic27.win_method.WinDef.LONG;
-import io.github.greymagic27.win_method.WinDef.LPARAM;
-import io.github.greymagic27.win_method.WinDef.LRESULT;
-import io.github.greymagic27.win_method.WinDef.SHORT;
-import io.github.greymagic27.win_method.WinDef.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WORD;
-import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.LONG;
+import io.github.greymagic27.win_method.WinNT.SHORT;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.MemorySegment;
@@ -21,7 +19,7 @@ public final class TypeMapper {
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
         if (javaType == int.class || javaType == Integer.class || javaType == LONG.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class) return ValueLayout.JAVA_INT;
-        if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class || javaType == LPARAM.class || javaType == WPARAM.class || javaType == UINT_PTR.class) return ValueLayout.JAVA_LONG;
+        if (javaType == long.class || javaType == Long.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class || javaType == SHORT.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
@@ -29,6 +27,7 @@ public final class TypeMapper {
         if (javaType == String.class) return ValueLayout.ADDRESS;
         if (Structure.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType) || Pointer.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         if (WORD.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_SHORT;
+        if (LONG_PTR.class.isAssignableFrom(javaType) || UINT_PTR.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_LONG;
         if (javaType == void.class || javaType == Void.class) return null;
         throw new IllegalArgumentException("No native layout mapping for: " + javaType);
     }
@@ -55,6 +54,12 @@ public final class TypeMapper {
         if (WORD.class.isAssignableFrom(javaType)) {
             return ((WORD) value).shortValue();
         }
+        if (LONG_PTR.class.isAssignableFrom(javaType)) {
+            return ((LONG_PTR) value).longValue();
+        }
+        if (UINT_PTR.class.isAssignableFrom(javaType)) {
+            return ((UINT_PTR) value).longValue();
+        }
         if (javaType == Boolean.class || javaType == boolean.class) {
             return ((Boolean) value) ? 1 : 0;
         }
@@ -64,23 +69,11 @@ public final class TypeMapper {
         if (javaType == BOOL.class) {
             return ((BOOL) value).intValue();
         }
-        if (javaType == LRESULT.class) {
-            return ((LRESULT) value).longValue();
-        }
-        if (javaType == LPARAM.class) {
-            return ((LPARAM) value).longValue();
-        }
         if (javaType == LONG.class) {
             return ((LONG) value).intValue();
         }
-        if (javaType == WPARAM.class) {
-            return ((WPARAM) value).longValue();
-        }
         if (javaType == BYTE.class) {
             return ((BYTE) value).byteValue();
-        }
-        if (javaType == UINT_PTR.class) {
-            return ((UINT_PTR) value).longValue();
         }
         if (javaType == SHORT.class) {
             return ((SHORT) value).shortValue();
@@ -117,6 +110,14 @@ public final class TypeMapper {
                 throw new RuntimeException(returnType + "needs a (MemorySegment) constructor", e);
             }
         }
+        if (LONG_PTR.class.isAssignableFrom(returnType) || UINT_PTR.class.isAssignableFrom(returnType)) {
+            try {
+                long value = (long) raw;
+                return returnType.getConstructor(long.class).newInstance(value);
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(returnType + " needs a (long) constructor", e);
+            }
+        }
         if (returnType == String.class) {
             if (raw == null || raw.equals(MemorySegment.NULL)) return null;
             MemorySegment segment = (MemorySegment) raw;
@@ -131,20 +132,8 @@ public final class TypeMapper {
         if (returnType == BYTE.class) {
             return new BYTE((Byte) raw);
         }
-        if (returnType == LRESULT.class) {
-            return new LRESULT((Long) raw);
-        }
-        if (returnType == LPARAM.class) {
-            return new LPARAM((Long) raw);
-        }
         if (returnType == LONG.class) {
             return new LONG((Integer) raw);
-        }
-        if (returnType == WPARAM.class) {
-            return new WPARAM((Long) raw);
-        }
-        if (returnType == UINT_PTR.class) {
-            return new UINT_PTR((Long) raw);
         }
         if (returnType == SHORT.class) {
             return new SHORT((Short) raw);
