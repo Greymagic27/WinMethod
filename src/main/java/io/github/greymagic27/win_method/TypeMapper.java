@@ -41,14 +41,7 @@ public final class TypeMapper {
 
     static Object toNative(Object value, Class<?> javaType, Arena callArena) {
         if (value == null) {
-            boolean addressType = javaType == String.class || Pointer.class.isAssignableFrom(javaType) || Structure.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType);
-            if (addressType) return MemorySegment.NULL;
-            if (javaType == long.class || javaType == Long.class || javaType == LRESULT.class || javaType == LPARAM.class || javaType == WPARAM.class || javaType == UINT_PTR.class) return 0L;
-            if (javaType == short.class || javaType == Short.class || javaType == SHORT.class || WORD.class.isAssignableFrom(javaType)) return (short) 0;
-            if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return (byte) 0;
-            if (javaType == double.class || javaType == Double.class) return 0.0d;
-            if (javaType == float.class || javaType == Float.class) return 0.0f;
-            return 0;
+            return defaultNativeValue(javaType);
         }
         if (Structure.class.isAssignableFrom(javaType)) {
             return ((Structure) value).pointer().segment;
@@ -157,5 +150,32 @@ public final class TypeMapper {
             return new SHORT((Short) raw);
         }
         return raw;
+    }
+
+    static @Nullable Object defaultNativeValue(Class<?> javaType) {
+        MemoryLayout layout = layoutMappings(javaType);
+        if (layout == null) return null;
+        if (layout.equals(ValueLayout.JAVA_LONG)) {
+            return 0L;
+        }
+        if (layout.equals(ValueLayout.JAVA_INT)) {
+            return 0;
+        }
+        if (layout.equals(ValueLayout.JAVA_SHORT)) {
+            return (short) 0;
+        }
+        if (layout.equals(ValueLayout.JAVA_BYTE)) {
+            return (byte) 0;
+        }
+        if (layout.equals(ValueLayout.JAVA_FLOAT)) {
+            return 0.0f;
+        }
+        if (layout.equals(ValueLayout.JAVA_DOUBLE)) {
+            return 0.0d;
+        }
+        if (layout.equals(ValueLayout.ADDRESS)) {
+            return MemorySegment.NULL;
+        }
+        throw new IllegalArgumentException("Unsupported default layout: " + layout);
     }
 }

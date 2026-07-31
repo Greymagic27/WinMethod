@@ -59,6 +59,7 @@ tasks.javadoc {
     include("io/github/greymagic27/win_method/WinDef/**")
     include("io/github/greymagic27/win_method/WinNT/**")
     include("io/github/greymagic27/win_method/methods/**")
+    include("io/github/greymagic27/win_method/Pointer.java")
 }
 mavenPublishing {
     coordinates(group, "WinMethod", version)
