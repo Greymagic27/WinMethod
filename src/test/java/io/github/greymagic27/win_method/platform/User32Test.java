@@ -19,6 +19,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -260,5 +261,11 @@ class User32Test {
         rect.bottom = new LONG(100);
         BOOL result = user32.InvalidateRect(window, rect, new BOOL(0));
         assertTrue(result.booleanValue());
+    }
+
+    @Test
+    void testMessageBox() {
+        int result = user32.MessageBoxW(window, "Test", "Test", WinUser.MB_OK);
+        assertEquals(WinUser.IDOK, result);
     }
 }

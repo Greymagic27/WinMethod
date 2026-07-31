@@ -85,6 +85,11 @@ public interface WinUser {
     /// Draws a horizontal dividing line
     int MF_SEPARATOR = 0x00000800;
 
+    /// The message box contains one push button: OK. This is the default
+    int MB_OK = 0x00000000;
+    /// A stop-sign icon appears in the message box.
+    int MB_ERRORICON = 0x00000010;
+
     /// Left mouse button
     int VK_LBUTTON = 0x01;
     /// Right mouse button
@@ -165,6 +170,9 @@ public interface WinUser {
     int VK_OEM_MINUS = 0xBD;
     /// For any country/region, the Period and Greater Than key
     int VK_OEM_PERIOD = 0xBE;
+
+    /// The OK button was selected
+    int IDOK = 1;
 
     /// A callback function which is defined in the application
     interface Wndproc extends Callback {

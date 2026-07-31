@@ -140,6 +140,15 @@ public interface User32 extends Library {
     /// @return If the function succeeds, the return value is the requested system metric or configuration setting. If the function fails, the return value is 0
     int GetSystemMetrics(int nIndex);
 
+    /// Displays a modal dialogue box that contains a system icon, set of buttons, and a brief application-specific message
+    ///
+    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the owner window of the message box to be created. If NULL, the message box has no owner window
+    /// @param lpText The message to be displayed. Multiple lines can be displayed by separating the lines using a carriage return and/or linefeed character between each line
+    /// @param lpCaption The dialogue box title. If NULL, this defaults to Error
+    /// @param uType The contents and behaviour of the dialogue box. This can be a combination of flags from the [following groups](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxw)
+    /// @return If the message box has a cancel button, the function returns IDCANCEL. If an MB_OK button is displayed, the return value will be IDOK
+    int MessageBoxW(HWND hWnd, String lpText, String lpCaption, int uType);
+
     /// Calls the default window procedure to provide default processing for any window messages that an application does not process
     ///
     /// @param hWnd   Handle to the window procedure that received the message

@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import static io.github.greymagic27.win_method.platform.WinUser.ES_AUTOVSCROLL;
 import static io.github.greymagic27.win_method.platform.WinUser.ES_MULTILINE;
 import static io.github.greymagic27.win_method.platform.WinUser.ES_WANTRETURN;
+import static io.github.greymagic27.win_method.platform.WinUser.IDOK;
+import static io.github.greymagic27.win_method.platform.WinUser.MB_ERRORICON;
+import static io.github.greymagic27.win_method.platform.WinUser.MB_OK;
 import static io.github.greymagic27.win_method.platform.WinUser.MF_POPUP;
 import static io.github.greymagic27.win_method.platform.WinUser.MF_SEPARATOR;
 import static io.github.greymagic27.win_method.platform.WinUser.MF_STRING;
@@ -182,8 +185,15 @@ class WinUserTest {
     }
 
     @Test
+    void testMbValues() {
+        assertEquals(0x00000000, MB_OK);
+        assertEquals(0x00000010L, MB_ERRORICON);
+    }
+
+    @Test
     void testMiscValues() {
         assertEquals(0x004, SWP_NOZORDER);
+        assertEquals(1, IDOK);
     }
 
     @Test
