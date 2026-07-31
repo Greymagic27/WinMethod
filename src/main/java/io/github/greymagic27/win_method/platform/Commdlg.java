@@ -44,7 +44,7 @@ public interface Commdlg extends Library {
         UINT_PTR Lpofnhookproc(HWND unnamedParam1, int unnamedParam2, WPARAM unnamedParam3, LPARAM unnamedParam4);
     }
 
-    /// Contains information that the [GetOpenFileName](https://learn.microsoft.com/en-us/windows/desktop/api/commdlg/nf-commdlg-getopenfilenamea) and [GetSaveFileName](https://learn.microsoft.com/en-us/windows/desktop/api/commdlg/nf-commdlg-getsavefilenamea) functions use to initialise an Open or Save As dialogue box.Once the dialogue box is closed, the system returns information about the user's selection in this structure
+    /// Contains information that the {@link #GetOpenFileNameW(OPENFILENAMEW)} and [GetSaveFileName](https://learn.microsoft.com/en-us/windows/desktop/api/commdlg/nf-commdlg-getsavefilenamew) functions use to initialise an Open or Save As dialogue box.Once the dialogue box is closed, the system returns information about the user's selection in this structure
     @SuppressWarnings("unused")
     @Structure.AutoFieldOrder
     class OPENFILENAMEW extends Structure {
