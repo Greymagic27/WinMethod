@@ -145,6 +145,26 @@ public interface WinUser {
     int VK_DELETE = 0x2E;
     /// Help key
     int VK_HELP = 0x2F;
+    /// Multiply key
+    int VK_MULTIPLY = 0x6A;
+    /// Add key
+    int VK_ADD = 0x6B;
+    /// Separator key
+    int VK_SEPARATOR = 0x6C;
+    /// Subtract key
+    int VK_SUBTRACT = 0x6D;
+    /// Decimal key
+    int VK_DECIMAL = 0x6E;
+    /// Divide key
+    int VK_DIVIDE = 0x6F;
+    /// For any country/region, the Equals and Plus key
+    int VK_OEM_PLUS = 0xBB;
+    /// For any country/region, the Comma and Less Than key
+    int VK_OEM_COMMA = 0xBC;
+    /// For any country/region, the Dash and Underscore key
+    int VK_OEM_MINUS = 0xBD;
+    /// For any country/region, the Period and Greater Than key
+    int VK_OEM_PERIOD = 0xBE;
 
     /// A callback function which is defined in the application
     interface Wndproc extends Callback {
