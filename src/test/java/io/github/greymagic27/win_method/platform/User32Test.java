@@ -2,6 +2,7 @@ package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
+import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HWND;
@@ -28,11 +29,13 @@ class User32Test {
     private static final User32 user32 = User32.INSTANCE;
     private HWND window;
     private WinUser.MSG msg;
+    private WinDef.RECT rect;
 
     @BeforeEach
     void setUp() {
         window = user32.CreateWindowExW(0, "STATIC", null, WinUser.WS_OVERLAPPED, 100, 100, 500, 400, null, null, null, null);
         msg = new WinUser.MSG();
+        rect = new WinDef.RECT();
     }
 
     @AfterEach
@@ -114,11 +117,35 @@ class User32Test {
 
     @Test
     void testGetWindowRect() {
-        WinDef.RECT rect = new WinDef.RECT();
         BOOL result = user32.GetWindowRect(window, rect);
         assertTrue(result.booleanValue());
         assertTrue(rect.right.intValue() > rect.left.intValue());
         assertTrue(rect.bottom.intValue() > rect.top.intValue());
+    }
+
+
+    @Test
+    void testInvalidateRect() {
+        rect.left = new LONG(0);
+        rect.top = new LONG(0);
+        rect.right = new LONG(100);
+        rect.bottom = new LONG(100);
+        BOOL result = user32.InvalidateRect(window, rect, new BOOL(0));
+        assertTrue(result.booleanValue());
+    }
+
+    @Test
+    void testGetClientRect() {
+        BOOL result = user32.GetClientRect(window, rect);
+        assertTrue(result.booleanValue());
+        assertEquals(0, rect.left.intValue());
+        assertEquals(0, rect.top.intValue());
+        assertTrue(rect.right.intValue() > 0);
+        assertTrue(rect.bottom.intValue() > 0);
+        WinDef.RECT windowRect = new WinDef.RECT();
+        assertTrue(user32.GetWindowRect(window, windowRect).booleanValue());
+        assertTrue(rect.right.intValue() <= (windowRect.right.intValue() - windowRect.left.intValue()));
+        assertTrue(rect.bottom.intValue() <= (windowRect.bottom.intValue() - windowRect.top.intValue()));
     }
 
     @Test
@@ -200,7 +227,6 @@ class User32Test {
     void testMoveWindow() {
         BOOL result = user32.MoveWindow(window, 200, 300, 400, 300, new BOOL(1));
         assertTrue(result.booleanValue());
-        WinDef.RECT rect = new WinDef.RECT();
         BOOL getRectResult = user32.GetWindowRect(window, rect);
         assertTrue(getRectResult.booleanValue());
         assertTrue(rect.right.intValue() - rect.left.intValue() >= 400);
@@ -253,17 +279,6 @@ class User32Test {
     }
 
     @Test
-    void testInvalidateRect() {
-        WinDef.RECT rect = new WinDef.RECT();
-        rect.left = new LONG(0);
-        rect.top = new LONG(0);
-        rect.right = new LONG(100);
-        rect.bottom = new LONG(100);
-        BOOL result = user32.InvalidateRect(window, rect, new BOOL(0));
-        assertTrue(result.booleanValue());
-    }
-
-    @Test
     void testMessageBox() {
         int result = user32.MessageBoxW(window, "Test", "Test", WinUser.MB_OK);
         assertEquals(WinUser.IDOK, result);
@@ -274,6 +289,29 @@ class User32Test {
         assertNotNull(window);
         assertNotEquals(0, window.segment.address());
         BOOL result = user32.SetWindowTextW(window, "New Window Title");
+        assertNotNull(result);
+        assertTrue(result.booleanValue());
+    }
+
+    @Test
+    void testBeginPaint() {
+        assertTrue(user32.InvalidateRect(window, null, new BOOL(1)).booleanValue());
+        assertTrue(user32.UpdateWindow(window).booleanValue());
+        WinUser.PAINTSTRUCT paintstruct = new WinUser.PAINTSTRUCT();
+        HDC hdc = user32.BeginPaint(window, paintstruct);
+        assertNotNull(hdc);
+        assertNotEquals(0, hdc.segment.address());
+        assertNotNull(paintstruct.hdc);
+        assertEquals(hdc.segment.address(), paintstruct.hdc.segment.address());
+        assertTrue(user32.EndPaint(window, paintstruct).booleanValue());
+    }
+
+    @Test
+    void testEndPaint() {
+        WinUser.PAINTSTRUCT paintstruct = new WinUser.PAINTSTRUCT();
+        assertNotNull(user32.BeginPaint(window, paintstruct));
+        assertNotEquals(0, paintstruct.hdc.segment.address());
+        BOOL result = user32.EndPaint(window, paintstruct);
         assertNotNull(result);
         assertTrue(result.booleanValue());
     }

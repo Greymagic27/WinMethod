@@ -250,7 +250,7 @@ public interface WinUser {
         public WinDef.POINT pt;
     }
 
-    //TODO: Add test
+    // TODO: Write test
     /// Contains information for an application. This information can be used to paint the client area of a window owned by that application
     @SuppressWarnings("unused")
     @Structure.AutoFieldOrder
@@ -267,6 +267,6 @@ public interface WinUser {
         public BOOL fIncUpdate;
         /// Reserved; used internally by the system
         @ArrayLength(32)
-        public BYTE rgbReserved;
+        public BYTE[] rgbReserved;
     }
 }

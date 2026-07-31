@@ -44,7 +44,6 @@ public interface User32 extends Library {
     /// @return Return value is nonzero. If the function fails, the return value is zero
     BOOL GetWindowRect(HWND hWnd, WinDef.RECT lpRect);
 
-    //TODO: Write test
     /// Retrieves the coordinates of the window's client area
     ///
     /// @param hWnd   A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose client coordinates are to be retrieved
@@ -151,7 +150,6 @@ public interface User32 extends Library {
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL SetWindowTextW(HWND hWnd, String lpString);
 
-    //TODO: Write test
     /// Marks the end of painting in the specified window
     ///
     /// @param hWnd {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window that has been repainted
@@ -216,7 +214,6 @@ public interface User32 extends Library {
     /// @return Specifies the status of the specified virtual key
     SHORT GetKeyState(int nVirtKey);
 
-    //TODO: Write test
     /// Prepares the specified window for painting and fills a {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure with information about the painting
     ///
     /// @param hWnd {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window to be repainted
