@@ -16,6 +16,7 @@ import io.github.greymagic27.win_method.WinDef.WPARAM;
 /// Values defined in commdlg.h
 public interface Commdlg extends Library {
 
+    /// The instance
     Commdlg INSTANCE = Library.load("comdlg32", Commdlg.class);
 
     /// The user can type only names of existing files in the File Name entry field
