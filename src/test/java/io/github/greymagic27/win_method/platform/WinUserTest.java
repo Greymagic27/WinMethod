@@ -10,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import static io.github.greymagic27.win_method.platform.WinUser.ES_AUTOVSCROLL;
 import static io.github.greymagic27.win_method.platform.WinUser.ES_MULTILINE;
 import static io.github.greymagic27.win_method.platform.WinUser.ES_WANTRETURN;
+import static io.github.greymagic27.win_method.platform.WinUser.MF_POPUP;
+import static io.github.greymagic27.win_method.platform.WinUser.MF_SEPARATOR;
+import static io.github.greymagic27.win_method.platform.WinUser.MF_STRING;
 import static io.github.greymagic27.win_method.platform.WinUser.SM_CXSCREEN;
 import static io.github.greymagic27.win_method.platform.WinUser.SM_CYSCREEN;
 import static io.github.greymagic27.win_method.platform.WinUser.SWP_NOZORDER;
@@ -85,6 +88,13 @@ class WinUserTest {
         assertEquals(0x0004, ES_MULTILINE);
         assertEquals(0x0040, ES_AUTOVSCROLL);
         assertEquals(0x1000, ES_WANTRETURN);
+    }
+
+    @Test
+    void testMfValues() {
+        assertEquals(0x00000000, MF_STRING);
+        assertEquals(0x00000010, MF_POPUP);
+        assertEquals(0x00000800, MF_SEPARATOR);
     }
 
     @Test
