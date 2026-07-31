@@ -268,4 +268,13 @@ class User32Test {
         int result = user32.MessageBoxW(window, "Test", "Test", WinUser.MB_OK);
         assertEquals(WinUser.IDOK, result);
     }
+
+    @Test
+    void testSetWindowText() {
+        assertNotNull(window);
+        assertNotEquals(0, window.segment.address());
+        BOOL result = user32.SetWindowTextW(window, "New Window Title");
+        assertNotNull(result);
+        assertTrue(result.booleanValue());
+    }
 }

@@ -3,6 +3,7 @@ package io.github.greymagic27.win_method.platform;
 import io.github.greymagic27.win_method.Library;
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
+import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HWND;
@@ -38,14 +39,22 @@ public interface User32 extends Library {
 
     /// Retrieves the dimensions of the bounding rectangle of the specified window. These are relative to the upper-left corner of the screen
     ///
-    /// @param hWnd A  {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window
+    /// @param hWnd   A  {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window
     /// @param lpRect Pointer to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure
     /// @return Return value is nonzero. If the function fails, the return value is zero
     BOOL GetWindowRect(HWND hWnd, WinDef.RECT lpRect);
 
+    //TODO: Write test
+    /// Retrieves the coordinates of the window's client area
+    ///
+    /// @param hWnd   A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose client coordinates are to be retrieved
+    /// @param lpRect A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure that retrieves the client coordinates
+    /// @return Return value is nonzero. If the function fails, the return value is zero
+    BOOL GetClientRect(HWND hWnd, WinDef.RECT lpRect);
+
     /// Adds a rectangle to the specified window's update region. The update region is the portion of the client that must be redrawn
     ///
-    /// @param hWnd  A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose update region has changed
+    /// @param hWnd   A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose update region has changed
     /// @param lpRect A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure that contains the client coordinates of the rectangle to be added to the update region
     /// @param bErase Specifies whether the background within the update region is to be erased when the update region is processed
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
@@ -115,15 +124,16 @@ public interface User32 extends Library {
 
     /// Appends a new item to the end of the specified menu bar, drop-down menu, submenu or shortcut menu
     ///
-    /// @param hMenu A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the menu bar, drop-down menu, submenu or shortcut menu to be changed
-    /// @param uFlags Controls the appearance and behaviour of the new menu item. This can be a combination of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw)
+    /// @param hMenu      A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the menu bar, drop-down menu, submenu or shortcut menu to be changed
+    /// @param uFlags     Controls the appearance and behaviour of the new menu item. This can be a combination of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw)
     /// @param uIDNewItem The identifier of the new menu item, or, if the uFlags parameter is {@link WinUser#MF_POPUP}, a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the drop-down menu or submenu
-    /// @param lpNewItem The content of the new menu item. The interpretation depends on whether the uFlags parameter includes [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw)
+    /// @param lpNewItem  The content of the new menu item. The interpretation depends on whether the uFlags parameter includes [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw)
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL AppendMenuW(HMENU hMenu, int uFlags, UINT_PTR uIDNewItem, String lpNewItem);
 
     /// Assigns a new menu to the specified window
-    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window to which the menu is to be assigned
+    ///
+    /// @param hWnd  A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window to which the menu is to be assigned
     /// @param hMenu A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the new menu. If NULL, the window's current menu is removed
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL SetMenu(HWND hWnd, HMENU hMenu);
@@ -134,6 +144,21 @@ public interface User32 extends Library {
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL DestroyMenu(HMENU hMenu);
 
+    /// Changes the text of the specified window's title bar
+    ///
+    /// @param hWnd     A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window or control whose text is to be changed
+    /// @param lpString The new title or control text
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL SetWindowTextW(HWND hWnd, String lpString);
+
+    //TODO: Write test
+    /// Marks the end of painting in the specified window
+    ///
+    /// @param hWnd {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window that has been repainted
+    /// @param lpPaint {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure that contains the painting information retrieved by {@link #BeginPaint(HWND, WinUser.PAINTSTRUCT)}
+    /// @return The return value is always nonzero
+    BOOL EndPaint(HWND hWnd, WinUser.PAINTSTRUCT lpPaint);
+
     /// Retrieves the specified system metric or system configuration setting
     ///
     /// @param nIndex System metric or configuration setting to be retrieved
@@ -142,10 +167,10 @@ public interface User32 extends Library {
 
     /// Displays a modal dialogue box that contains a system icon, set of buttons, and a brief application-specific message
     ///
-    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the owner window of the message box to be created. If NULL, the message box has no owner window
-    /// @param lpText The message to be displayed. Multiple lines can be displayed by separating the lines using a carriage return and/or linefeed character between each line
+    /// @param hWnd      A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the owner window of the message box to be created. If NULL, the message box has no owner window
+    /// @param lpText    The message to be displayed. Multiple lines can be displayed by separating the lines using a carriage return and/or linefeed character between each line
     /// @param lpCaption The dialogue box title. If NULL, this defaults to Error
-    /// @param uType The contents and behaviour of the dialogue box. This can be a combination of flags from the [following groups](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxw)
+    /// @param uType     The contents and behaviour of the dialogue box. This can be a combination of flags from the [following groups](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxw)
     /// @return If the message box has a cancel button, the function returns IDCANCEL. If an MB_OK button is displayed, the return value will be IDOK
     int MessageBoxW(HWND hWnd, String lpText, String lpCaption, int uType);
 
@@ -186,9 +211,18 @@ public interface User32 extends Library {
     HMENU CreatePopupMenu();
 
     /// Retrieves the status of the specified key
+    ///
     /// @param nVirtKey A virtual key
     /// @return Specifies the status of the specified virtual key
     SHORT GetKeyState(int nVirtKey);
+
+    //TODO: Write test
+    /// Prepares the specified window for painting and fills a {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure with information about the painting
+    ///
+    /// @param hWnd {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window to be repainted
+    /// @param lpPaint {@link io.github.greymagic27.win_method.Pointer} to the {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure that will receive painting information
+    /// @return If the function succeeds, the return value is the handle to a display device context for the specified window. If the function fails, the return value is NULL
+    HDC BeginPaint(HWND hWnd, WinUser.PAINTSTRUCT lpPaint);
 
     /// Indicates to the system that a thread has made a request to terminate. It is typically used in response to a WM_DESTROY message.
     ///

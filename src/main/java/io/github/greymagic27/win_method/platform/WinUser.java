@@ -2,8 +2,11 @@ package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.Callback;
 import io.github.greymagic27.win_method.Structure;
+import io.github.greymagic27.win_method.WinDef.BOOL;
+import io.github.greymagic27.win_method.WinDef.BYTE;
 import io.github.greymagic27.win_method.WinDef.HBRUSH;
 import io.github.greymagic27.win_method.WinDef.HCURSOR;
+import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HICON;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HWND;
@@ -245,5 +248,25 @@ public interface WinUser {
         public int time;
         /// The cursor positon, in screen coordinates, when the message was posted
         public WinDef.POINT pt;
+    }
+
+    //TODO: Add test
+    /// Contains information for an application. This information can be used to paint the client area of a window owned by that application
+    @SuppressWarnings("unused")
+    @Structure.AutoFieldOrder
+    class PAINTSTRUCT extends Structure {
+        /// A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the display DC to be used for painting
+        public HDC hdc;
+        /// Indicates whether the background must be erased
+        public BOOL fErase;
+        /// A {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure that specifies the upper left and lower right corners of the rectangle in which the painting is requested
+        public WinDef.RECT rcPaint;
+        /// Reserved; used internally by the system
+        public BOOL fRestore;
+        /// Reserved; used internally by the system
+        public BOOL fIncUpdate;
+        /// Reserved; used internally by the system
+        @ArrayLength(32)
+        public BYTE rgbReserved;
     }
 }
