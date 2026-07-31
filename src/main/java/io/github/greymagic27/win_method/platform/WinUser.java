@@ -12,7 +12,7 @@ import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import org.jspecify.annotations.NonNull;
 
-/// Values defined in WinUser.h
+/// Values defined in Winuser.h
 public interface WinUser {
 
     /// The window is an overlapped window. An overlapped window has a title bar and a border. Same as the WS_TILED style
@@ -77,6 +77,13 @@ public interface WinUser {
     int ES_AUTOVSCROLL = 0x0040;
     /// Specifies that a carriage return be inserted when the user presses the ENTER key while entering text into a multiline edit control in a dialogue box
     int ES_WANTRETURN = 0x1000;
+
+    /// Specifies that the menu item is a text string
+    int MF_STRING = 0x00000000;
+    /// Specifies that the menu item opens a drop-down menu or submenu
+    int MF_POPUP = 0x00000010;
+    /// Draws a horizontal dividing line
+    int MF_SEPARATOR = 0x00000800;
 
     /// A callback function which is defined in the application
     interface Wndproc extends Callback {

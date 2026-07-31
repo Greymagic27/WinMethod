@@ -3,7 +3,7 @@ package io.github.greymagic27.win_method.platform;
 import io.github.greymagic27.win_method.Structure;
 import io.github.greymagic27.win_method.WinDef.LONG;
 
-/// Values defined in WinDef.h
+/// Values defined in Windef.h
 public interface WinDef {
 
     /// Defines the x and y coordinates of a point
