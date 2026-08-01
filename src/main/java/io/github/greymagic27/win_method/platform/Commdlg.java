@@ -93,10 +93,6 @@ public interface Commdlg extends Library {
         public LPOFNHOOKPROC lpfnHook;
         /// The name of the dialogue template resource in the module identified by the hInstance member
         public LPCWSTR lpTemplateName;
-        /// This member is conditionally compiled so that it is only applicable to macOS
-        public Pointer lpEditInfo;
-        /// This member is conditionally compiled so that it is only applicable to macOS
-        public LPCWSTR lpstrPrompt;
         /// This member is reserved
         public LPVOID pvReserved;
         /// This member is reserved
