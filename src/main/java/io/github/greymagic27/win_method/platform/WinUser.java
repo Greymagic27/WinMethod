@@ -252,6 +252,11 @@ public interface WinUser {
     /// The OK button was selected
     int IDOK = 1;
 
+    /// Redraws the entire window if a movement or size adjustment changes the width of the client area
+    int CS_HREDRAW = 0x0002;
+    /// Redraws the entire window if a movement or size adjustment changes the height of the client area
+    int CS_VREDRAW = 0x0001;
+
     /// A callback function which is defined in the application
     interface Wndproc extends Callback {
         /// Creates a standard window with default {@link #WM_DESTROY} handling

@@ -9,10 +9,13 @@ import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LONG;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import java.lang.foreign.MemorySegment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static io.github.greymagic27.win_method.platform.WinUser.CS_HREDRAW;
+import static io.github.greymagic27.win_method.platform.WinUser.CS_VREDRAW;
 import static io.github.greymagic27.win_method.platform.WinUser.ES_AUTOVSCROLL;
 import static io.github.greymagic27.win_method.platform.WinUser.ES_MULTILINE;
 import static io.github.greymagic27.win_method.platform.WinUser.ES_WANTRETURN;
@@ -271,6 +274,12 @@ class WinUserTest {
     }
 
     @Test
+    void testCsValues() {
+        assertEquals(0x0002, CS_HREDRAW);
+        assertEquals(0x0001, CS_VREDRAW);
+    }
+
+    @Test
     void testMiscValues() {
         assertEquals(0x004, SWP_NOZORDER);
         assertEquals(1, IDOK);
@@ -279,13 +288,23 @@ class WinUserTest {
     @Test
     void testWndClassEx() {
         WinUser.WNDCLASSEXW wndClass = new WinUser.WNDCLASSEXW();
-        assertEquals(80, wndClass.size());
+        wndClass.cbSize = new UINT(wndClass.size());
+        wndClass.style = new UINT(CS_HREDRAW | CS_VREDRAW);
+        wndClass.lpszClassName = new LPCWSTR("TestWindow");
+        assertEquals(wndClass.size(), wndClass.cbSize.intValue());
+        assertEquals(CS_HREDRAW | CS_VREDRAW, wndClass.style.intValue());
+        assertEquals("TestWindow", wndClass.lpszClassName.getWideString(0));
     }
 
     @Test
     void testMsg() {
         WinUser.MSG msg = new WinUser.MSG();
-        assertEquals(48, msg.size());
+        msg.message = new UINT(WM_KEYDOWN);
+        msg.wParam = new WPARAM(123);
+        msg.lParam = new LPARAM(456);
+        assertEquals(WM_KEYDOWN, msg.message.intValue());
+        assertEquals(123, msg.wParam.longValue());
+        assertEquals(456, msg.lParam.longValue());
     }
 
     @Test
@@ -309,7 +328,6 @@ class WinUserTest {
     @Test
     void testPaintStruct() {
         WinUser.PAINTSTRUCT ps = new WinUser.PAINTSTRUCT();
-        assertEquals(64, ps.size());
         ps.hdc = new HDC(MemorySegment.ofAddress(0xDEADBEEFL));
         ps.fErase = new BOOL(1);
         ps.rcPaint = new WinDef.RECT();

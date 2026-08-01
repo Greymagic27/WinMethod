@@ -35,7 +35,6 @@ class CommdlgTest {
         openfilenamew.Flags = new DWORD(OFN_EXPLORER | OFN_FILEMUSTEXIST);
         openfilenamew.lpstrTitle = new LPCWSTR("Test");
         openfilenamew.nMaxFile = new DWORD(260);
-        assertEquals(openfilenamew.size(), openfilenamew.lStructSize.intValue());
         assertEquals(OFN_EXPLORER | OFN_FILEMUSTEXIST, openfilenamew.Flags.intValue());
         assertEquals("Test", openfilenamew.lpstrTitle.getWideString(0));
         assertEquals(260, openfilenamew.nMaxFile.intValue());

@@ -91,3 +91,40 @@ mavenPublishing {
         }
     }
 }
+
+abstract class CheckStructureSize extends DefaultTask {
+
+    @Inject
+    abstract ExecOperations getExecOperations()
+
+    @Inject
+    abstract FileSystemOperations getFileSystemOperations()
+
+    @TaskAction
+    void run() {
+        def vswhere = "C:\\Program Files (x86)\\Microsoft Visual Studio\\Installer\\vswhere.exe"
+        def stdout = new ByteArrayOutputStream()
+        execOperations.exec {
+            commandLine vswhere, "-latest", "-products", "*",
+                    "-requires", "Microsoft.VisualStudio.Component.VC.Tools.x86.x64",
+                    "-property", "installationPath"
+            standardOutput = stdout
+        }
+        def vsInstallPath = stdout.toString().trim()
+        def vcvarsall = "${vsInstallPath}\\VC\\Auxiliary\\Build\\vcvarsall.bat"
+        execOperations.exec {
+            workingDir "tools"
+            commandLine "cmd", "/c", "\"${vcvarsall}\" x64 && cl /EHsc StructureSize.cpp"
+        }
+        def runOutput = new ByteArrayOutputStream()
+        execOperations.exec {
+            workingDir "tools"
+            commandLine "cmd", "/c", "StructureSize.exe"
+            standardOutput = runOutput
+        }
+        fileSystemOperations.delete { delete "tools/StructureSize.exe", "tools/StructureSize.obj" }
+        logger.lifecycle(runOutput.toString())
+    }
+}
+
+tasks.register("checkStructSizes", CheckStructureSize)
