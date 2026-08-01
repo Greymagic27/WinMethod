@@ -17,6 +17,8 @@ import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
 import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WORD;
@@ -68,7 +70,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class)) {
+        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class)) {
@@ -528,6 +530,64 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_LPWSTRString() {
+        try (Arena arena = Arena.ofConfined()) {
+            Object result = TypeMapper.toNative("test", LPWSTR.class, arena);
+            assertInstanceOf(MemorySegment.class, result);
+            assertNotEquals(MemorySegment.NULL, result);
+            MemorySegment segment = (MemorySegment) result;
+            assertEquals('t', segment.get(ValueLayout.JAVA_CHAR, 0));
+            assertEquals('e', segment.get(ValueLayout.JAVA_CHAR, 2));
+        }
+    }
+
+    @Test
+    void testToNative_LPWSTR() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            LPWSTR value = new LPWSTR(segment);
+            Object result = TypeMapper.toNative(value, LPWSTR.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_LPWSTRNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, LPWSTR.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_LPCWSTRString() {
+        try (Arena arena = Arena.ofConfined()) {
+            Object result = TypeMapper.toNative("test", LPCWSTR.class, arena);
+            assertInstanceOf(MemorySegment.class, result);
+            assertNotEquals(MemorySegment.NULL, result);
+            MemorySegment segment = (MemorySegment) result;
+            assertEquals('t', segment.get(ValueLayout.JAVA_CHAR, 0));
+            assertEquals('e', segment.get(ValueLayout.JAVA_CHAR, 2));
+        }
+    }
+
+    @Test
+    void testToNative_LPCWSTR() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            LPCWSTR value = new LPCWSTR(segment);
+            Object result = TypeMapper.toNative(value, LPCWSTR.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_LPCWSTRNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, LPCWSTR.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -755,6 +815,22 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(9999, DWORD.class);
         assertInstanceOf(DWORD.class, result);
         assertEquals(9999, ((DWORD) result).intValue());
+    }
+
+    @Test
+    void testFromNative_LPWSTR() {
+        MemorySegment segment = MemorySegment.ofAddress(0x1234);
+        Object result = TypeMapper.fromNative(segment, LPWSTR.class);
+        assertInstanceOf(LPWSTR.class, result);
+        assertEquals(0x1234L, ((LPWSTR) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_LPCWSTR() {
+        MemorySegment segment = MemorySegment.ofAddress(0x5678);
+        Object result = TypeMapper.fromNative(segment, LPCWSTR.class);
+        assertInstanceOf(LPCWSTR.class, result);
+        assertEquals(0x5678L, ((LPCWSTR) result).segment.address());
     }
 
     @Test

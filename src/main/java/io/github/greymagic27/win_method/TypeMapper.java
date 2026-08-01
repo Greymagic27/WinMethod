@@ -8,6 +8,8 @@ import io.github.greymagic27.win_method.WinDef.BYTE;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemoryLayout;
@@ -43,6 +45,9 @@ public final class TypeMapper {
     static Object toNative(Object value, Class<?> javaType, Arena callArena) {
         if (value == null) {
             return defaultNativeValue(javaType);
+        }
+        if ((javaType == LPWSTR.class || javaType == LPCWSTR.class) && value instanceof String s) {
+            return callArena.allocateFrom(s, StandardCharsets.UTF_16LE);
         }
         if (Structure.class.isAssignableFrom(javaType)) {
             return ((Structure) value).pointer().segment;
