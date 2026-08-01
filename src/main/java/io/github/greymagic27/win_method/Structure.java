@@ -102,7 +102,7 @@ public abstract class Structure {
                     throw new RuntimeException(e);
                 }
                 if (nested == null) throw new IllegalStateException("Nested structure field " + f.getName() + " must be initialised");
-                ml = ((Structure) nested).getLayout();
+                ml = ((Structure) nested).layout;
             } else {
                 ml = TypeMapper.layoutMappings(f.getType());
                 if (ml == null) throw new IllegalStateException("Unsupported struct field type: " + f.getType() + " on " + f.getName());
@@ -227,14 +227,14 @@ public abstract class Structure {
         Structure nested = (Structure) nestedValue;
         nested.write();
         long offset = layout.byteOffset(PathElement.groupElement(field.getName()));
-        long size = nested.getLayout().byteSize();
+        long size = nested.layout.byteSize();
         MemorySegment.copy(nested.segment, 0, segment, offset, size);
     }
 
     private void readNestedStructure(@NonNull Field field, Object nestedValue) {
         Structure nested = (Structure) nestedValue;
         long offset = layout.byteOffset(PathElement.groupElement(field.getName()));
-        long size = nested.getLayout().byteSize();
+        long size = nested.layout.byteSize();
         MemorySegment.copy(segment, offset, nested.segment, 0, size);
         nested.read();
     }
@@ -313,10 +313,6 @@ public abstract class Structure {
 
     public void useMemory(MemorySegment segment) {
         this.segment = segment;
-    }
-
-    public MemoryLayout getLayout() {
-        return layout;
     }
 
     /// Structure field order is manually set using field names
