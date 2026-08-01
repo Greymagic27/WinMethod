@@ -1,5 +1,6 @@
 package io.github.greymagic27.win_method.platform;
 
+import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.Library;
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
@@ -10,9 +11,8 @@ import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
-import io.github.greymagic27.win_method.WinNT.SHORT;
-import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.SHORT;
 
 /// Interface for User32.dll
 public interface User32 extends Library {
@@ -125,7 +125,7 @@ public interface User32 extends Library {
     ///
     /// @param hMenu      A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the menu bar, drop-down menu, submenu or shortcut menu to be changed
     /// @param uFlags     Controls the appearance and behaviour of the new menu item. This can be a combination of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw)
-    /// @param uIDNewItem The identifier of the new menu item, or, if the uFlags parameter is {@link WinUser#MF_POPUP}, a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the drop-down menu or submenu
+    /// @param uIDNewItem The identifier of the new menu item or, if the uFlags parameter is set to MF_POPUP, a handle to the drop-down menu or submenu
     /// @param lpNewItem  The content of the new menu item. The interpretation depends on whether the uFlags parameter includes [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw)
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL AppendMenuW(HMENU hMenu, int uFlags, UINT_PTR uIDNewItem, String lpNewItem);
@@ -152,10 +152,18 @@ public interface User32 extends Library {
 
     /// Marks the end of painting in the specified window
     ///
-    /// @param hWnd {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window that has been repainted
+    /// @param hWnd    {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window that has been repainted
     /// @param lpPaint {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure that contains the painting information retrieved by {@link #BeginPaint(HWND, WinUser.PAINTSTRUCT)}
     /// @return The return value is always nonzero
     BOOL EndPaint(HWND hWnd, WinUser.PAINTSTRUCT lpPaint);
+
+    // TODO: Add test
+
+    /// Redraws the menu bar of the specified window
+    ///
+    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose menu bar is to be redrawn
+    /// @return If the function succeeds, the return value is nonzero. If the fuction fails, the return value is zero
+    BOOL DrawMenuBar(HWND hWnd);
 
     /// Retrieves the specified system metric or system configuration setting
     ///
@@ -216,7 +224,7 @@ public interface User32 extends Library {
 
     /// Prepares the specified window for painting and fills a {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure with information about the painting
     ///
-    /// @param hWnd {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window to be repainted
+    /// @param hWnd    {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window to be repainted
     /// @param lpPaint {@link io.github.greymagic27.win_method.Pointer} to the {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure that will receive painting information
     /// @return If the function succeeds, the return value is the handle to a display device context for the specified window. If the function fails, the return value is NULL
     HDC BeginPaint(HWND hWnd, WinUser.PAINTSTRUCT lpPaint);
