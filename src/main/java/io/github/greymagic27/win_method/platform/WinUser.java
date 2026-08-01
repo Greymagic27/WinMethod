@@ -250,7 +250,6 @@ public interface WinUser {
         public WinDef.POINT pt;
     }
 
-    // TODO: Write test
     /// Contains information for an application. This information can be used to paint the client area of a window owned by that application
     @SuppressWarnings("unused")
     @Structure.AutoFieldOrder

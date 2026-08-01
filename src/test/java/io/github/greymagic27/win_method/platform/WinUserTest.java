@@ -1,9 +1,14 @@
 package io.github.greymagic27.win_method.platform;
 
+import io.github.greymagic27.win_method.WinDef.BOOL;
+import io.github.greymagic27.win_method.WinDef.BYTE;
+import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.LONG;
+import java.lang.foreign.MemorySegment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -82,7 +87,9 @@ import static io.github.greymagic27.win_method.platform.WinUser.WS_SYSMENU;
 import static io.github.greymagic27.win_method.platform.WinUser.WS_VISIBLE;
 import static io.github.greymagic27.win_method.platform.WinUser.WS_VSCROLL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class WinUserTest {
 
@@ -224,5 +231,32 @@ class WinUserTest {
         LRESULT result = wndproc.callback(hwnd, msg, wparam, lparam);
         assertNotNull(result);
         assertEquals(0, result.longValue());
+    }
+
+    @Test
+    void testPaintStruct() {
+        WinUser.PAINTSTRUCT ps = new WinUser.PAINTSTRUCT();
+        assertEquals(64, ps.size());
+        ps.hdc = new HDC(MemorySegment.ofAddress(0xDEADBEEFL));
+        ps.fErase = new BOOL(1);
+        ps.rcPaint = new WinDef.RECT();
+        ps.rcPaint.left = new LONG(1);
+        ps.rcPaint.top = new LONG(2);
+        ps.rcPaint.right = new LONG(3);
+        ps.rcPaint.bottom = new LONG(4);
+        ps.fRestore = new BOOL(0);
+        ps.fIncUpdate = new BOOL(0);
+        for (int i = 0; i < ps.rgbReserved.length; i++) ps.rgbReserved[i] = new BYTE((byte) i);
+        ps.write();
+        ps.read();
+        assertEquals(0xDEADBEEFL, ps.hdc.segment.address());
+        assertTrue(ps.fErase.booleanValue());
+        assertEquals(1, ps.rcPaint.left.intValue());
+        assertEquals(2, ps.rcPaint.top.intValue());
+        assertEquals(3, ps.rcPaint.right.intValue());
+        assertEquals(4, ps.rcPaint.bottom.intValue());
+        assertFalse(ps.fRestore.booleanValue());
+        assertFalse(ps.fIncUpdate.booleanValue());
+        for (int i = 0; i < ps.rgbReserved.length; i++) assertEquals((byte) i, ps.rgbReserved[i].byteValue());
     }
 }
