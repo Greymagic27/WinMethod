@@ -173,6 +173,78 @@ public interface WinUser {
     int VK_OEM_MINUS = 0xBD;
     /// For any country/region, the Period and Greater Than key
     int VK_OEM_PERIOD = 0xBE;
+    /// 0 key
+    int VK_0 = 0x30;
+    /// 1 key
+    int VK_1 = 0x31;
+    /// 2 key
+    int VK_2 = 0x32;
+    /// 3 key
+    int VK_3 = 0x33;
+    /// 4 key
+    int VK_4 = 0x34;
+    /// 5 key
+    int VK_5 = 0x35;
+    /// 6 key
+    int VK_6 = 0x36;
+    /// 7 key
+    int VK_7 = 0x37;
+    /// 8 key
+    int VK_8 = 0x38;
+    /// 9 key
+    int VK_9 = 0x39;
+    /// A key
+    int VK_A = 0x41;
+    /// B key
+    int VK_B = 0x42;
+    /// C key
+    int VK_C = 0x43;
+    /// D key
+    int VK_D = 0x44;
+    /// E key
+    int VK_E = 0x45;
+    /// F key
+    int VK_F = 0x46;
+    /// G key
+    int VK_G = 0x47;
+    /// H key
+    int VK_H = 0x48;
+    /// I key
+    int VK_I = 0x49;
+    /// J key
+    int VK_J = 0x4A;
+    /// K key
+    int VK_K = 0x4B;
+    /// L key
+    int VK_L = 0x4C;
+    /// M key
+    int VK_M = 0x4D;
+    /// N key
+    int VK_N = 0x4E;
+    /// O key
+    int VK_O = 0x4F;
+    /// P key
+    int VK_P = 0x50;
+    /// Q key
+    int VK_Q = 0x51;
+    /// R key
+    int VK_R = 0x52;
+    /// S key
+    int VK_S = 0x53;
+    /// T key
+    int VK_T = 0x54;
+    /// U key
+    int VK_U = 0x55;
+    /// V key
+    int VK_V = 0x56;
+    /// W key
+    int VK_W = 0x57;
+    /// X key
+    int VK_X = 0x58;
+    /// Y key
+    int VK_Y = 0x59;
+    /// Z key
+    int VK_Z = 0x5A;
 
     /// The OK button was selected
     int IDOK = 1;
