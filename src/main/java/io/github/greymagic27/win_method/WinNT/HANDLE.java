@@ -17,7 +17,7 @@ public class HANDLE extends LPVOID {
     }
 
     public HANDLE(long address) {
-        this(MemorySegment.ofAddress(address));
+        super(MemorySegment.ofAddress(address));
     }
 
     /// @return Returns the class and segment address as a string
