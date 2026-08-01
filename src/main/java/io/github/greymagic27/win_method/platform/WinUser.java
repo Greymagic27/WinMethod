@@ -1,6 +1,7 @@
 package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.Callback;
+import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.Structure;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.BYTE;
@@ -12,7 +13,9 @@ import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import org.jspecify.annotations.NonNull;
 
 /// Values defined in Winuser.h
@@ -256,7 +259,7 @@ public interface WinUser {
         /// @return Returns a standard window procedure callback
         static @NonNull Wndproc defaultWndProc() {
             return (hWnd, uMsg, wParam, lParam) -> {
-                if (uMsg == WinUser.WM_DESTROY) {
+                if (uMsg.intValue() == WinUser.WM_DESTROY) {
                     User32.INSTANCE.PostQuitMessage(0);
                     return new LRESULT(0);
                 }
@@ -271,7 +274,7 @@ public interface WinUser {
         /// @param wParam Additional message information
         /// @param lParam Additional message information
         /// @return Return value is the result of the message processing and depends on the message sent
-        LRESULT callback(HWND hWnd, int uMsg, WPARAM wParam, LPARAM lParam);
+        LRESULT callback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     }
 
     /// Contains window class information
@@ -279,9 +282,9 @@ public interface WinUser {
     @Structure.AutoFieldOrder
     class WNDCLASSEXW extends Structure {
         /// The size, in bytes, of this structure
-        public int cbSize;
+        public UINT cbSize;
         /// The class style(s). This can be a combination of <a href="https://learn.microsoft.com/en-us/windows/win32/winmsg/window-class-styles"></a>
-        public int style;
+        public UINT style;
         /// A pointer to the window procedure
         public Wndproc lpfnWndProc;
         /// The number of extra bytes to allocate following the window-class structure. This initialises to 0
@@ -297,9 +300,9 @@ public interface WinUser {
         /// A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the class background brush. This member can be a handle to a brush or a colour value, however this must be one of the standard system colours. If a colour value is given, it must be converted to an <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-wndclassexw">HBRUSH type</a>
         public HBRUSH hbrBackground;
         /// Pointer to a null-terminated character string that specifies the resource name of the clas menu. If an integer is used, it must be used via the {@link io.github.greymagic27.win_method.Pointer#MAKEINTRESOURCEW(int)} function
-        public String lpszMenuName;
+        public LPCWSTR lpszMenuName;
         /// A pointer to a null-terminated character string or is an atom. If this is an atom, it must be a class atom created by a previous call to the {@link User32#RegisterClassExW(WNDCLASSEXW)} function
-        public String lpszClassName;
+        public LPCWSTR lpszClassName;
         /// A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to a small icon that is associated with the window class. If NULL, the system searches the icon resource specified by the {@link HICON} member for an icon of appropriate size
         public HICON hIconSm;
     }
@@ -311,13 +314,13 @@ public interface WinUser {
         /// A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose window procedure receives the message. This is NULL when the message is a thread message
         public HWND hwnd;
         /// The message identifier
-        public int message;
+        public UINT message;
         /// Additional information about the message
         public WPARAM wParam;
         /// Additional information about the message
         public LPARAM lParam;
         /// The time at which the message was posted
-        public int time;
+        public DWORD time;
         /// The cursor positon, in screen coordinates, when the message was posted
         public WinDef.POINT pt;
     }

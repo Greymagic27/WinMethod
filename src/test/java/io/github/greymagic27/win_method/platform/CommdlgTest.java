@@ -1,9 +1,13 @@
 package io.github.greymagic27.win_method.platform;
 
+import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
+import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import org.junit.jupiter.api.Test;
 
 import static io.github.greymagic27.win_method.platform.Commdlg.OFN_EXPLORER;
@@ -28,14 +32,14 @@ class CommdlgTest {
     void testOpenFileName() {
         Commdlg.OPENFILENAMEW openfilenamew = new Commdlg.OPENFILENAMEW();
         assertNotNull(openfilenamew);
-        openfilenamew.lStructSize = openfilenamew.size();
-        openfilenamew.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST;
-        openfilenamew.lpstrTitle = "Test";
-        openfilenamew.nMaxFile = 260;
-        assertEquals(openfilenamew.size(), openfilenamew.lStructSize);
-        assertEquals(OFN_EXPLORER | OFN_FILEMUSTEXIST, openfilenamew.Flags);
-        assertEquals("Test", openfilenamew.lpstrTitle);
-        assertEquals(260, openfilenamew.nMaxFile);
+        openfilenamew.lStructSize = new DWORD(openfilenamew.size());
+        openfilenamew.Flags = new DWORD(OFN_EXPLORER | OFN_FILEMUSTEXIST);
+        openfilenamew.lpstrTitle = new LPCWSTR("Test");
+        openfilenamew.nMaxFile = new DWORD(260);
+        assertEquals(openfilenamew.size(), openfilenamew.lStructSize.intValue());
+        assertEquals(OFN_EXPLORER | OFN_FILEMUSTEXIST, openfilenamew.Flags.intValue());
+        assertEquals("Test", openfilenamew.lpstrTitle.getWideString(0));
+        assertEquals(260, openfilenamew.nMaxFile.intValue());
     }
 
     @Test
@@ -54,7 +58,7 @@ class CommdlgTest {
     void testLpofnhookproc() {
         Commdlg.LPOFNHOOKPROC callback = (_, _, _, _) -> new UINT_PTR(0);
         assertNotNull(callback);
-        UINT_PTR result = callback.Lpofnhookproc(null, 0, new WPARAM(0), new LPARAM(0));
+        UINT_PTR result = callback.Lpofnhookproc(null, new UINT(0), new WPARAM(0), new LPARAM(0));
         assertNotNull(result);
         assertEquals(0, result.longValue());
     }
@@ -62,11 +66,11 @@ class CommdlgTest {
     @Test
     void testGetOpenFileName() {
         Commdlg.OPENFILENAMEW openFileName = new Commdlg.OPENFILENAMEW();
-        openFileName.lStructSize = openFileName.size();
-        openFileName.lpstrFilter = "All Files\0*.*\0";
-        openFileName.lpstrFile = "Test";
-        openFileName.nMaxFile = 260;
-        openFileName.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
+        openFileName.lStructSize = new DWORD(openFileName.size());
+        openFileName.lpstrFilter = new LPCWSTR("All Files\0*.*\0");
+        openFileName.lpstrFile = new LPWSTR("Test");
+        openFileName.nMaxFile = new DWORD(260);
+        openFileName.Flags = new DWORD(OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY);
         BOOL result = Commdlg.INSTANCE.GetOpenFileNameW(openFileName);
         assertNotNull(result);
     }

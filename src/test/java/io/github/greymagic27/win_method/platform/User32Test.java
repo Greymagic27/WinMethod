@@ -1,17 +1,20 @@
 package io.github.greymagic27.win_method.platform;
 
+import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
+import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HWND;
-import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
-import io.github.greymagic27.win_method.WinNT.SHORT;
-import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
+import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.LONG;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.WinNT.SHORT;
 import java.lang.foreign.MemorySegment;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +36,7 @@ class User32Test {
 
     @BeforeEach
     void setUp() {
-        window = user32.CreateWindowExW(0, "STATIC", null, WinUser.WS_OVERLAPPED, 100, 100, 500, 400, null, null, null, null);
+        window = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC"), null, new DWORD(WinUser.WS_OVERLAPPED), 100, 100, 500, 400, null, null, null, null);
         msg = new WinUser.MSG();
         rect = new WinDef.RECT();
     }
@@ -46,10 +49,10 @@ class User32Test {
     @Test
     void testRegisterClassEx() {
         WinUser.WNDCLASSEXW wndClass = new WinUser.WNDCLASSEXW();
-        wndClass.cbSize = wndClass.size();
+        wndClass.cbSize = new UINT(wndClass.size());
         wndClass.lpfnWndProc = user32::DefWindowProcW;
         wndClass.hInstance = new HINSTANCE(MemorySegment.NULL);
-        wndClass.lpszClassName = "Test";
+        wndClass.lpszClassName = new LPCWSTR("Test");
         ATOM atom = user32.RegisterClassExW(wndClass);
         assertNotNull(atom);
         assertTrue(Short.toUnsignedInt(atom.shortValue()) != 0);
@@ -63,7 +66,7 @@ class User32Test {
 
     @Test
     void testSetWindowPos() {
-        BOOL result = user32.SetWindowPos(window, null, 200, 300, 400, 300, WinUser.SWP_NOZORDER);
+        BOOL result = user32.SetWindowPos(window, null, 200, 300, 400, 300, new UINT(WinUser.SWP_NOZORDER));
         assertTrue(result.booleanValue());
     }
 
@@ -75,7 +78,7 @@ class User32Test {
 
     @Test
     void testDestroyWindow() {
-        HWND hwnd1 = user32.CreateWindowExW(0, "STATIC", "Temp", WinUser.WS_OVERLAPPED, 0, 0, 10, 10, null, null, null, null);
+        HWND hwnd1 = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC"), new LPCWSTR("Temp"), new DWORD(WinUser.WS_OVERLAPPED), 0, 0, 10, 10, null, null, null, null);
         BOOL result = user32.DestroyWindow(hwnd1);
         assertTrue(result.booleanValue());
     }
@@ -83,7 +86,7 @@ class User32Test {
     @Test
     void testTranslateMessage() {
         msg.hwnd = window;
-        msg.message = 0x0;
+        msg.message = new UINT(0x0);
         msg.wParam = new WPARAM(0x41);
         msg.lParam = new LPARAM(0);
         BOOL result = user32.TranslateMessage(msg);
@@ -93,7 +96,7 @@ class User32Test {
     @Test
     void testDispatchMessage() {
         msg.hwnd = window;
-        msg.message = 0x1;
+        msg.message = new UINT(0x1);
         msg.wParam = new WPARAM(0);
         msg.lParam = new LPARAM(0);
         BOOL lresult = user32.DispatchMessageW(msg);
@@ -106,7 +109,7 @@ class User32Test {
         AtomicBoolean get = new AtomicBoolean(false);
         Thread t = new Thread(() -> {
             user32.PostQuitMessage(0);
-            user32.GetMessageW(msg, null, 0, 0);
+            user32.GetMessageW(msg, null, new UINT(0), new UINT(0));
             get.set(true);
             latch.countDown();
         });
@@ -160,7 +163,7 @@ class User32Test {
     void testDefWindowProc() {
         WPARAM wparam = new WPARAM(0);
         LPARAM lparam = new LPARAM(0);
-        LRESULT result = user32.DefWindowProcW(window, 0x000F, wparam, lparam);
+        LRESULT result = user32.DefWindowProcW(window, new UINT(0x000F), wparam, lparam);
         assertNotNull(result);
     }
 
@@ -176,7 +179,7 @@ class User32Test {
         AtomicBoolean quit = new AtomicBoolean(false);
         Thread t = new Thread(() -> {
             user32.PostQuitMessage(0);
-            BOOL result = user32.GetMessageW(msg, null, 0, 0);
+            BOOL result = user32.GetMessageW(msg, null, new UINT(0), new UINT(0));
             if (!result.booleanValue()) quit.set(true);
             latch.countDown();
         });
@@ -192,28 +195,28 @@ class User32Test {
         int testMessage = WinUser.WM_COMMAND;
         Thread window = new Thread(() -> {
             WinUser.WNDCLASSEXW wc = new WinUser.WNDCLASSEXW();
-            wc.cbSize = wc.size();
+            wc.cbSize = new UINT(wc.size());
             wc.lpfnWndProc = (hWnd, uMsg, wParam, lParam) -> {
-                if (uMsg == testMessage) {
+                if (uMsg.intValue() == testMessage) {
                     received.set(true);
                     return new LRESULT(0);
                 }
                 return user32.DefWindowProcW(hWnd, uMsg, wParam, lParam);
             };
             wc.hInstance = new HINSTANCE(MemorySegment.NULL);
-            wc.lpszClassName = "PostMessageTestClass";
+            wc.lpszClassName = new LPCWSTR("PostMessageTestClass");
             user32.RegisterClassExW(wc);
-            this.window = user32.CreateWindowExW(0, "PostMessageTestClass", "PostMessageTest", WinUser.WS_OVERLAPPED, 0, 0, 100, 100, null, null, null, null);
+            this.window = user32.CreateWindowExW(new DWORD(0), wc.lpszClassName, new LPCWSTR("PostMessageTest"), new DWORD(WinUser.WS_OVERLAPPED), 0, 0, 100, 100, null, null, null, null);
             ready.countDown();
             WinUser.MSG msg = new WinUser.MSG();
-            while (user32.GetMessageW(msg, null, 0, 0).booleanValue()) {
+            while (user32.GetMessageW(msg, null, new UINT(0), new UINT(0)).booleanValue()) {
                 user32.TranslateMessage(msg);
                 user32.DispatchMessageW(msg);
             }
         });
         window.start();
         assertTrue(ready.await(2, TimeUnit.SECONDS));
-        BOOL result = user32.PostMessageW(this.window, testMessage, new WPARAM(0), new LPARAM(0));
+        BOOL result = user32.PostMessageW(this.window, new UINT(testMessage), new WPARAM(0), new LPARAM(0));
         assertTrue(result.booleanValue());
         long timeout = System.currentTimeMillis() + 2000;
         while (!received.get() && System.currentTimeMillis() < timeout) {
@@ -238,7 +241,7 @@ class User32Test {
         HMENU hmenu = user32.CreateMenu();
         assertNotNull(hmenu);
         assertNotEquals(0, hmenu.segment.address());
-        BOOL result = user32.AppendMenuW(hmenu, WinUser.MF_STRING, new UINT_PTR(1001), "Test Item");
+        BOOL result = user32.AppendMenuW(hmenu, new UINT(WinUser.MF_STRING), new UINT_PTR(1001), new LPCWSTR("Test Item"));
         assertTrue(result.booleanValue());
         user32.DestroyMenu(hmenu);
     }
@@ -249,7 +252,7 @@ class User32Test {
         HMENU popupMenu = user32.CreatePopupMenu();
         assertNotNull(menuBar);
         assertNotNull(popupMenu);
-        BOOL result = user32.AppendMenuW(menuBar, WinUser.MF_POPUP, new UINT_PTR(popupMenu.segment.address()), "Test");
+        BOOL result = user32.AppendMenuW(menuBar, new UINT(WinUser.MF_POPUP), new UINT_PTR(popupMenu.segment.address()), new LPCWSTR("Test"));
         assertTrue(result.booleanValue());
         user32.DestroyMenu(popupMenu);
         user32.DestroyMenu(menuBar);
@@ -280,7 +283,7 @@ class User32Test {
 
     @Test
     void testMessageBox() {
-        int result = user32.MessageBoxW(window, "Test", "Test", WinUser.MB_OK);
+        int result = user32.MessageBoxW(window, new LPCWSTR("Test"), new LPCWSTR("Test"), new UINT(WinUser.MB_OK));
         assertEquals(WinUser.IDOK, result);
     }
 
@@ -288,7 +291,7 @@ class User32Test {
     void testSetWindowText() {
         assertNotNull(window);
         assertNotEquals(0, window.segment.address());
-        BOOL result = user32.SetWindowTextW(window, "New Window Title");
+        BOOL result = user32.SetWindowTextW(window, new LPCWSTR("New Window Title"));
         assertNotNull(result);
         assertTrue(result.booleanValue());
     }
@@ -314,5 +317,20 @@ class User32Test {
         BOOL result = user32.EndPaint(window, paintstruct);
         assertNotNull(result);
         assertTrue(result.booleanValue());
+    }
+
+    @Test
+    void testDrawMenuBar() {
+        HMENU hmenu = user32.CreateMenu();
+        assertNotNull(hmenu);
+        assertNotEquals(0, hmenu.segment.address());
+        BOOL appendResult = user32.AppendMenuW(hmenu, new UINT(WinUser.MF_STRING), new UINT_PTR(1001), new LPCWSTR("Test Item"));
+        assertTrue(appendResult.booleanValue());
+        BOOL setMenuResult = user32.SetMenu(window, hmenu);
+        assertTrue(setMenuResult.booleanValue());
+        BOOL drawResult = user32.DrawMenuBar(window);
+        assertNotNull(drawResult);
+        assertTrue(drawResult.booleanValue());
+        user32.DestroyMenu(hmenu);
     }
 }

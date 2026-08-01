@@ -1,6 +1,7 @@
 package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
+import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.Library;
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
@@ -11,7 +12,9 @@ import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
 
 /// Interface for User32.dll
@@ -19,7 +22,7 @@ public interface User32 extends Library {
     /// The instance
     User32 INSTANCE = Library.load(User32.class);
 
-    /// Registers a window class for subsequent use in calls to the {@link #CreateWindowExW(int, String, String, int, int, int, int, int, HWND, HMENU, HINSTANCE, LPVOID)} function.
+    /// Registers a window class for subsequent use in calls to the {@link #CreateWindowExW(DWORD, LPCWSTR, LPCWSTR, DWORD, int, int, int, int, HWND, HMENU, HINSTANCE, LPVOID)} function.
     ///
     /// @param pointer A pointer to a {@link io.github.greymagic27.win_method.platform.WinUser.WNDCLASSEXW} structure
     /// @return Return value is a class atom that uniquely identifies the class being registered. If the function fails, the return value is zero
@@ -76,9 +79,9 @@ public interface User32 extends Library {
     /// @param cy              The new height of the window, in pixels
     /// @param uFlags          The window sizing and positioning flags. These can be a combination of SWP flags
     /// @return Return value is nonzero. If the function fails, the return value is zero
-    BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
+    BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags);
 
-    /// Translates virtual-key messages into character messages. These are posted to the calling thread's message queue, to be read the next time the thread calls {@link #GetMessageW(WinUser.MSG, HWND, int, int)} or PeekMessage functions
+    /// Translates virtual-key messages into character messages. These are posted to the calling thread's message queue, to be read the next time the thread calls {@link #GetMessageW(WinUser.MSG, HWND, UINT, UINT)} or PeekMessage functions
     ///
     /// @param msg Pointer to a {@link io.github.greymagic27.win_method.platform.WinUser.MSG} structure that contains message information
     /// @return If the message is translated, the return value is nonzero. If not translated, the return value is zero
@@ -97,7 +100,7 @@ public interface User32 extends Library {
     /// @param wParam Additional message-specific information
     /// @param lParam Additional message-specific information
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
-    BOOL PostMessageW(HWND hWnd, int Msg, WPARAM wParam, LPARAM lParam);
+    BOOL PostMessageW(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
     /// Retrieves a message from the calling thread's message queue
     ///
@@ -106,7 +109,7 @@ public interface User32 extends Library {
     /// @param wMsgFilterMin Integer value of the lowest message value to be retrieved. Use WM_KEYFIRST to specify first keyboard message or WM_MOUSEFIRST to specify first mouse message
     /// @param wMsgFilterMax Integer value of the highest message value to be retrieved. Use WM_KEYLAST to specify last keyboard message or WM_MOUSELAST to specify last mouse message
     /// @return If the function retrieves a message other than WM_QUIT, the return value is nonzero. If the function retrieves WM_QUT, the return value is zero. If there is an error, the return value is -1
-    BOOL GetMessageW(WinUser.MSG lpMsg, HWND hWnd, int wMsgFilterMin, int wMsgFilterMax);
+    BOOL GetMessageW(WinUser.MSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax);
 
     /// Changes the positon and dimensions of the specified window
     /// Top-level windows are relative to the upper-left corner of the screen
@@ -128,7 +131,7 @@ public interface User32 extends Library {
     /// @param uIDNewItem The identifier of the new menu item or, if the uFlags parameter is set to MF_POPUP, a handle to the drop-down menu or submenu
     /// @param lpNewItem  The content of the new menu item. The interpretation depends on whether the uFlags parameter includes [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-appendmenuw)
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
-    BOOL AppendMenuW(HMENU hMenu, int uFlags, UINT_PTR uIDNewItem, String lpNewItem);
+    BOOL AppendMenuW(HMENU hMenu, UINT uFlags, UINT_PTR uIDNewItem, LPCWSTR lpNewItem);
 
     /// Assigns a new menu to the specified window
     ///
@@ -148,7 +151,7 @@ public interface User32 extends Library {
     /// @param hWnd     A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window or control whose text is to be changed
     /// @param lpString The new title or control text
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
-    BOOL SetWindowTextW(HWND hWnd, String lpString);
+    BOOL SetWindowTextW(HWND hWnd, LPCWSTR lpString);
 
     /// Marks the end of painting in the specified window
     ///
@@ -178,7 +181,7 @@ public interface User32 extends Library {
     /// @param lpCaption The dialogue box title. If NULL, this defaults to Error
     /// @param uType     The contents and behaviour of the dialogue box. This can be a combination of flags from the [following groups](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxw)
     /// @return If the message box has a cancel button, the function returns IDCANCEL. If an MB_OK button is displayed, the return value will be IDOK
-    int MessageBoxW(HWND hWnd, String lpText, String lpCaption, int uType);
+    int MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType);
 
     /// Calls the default window procedure to provide default processing for any window messages that an application does not process
     ///
@@ -187,7 +190,7 @@ public interface User32 extends Library {
     /// @param wParam Additional message information. The content of this depends on the value of the Msg parameter
     /// @param lParam Additional message information. The content of this depends on the value of the Msg parameter
     /// @return Return value is the result of the message processing and depends on the message
-    LRESULT DefWindowProcW(HWND hWnd, int Msg, WPARAM wParam, LPARAM lParam);
+    LRESULT DefWindowProcW(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
     /// Creates an overlapped, pop-up or child window with an extended window style
     ///
@@ -204,14 +207,14 @@ public interface User32 extends Library {
     /// @param hInstance    A handle to the instance of the module to be associated with the window
     /// @param lpParam      Pointer to a value to be passed to the window through the CREATESTRUCT structure pointed to by the lParam param of the WM_CREATE message
     /// @return If the function succeeds, the return value is a handle to the new window. If the function fails, the return value is NULL
-    HWND CreateWindowExW(int dwExStyle, String lpClassName, String lpWindowName, int dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
+    HWND CreateWindowExW(DWORD dwExStyle, LPCWSTR lpClassName, LPCWSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
 
-    /// Creates a menu. This is initially empty but can be filled with menu items by using the [InsertMenuItem](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuitemw), {@link #AppendMenuW(HMENU, int, UINT_PTR, String)} and [InsertMenu](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuw) functions
+    /// Creates a menu. This is initially empty but can be filled with menu items by using the [InsertMenuItem](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuitemw), {@link #AppendMenuW(HMENU, UINT, UINT_PTR, LPCWSTR)} and [InsertMenu](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuw) functions
     ///
     /// @return If the function succeeds, the return value is a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the newly created menu. If the function fails, the return value is NULL
     HMENU CreateMenu();
 
-    /// Creates a drop-down menu, submenu or shortcut menu. This is initially empty but can be filled with menu items by using the [InsertMenuItem](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuitemw), {@link #AppendMenuW(HMENU, int, UINT_PTR, String)} and [InsertMenu](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuw) functions
+    /// Creates a drop-down menu, submenu or shortcut menu. This is initially empty but can be filled with menu items by using the [InsertMenuItem](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuitemw), {@link #AppendMenuW(HMENU, UINT, UINT_PTR, LPCWSTR)} and [InsertMenu](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuw) functions
     ///
     /// @return If the function succeeds, the return value is a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the newly created menu. If the function fails, the return value is NULL
     HMENU CreatePopupMenu();

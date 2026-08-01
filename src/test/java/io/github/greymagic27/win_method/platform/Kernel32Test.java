@@ -2,6 +2,7 @@ package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.WinDef.HMODULE;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -46,15 +47,15 @@ class Kernel32Test {
 
     @Test
     void testGetLastError() {
-        HMODULE hmodule = kernel32.GetModuleHandleW("NonExistent.dll");
+        HMODULE hmodule = kernel32.GetModuleHandleW(new LPCWSTR("NonExistent.dll"));
         assertTrue(hmodule.isNull());
         assertEquals(126, kernel32.GetLastError());
     }
 
     @Test
     void testLoadLibrary() {
-        HMODULE hmodule = kernel32.LoadLibraryW("kernel32.dll");
-        HMODULE hmodule1 = kernel32.LoadLibraryW("NonExistent");
+        HMODULE hmodule = kernel32.LoadLibraryW(new LPCWSTR("kernel32.dll"));
+        HMODULE hmodule1 = kernel32.LoadLibraryW(new LPCWSTR("NonExistent"));
         assertNotNull(hmodule);
         assertNotNull(hmodule1);
         assertFalse(hmodule.isNull());

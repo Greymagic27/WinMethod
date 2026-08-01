@@ -3,6 +3,7 @@ package io.github.greymagic27.win_method.methods;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.platform.User32;
 import io.github.greymagic27.win_method.platform.WinDef;
 import io.github.greymagic27.win_method.platform.WinUser;
@@ -91,7 +92,7 @@ class WindowTest {
         CountDownLatch ready = new CountDownLatch(1);
         windowThread = new Thread(() -> {
             Window.createWindow((hWnd, uMsg, wParam, lParam) -> {
-                if (uMsg == WinUser.WM_CLOSE) {
+                if (uMsg.intValue() == WinUser.WM_CLOSE) {
                     called.set(true);
                     User32.INSTANCE.DestroyWindow(hWnd);
                     return new LRESULT(0);
@@ -105,7 +106,7 @@ class WindowTest {
         windowThread.setDaemon(true);
         windowThread.start();
         assertTrue(ready.await(2, TimeUnit.SECONDS));
-        User32.INSTANCE.PostMessageW(Window.getCurrentWindow(), WinUser.WM_CLOSE, null, null).booleanValue();
+        User32.INSTANCE.PostMessageW(Window.getCurrentWindow(), new UINT(WinUser.WM_CLOSE), null, null).booleanValue();
         long timeout = System.currentTimeMillis() + 2000;
         while (!called.get() && System.currentTimeMillis() < timeout) Thread.onSpinWait();
         assertTrue(called.get(), "Custom Wndproc was not called");

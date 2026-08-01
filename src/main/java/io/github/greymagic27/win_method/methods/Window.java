@@ -1,7 +1,10 @@
 package io.github.greymagic27.win_method.methods;
 
+import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HWND;
+import io.github.greymagic27.win_method.WinDef.UINT;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.platform.Kernel32;
 import io.github.greymagic27.win_method.platform.User32;
 import io.github.greymagic27.win_method.platform.WinUser;
@@ -23,15 +26,15 @@ public class Window {
         currentWidth = width;
         currentHeight = height;
         Objects.requireNonNull(wndproc);
-        String className = "WindowClass_" + System.nanoTime();
+        LPCWSTR className = new LPCWSTR("WindowClass_" + System.nanoTime());
         HINSTANCE hInstance = Kernel32.INSTANCE.GetModuleHandleW(null);
         WinUser.WNDCLASSEXW wc = new WinUser.WNDCLASSEXW();
-        wc.cbSize = wc.size();
+        wc.cbSize = new UINT(wc.size());
         wc.lpfnWndProc = wndproc;
         wc.hInstance = hInstance;
         wc.lpszClassName = className;
         User32.INSTANCE.RegisterClassExW(wc);
-        currentWindow = User32.INSTANCE.CreateWindowExW(0, className, title, WinUser.WS_OVERLAPPEDWINDOW, 0, 0, width, height, null, null, hInstance, null);
+        currentWindow = User32.INSTANCE.CreateWindowExW(new DWORD(0), className, new LPCWSTR(title), new DWORD(WinUser.WS_OVERLAPPEDWINDOW), 0, 0, width, height, null, null, hInstance, null);
         User32.INSTANCE.ShowWindow(currentWindow, WinUser.SW_SHOW);
         User32.INSTANCE.UpdateWindow(currentWindow);
     }
@@ -39,7 +42,7 @@ public class Window {
     /// Called to start the program. Without this, the window will open and close immediately
     public static void start() {
         WinUser.MSG msg = new WinUser.MSG();
-        while (User32.INSTANCE.GetMessageW(msg, null, 0, 0).booleanValue()) {
+        while (User32.INSTANCE.GetMessageW(msg, null, new UINT(0), new UINT(0)).booleanValue()) {
             User32.INSTANCE.TranslateMessage(msg);
             User32.INSTANCE.DispatchMessageW(msg);
         }
@@ -94,7 +97,7 @@ public class Window {
             }
             default -> throw new IllegalStateException("Unexpected value: " + position);
         }
-        User32.INSTANCE.SetWindowPos(currentWindow, null, x, y, currentWidth, currentHeight, WinUser.SWP_NOZORDER);
+        User32.INSTANCE.SetWindowPos(currentWindow, null, x, y, currentWidth, currentHeight, new UINT(WinUser.SWP_NOZORDER));
     }
 
     /// Returns the current window {@link HWND}

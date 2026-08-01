@@ -6,6 +6,7 @@ import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import java.lang.foreign.MemorySegment;
@@ -290,7 +291,7 @@ class WinUserTest {
     @Test
     void testWndProc() {
         HWND hwnd = new HWND(0x12345678);
-        int msg = WM_DESTROY;
+        UINT msg = new UINT(WM_DESTROY);
         WPARAM wparam = new WPARAM(1);
         LPARAM lparam = new LPARAM(1);
         WinUser.Wndproc wndproc = (hWnd, uMsg, wParam, lParam) -> {

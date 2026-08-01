@@ -3,6 +3,7 @@ package io.github.greymagic27.win_method.platform;
 import io.github.greymagic27.win_method.Library;
 import io.github.greymagic27.win_method.WinDef.HMODULE;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 
 /// Interface for Kernel32.dll
 public interface Kernel32 extends Library {
@@ -18,13 +19,13 @@ public interface Kernel32 extends Library {
     ///
     /// @param lpModuleName Name of the loaded module (either a .dll for .exe file)
     /// @return Handle to the specified module. If the function fails, this will be NULL
-    HMODULE GetModuleHandleW(String lpModuleName);
+    HMODULE GetModuleHandleW(LPCWSTR lpModuleName);
 
     /// Loads the specified module into the address space of the calling process. The specified module may cause other modules to be loaded
     ///
     /// @param lpLibFileName The name of the module. This can be a module name or an executable
     /// @return If the function succeeds, the return is a {@link HANDLE} to the module. If the function fails, the return value is NULL
-    HMODULE LoadLibraryW(String lpLibFileName);
+    HMODULE LoadLibraryW(LPCWSTR lpLibFileName);
 
     /// Retrieves the process identifier of the calling process
     ///

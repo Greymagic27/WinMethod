@@ -2,8 +2,10 @@ package io.github.greymagic27.win_method;
 
 import io.github.greymagic27.win_method.BaseTsd.LONG_PTR;
 import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
+import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.BYTE;
+import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.SHORT;
@@ -17,8 +19,8 @@ import org.jspecify.annotations.Nullable;
 public final class TypeMapper {
 
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
-        if (javaType == int.class || javaType == Integer.class || javaType == LONG.class) return ValueLayout.JAVA_INT;
-        if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class) return ValueLayout.JAVA_INT;
+        if (javaType == int.class || javaType == Integer.class || javaType == LONG.class || javaType == DWORD.class) return ValueLayout.JAVA_INT;
+        if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class || javaType == UINT.class) return ValueLayout.JAVA_INT;
         if (javaType == long.class || javaType == Long.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class || javaType == SHORT.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
@@ -77,6 +79,12 @@ public final class TypeMapper {
         }
         if (javaType == SHORT.class) {
             return ((SHORT) value).shortValue();
+        }
+        if (javaType == DWORD.class) {
+            return ((DWORD) value).intValue();
+        }
+        if (javaType == UINT.class) {
+            return ((UINT) value).intValue();
         }
         return value;
     }
@@ -137,6 +145,12 @@ public final class TypeMapper {
         }
         if (returnType == SHORT.class) {
             return new SHORT((Short) raw);
+        }
+        if (returnType == DWORD.class) {
+            return new DWORD((Integer) raw);
+        }
+        if (returnType == UINT.class) {
+            return new UINT((Integer) raw);
         }
         return raw;
     }
