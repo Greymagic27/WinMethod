@@ -2,6 +2,7 @@ package io.github.greymagic27.win_method;
 
 import io.github.greymagic27.win_method.platform.Commdlg;
 import io.github.greymagic27.win_method.platform.WinDef;
+import io.github.greymagic27.win_method.platform.WinGdi;
 import io.github.greymagic27.win_method.platform.WinUser;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@SuppressWarnings("deprecation")
 class StructureTest {
 
     @Test
@@ -253,6 +255,9 @@ class StructureTest {
         assertEquals(48, new WinUser.MSG().size());
         assertEquals(72, new WinUser.PAINTSTRUCT().size());
         assertEquals(80, new WinUser.WNDCLASSEXW().size());
+        assertEquals(44, new WinGdi.BITMAPINFO().size());
+        assertEquals(40, new WinGdi.BITMAPINFOHEADER().size());
+        assertEquals(4, new WinGdi.RGBQUAD().size());
     }
 
     @Structure.FieldOrder({"x", "y"})

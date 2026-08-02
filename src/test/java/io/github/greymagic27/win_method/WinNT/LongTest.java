@@ -3,7 +3,6 @@ package io.github.greymagic27.win_method.WinNT;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LongTest {
@@ -23,24 +22,5 @@ class LongTest {
     @Test
     void testToStringContainsValue() {
         assertTrue(new LONG(777).toString().contains("777"));
-    }
-
-    @Test
-    void testEqualsFunction() {
-        LONG first = new LONG(42);
-        LONG second = new LONG(42);
-        LONG third = new LONG(43);
-        Object other = 42;
-        assertEquals(first, second);
-        assertNotEquals(first, third);
-        assertNotEquals(other, first);
-        assertNotEquals(null, first);
-    }
-
-    @Test
-    void testHashCodeFunction() {
-        LONG first = new LONG(42);
-        LONG second = new LONG(42);
-        assertEquals(first.hashCode(), second.hashCode());
     }
 }

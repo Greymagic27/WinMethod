@@ -17,21 +17,6 @@ public class LONG {
         return value;
     }
 
-    /// @param obj the reference object with which to compare
-    /// @return Returns if the objects are equal
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof LONG other)) return false;
-        return value == other.value;
-    }
-
-    /// @return Returns the {@link Integer} hash code
-    @Override
-    public int hashCode() {
-        return Integer.hashCode(value);
-    }
-
     /// @return Returns the value of {@link #intValue()} as a string
     @Override
     public @NonNull String toString() {

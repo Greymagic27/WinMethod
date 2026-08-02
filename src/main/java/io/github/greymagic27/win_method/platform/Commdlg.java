@@ -1,16 +1,14 @@
 package io.github.greymagic27.win_method.platform;
 
+import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.Callback;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
-import io.github.greymagic27.win_method.Library;
 import io.github.greymagic27.win_method.Pointer;
 import io.github.greymagic27.win_method.Structure;
-import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
-import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
@@ -18,10 +16,7 @@ import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
 
 /// Values defined in commdlg.h
-public interface Commdlg extends Library {
-
-    /// The instance
-    Commdlg INSTANCE = Library.load("comdlg32", Commdlg.class);
+public interface Commdlg {
 
     /// The user can type only names of existing files in the File Name entry field
     int OFN_FILEMUSTEXIST = 0x00001000;
@@ -31,11 +26,6 @@ public interface Commdlg extends Library {
     int OFN_EXPLORER = 0x00080000;
     /// Hides the Read Only check box
     int OFN_HIDEREADONLY = 0x00000004;
-    /// Creates an Open dialogue box that lets the user specify the drive, directory, and name of a file or set of files to be opened
-    ///
-    /// @param unnamedParam1 A {@link Pointer} to an {@link OPENFILENAMEW} structure that contains information used to initialise the dialogue box
-    /// @return If a file name is specified, the return value is nonzero. If the dialogue box is cancelled, the return value is zero
-    BOOL GetOpenFileNameW(OPENFILENAMEW unnamedParam1);
 
     /// Receives notification messages sent from the dialogue box
     interface LPOFNHOOKPROC extends Callback {
@@ -49,7 +39,7 @@ public interface Commdlg extends Library {
         UINT_PTR Lpofnhookproc(HWND unnamedParam1, UINT unnamedParam2, WPARAM unnamedParam3, LPARAM unnamedParam4);
     }
 
-    /// Contains information that the {@link #GetOpenFileNameW(OPENFILENAMEW)} and [GetSaveFileName](https://learn.microsoft.com/en-us/windows/desktop/api/commdlg/nf-commdlg-getsavefilenamew) functions use to initialise an Open or Save As dialogue box.Once the dialogue box is closed, the system returns information about the user's selection in this structure
+    /// Contains information that the {@link Comdlg32#GetOpenFileNameW(OPENFILENAMEW)} and [GetSaveFileName](https://learn.microsoft.com/en-us/windows/desktop/api/commdlg/nf-commdlg-getsavefilenamew) functions use to initialise an Open or Save As dialogue box.Once the dialogue box is closed, the system returns information about the user's selection in this structure
     @SuppressWarnings("unused")
     @Structure.AutoFieldOrder
     class OPENFILENAMEW extends Structure {

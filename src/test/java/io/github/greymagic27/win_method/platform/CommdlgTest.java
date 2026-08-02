@@ -2,7 +2,6 @@ package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
-import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
@@ -14,7 +13,6 @@ import static io.github.greymagic27.win_method.platform.Commdlg.OFN_FILEMUSTEXIS
 import static io.github.greymagic27.win_method.platform.Commdlg.OFN_HIDEREADONLY;
 import static io.github.greymagic27.win_method.platform.Commdlg.OFN_PATHMUSTEXIST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CommdlgTest {
@@ -47,15 +45,5 @@ class CommdlgTest {
         UINT_PTR result = callback.Lpofnhookproc(null, new UINT(0), new WPARAM(0), new LPARAM(0));
         assertNotNull(result);
         assertEquals(0, result.longValue());
-    }
-
-    @Test
-    void testGetOpenFileName() {
-        Commdlg.OPENFILENAMEW openFileName = new Commdlg.OPENFILENAMEW();
-        openFileName.lStructSize = new DWORD(0);
-        BOOL result = Commdlg.INSTANCE.GetOpenFileNameW(openFileName);
-        assertFalse(result.booleanValue());
-        openFileName.lStructSize = new DWORD(openFileName.size());
-        assertEquals(openFileName.size(), openFileName.lStructSize.intValue());
     }
 }

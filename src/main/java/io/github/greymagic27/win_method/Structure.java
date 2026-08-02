@@ -39,6 +39,7 @@ public abstract class Structure {
         GroupLayout layout = buildLayout();
         this.layout = layout;
         this.segment = arena.allocate(layout);
+        read();
     }
 
     private void initFields() {
@@ -60,8 +61,14 @@ public abstract class Structure {
         Class<?> type = field.getType();
         if (type.isArray()) {
             ArrayLength arrayLength = field.getAnnotation(ArrayLength.class);
-            if (arrayLength == null) throw new IllegalStateException("Array field " + field.getName() + " must have @ArrayLength");
-            return Array.newInstance(type.getComponentType(), arrayLength.value());
+            if (arrayLength == null) throw new IllegalStateException("Array field " + field.getName() + " must have an @ArrayLength");
+            Object array = Array.newInstance(type.getComponentType(), arrayLength.value());
+            if (Structure.class.isAssignableFrom(type.getComponentType())) {
+                for (int i = 0; i < arrayLength.value(); i++) {
+                    Array.set(array, i, instantiateStructure(type.getComponentType()));
+                }
+            }
+            return array;
         }
         try {
             if (type.isPrimitive()) return null;
@@ -71,6 +78,14 @@ public abstract class Structure {
             return null;
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Could not initialise structure field of type " + type, e);
+        }
+    }
+
+    private @NonNull Structure instantiateStructure(@NonNull Class<?> structureType) {
+        try {
+            return (Structure) structureType.getDeclaredConstructor().newInstance();
+        } catch (ReflectiveOperationException e) {
+            throw new RuntimeException("Could not initialise structure array element of type " + structureType, e);
         }
     }
 
@@ -184,12 +199,16 @@ public abstract class Structure {
     }
 
     private void writeArray(@NonNull Field field, Object value) {
-        long offset = layout.byteOffset(PathElement.groupElement(field.getName()));
+        Class<?> componentType = field.getType().getComponentType();
         ArrayLength arrayLength = field.getAnnotation(ArrayLength.class);
         if (arrayLength != null && Array.getLength(value) != arrayLength.value()) throw new IllegalStateException("Array field " + field.getName() + " must have length " + arrayLength.value());
+        if (Structure.class.isAssignableFrom(componentType)) {
+            writeStructureArray(field, value);
+            return;
+        }
+        long offset = layout.byteOffset(PathElement.groupElement(field.getName()));
         MemoryLayout elementLayout = getArrayElementLayout(field);
         VarHandle handle = elementLayout.varHandle();
-        Class<?> componentType = field.getType().getComponentType();
         for (int i = 0; i < Array.getLength(value); i++) {
             Object element = Array.get(value, i);
             Object nativeValue = TypeMapper.toNative(element, componentType, arena);
@@ -197,8 +216,19 @@ public abstract class Structure {
         }
     }
 
+    private void writeStructureArray(@NonNull Field field, Object value) {
+        long baseOffset = layout.byteOffset(PathElement.groupElement(field.getName()));
+        int length = Array.getLength(value);
+        for (int i = 0; i < length; i++) {
+            Structure element = (Structure) Array.get(value, i);
+            if (element == null) throw new IllegalStateException("Element " + i + " of structure array field " + field.getName() + " cannot be null");
+            element.write();
+            long elementSize = element.layout.byteSize();
+            MemorySegment.copy(element.segment, 0, segment, baseOffset + (i * elementSize), elementSize);
+        }
+    }
+
     private void readArray(@NonNull Field field) {
-        long offset = layout.byteOffset(PathElement.groupElement(field.getName()));
         Object value;
         try {
             value = field.get(this);
@@ -206,9 +236,14 @@ public abstract class Structure {
             throw new RuntimeException(e);
         }
         if (value == null) throw new IllegalStateException("Array field " + field.getName() + " cannot be null");
+        Class<?> componentType = field.getType().getComponentType();
+        if (Structure.class.isAssignableFrom(componentType)) {
+            readStructureArray(field, value);
+            return;
+        }
+        long offset = layout.byteOffset(PathElement.groupElement(field.getName()));
         MemoryLayout elementLayout = getArrayElementLayout(field);
         VarHandle handle = elementLayout.varHandle();
-        Class<?> componentType = field.getType().getComponentType();
         for (int i = 0; i < Array.getLength(value); i++) {
             Object nativeValue = handle.get(segment, offset + (i * elementLayout.byteSize()));
             Object javaValue = TypeMapper.fromNative(nativeValue, componentType);
@@ -216,8 +251,32 @@ public abstract class Structure {
         }
     }
 
+    private void readStructureArray(@NonNull Field field, Object value) {
+        long baseOffset = layout.byteOffset(PathElement.groupElement(field.getName()));
+        int length = Array.getLength(value);
+        for (int i = 0; i < length; i++) {
+            Structure element = (Structure) Array.get(value, i);
+            if (element == null) throw new IllegalStateException("Element " + i + " of structure array field " + field.getName() + " cannot be null");
+            long elementSize = element.layout.byteSize();
+            MemorySegment.copy(segment, baseOffset + (i * elementSize), element.segment, 0, elementSize);
+            element.read();
+        }
+    }
+
     private @NonNull MemoryLayout getArrayElementLayout(@NonNull Field field) {
         Class<?> componentType = field.getType().getComponentType();
+        if (Structure.class.isAssignableFrom(componentType)) {
+            Object array;
+            try {
+                array = field.get(this);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+            if (array == null || Array.getLength(array) == 0) throw new IllegalStateException("Structure array field " + field.getName() + " must be initialised with at least one element");
+            Structure element = (Structure) Array.get(array, 0);
+            if (element == null) throw new IllegalStateException("Structure array field " + field.getName() + " has an uninitialised element at index 0");
+            return element.layout;
+        }
         MemoryLayout elementLayout = TypeMapper.layoutMappings(componentType);
         if (elementLayout == null) throw new IllegalStateException("Unsupported array component type: " + componentType + " in field " + field.getName());
         return elementLayout;
@@ -316,8 +375,12 @@ public abstract class Structure {
     }
 
     /// Structure field order is manually set using field names
+    ///
+    /// @deprecated Use {@link AutoFieldOrder} instead
+    @SuppressWarnings("DeprecatedIsStillUsed")
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.TYPE)
+    @Deprecated
     public @interface FieldOrder {
         String[] value();
     }

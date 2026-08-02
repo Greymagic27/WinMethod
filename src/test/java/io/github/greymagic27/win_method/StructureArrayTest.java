@@ -167,7 +167,7 @@ class StructureArrayTest {
             private byte[] data;
         }
         IllegalStateException e = assertThrows(IllegalStateException.class, InvalidArray::new);
-        assertTrue(e.getMessage().contains("must have @ArrayLength"));
+        assertTrue(e.getMessage().contains("must have an @ArrayLength"));
     }
 
     @Test
@@ -180,7 +180,7 @@ class StructureArrayTest {
 
     @Test
     void testPrimitiveBeforeArray() {
-        @Structure.FieldOrder({"value", "data"})
+        @Structure.AutoFieldOrder
         class PrimitiveArray extends Structure {
             private int value;
             @ArrayLength(4)
@@ -207,7 +207,7 @@ class StructureArrayTest {
 
     @Test
     void testPrimitiveAfterArray() {
-        @Structure.FieldOrder({"value", "data"})
+        @Structure.AutoFieldOrder
         class PrimitiveArray extends Structure {
             @ArrayLength(4)
             private int[] data;
@@ -217,11 +217,11 @@ class StructureArrayTest {
         st.value = 100;
         st.data = new int[]{10, 20, 30, 40};
         MemorySegment segment = st.pointer().segment;
-        assertEquals(100, segment.get(ValueLayout.JAVA_INT, 0));
-        assertEquals(10, segment.get(ValueLayout.JAVA_INT, 4));
-        assertEquals(20, segment.get(ValueLayout.JAVA_INT, 8));
-        assertEquals(30, segment.get(ValueLayout.JAVA_INT, 12));
-        assertEquals(40, segment.get(ValueLayout.JAVA_INT, 16));
+        assertEquals(10, segment.get(ValueLayout.JAVA_INT, 0));
+        assertEquals(20, segment.get(ValueLayout.JAVA_INT, 4));
+        assertEquals(30, segment.get(ValueLayout.JAVA_INT, 8));
+        assertEquals(40, segment.get(ValueLayout.JAVA_INT, 12));
+        assertEquals(100, segment.get(ValueLayout.JAVA_INT, 16));
         st.value = 0;
         st.data = new int[4];
         st.read();

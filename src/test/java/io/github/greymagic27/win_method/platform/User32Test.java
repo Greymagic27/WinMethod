@@ -4,6 +4,7 @@ import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
+import io.github.greymagic27.win_method.WinDef.HBRUSH;
 import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HMENU;
@@ -31,18 +32,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class User32Test {
     private static final User32 user32 = User32.INSTANCE;
     private HWND window;
+    private HDC hdc;
     private WinUser.MSG msg;
     private WinDef.RECT rect;
 
     @BeforeEach
     void setUp() {
         window = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC"), null, new DWORD(WinUser.WS_OVERLAPPED), 100, 100, 500, 400, null, null, null, null);
+        hdc = user32.GetDC(window);
         msg = new WinUser.MSG();
         rect = new WinDef.RECT();
     }
 
     @AfterEach
     void tearDown() {
+        user32.ReleaseDC(window, hdc);
         user32.DestroyWindow(window);
     }
 
@@ -149,6 +153,20 @@ class User32Test {
         assertTrue(user32.GetWindowRect(window, windowRect).booleanValue());
         assertTrue(rect.right.intValue() <= (windowRect.right.intValue() - windowRect.left.intValue()));
         assertTrue(rect.bottom.intValue() <= (windowRect.bottom.intValue() - windowRect.top.intValue()));
+    }
+
+    @Test
+    void testFillRect() {
+        assertNotNull(hdc);
+        rect.left = new LONG(0);
+        rect.top = new LONG(0);
+        rect.right = new LONG(100);
+        rect.bottom = new LONG(100);
+        HBRUSH hbrush = GDI32.INSTANCE.GetStockObject(WinGdi.WHITE_BRUSH);
+        assertNotNull(hbrush);
+        int result = user32.FillRect(hdc, rect, hbrush);
+        assertTrue(result != 0);
+        user32.ReleaseDC(window, hdc);
     }
 
     @Test
@@ -332,5 +350,19 @@ class User32Test {
         assertNotNull(drawResult);
         assertTrue(drawResult.booleanValue());
         user32.DestroyMenu(hmenu);
+    }
+
+    @Test
+    void testGetDC() {
+        assertNotNull(hdc);
+        assertNotEquals(0, hdc.segment.address());
+    }
+
+    @Test
+    void testReleaseDC() {
+        assertNotNull(hdc);
+        assertNotEquals(0, hdc.segment.address());
+        int result = user32.ReleaseDC(window, hdc);
+        assertEquals(1, result);
     }
 }

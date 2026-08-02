@@ -1,5 +1,6 @@
 package io.github.greymagic27.win_method;
 
+import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
@@ -7,23 +8,23 @@ import io.github.greymagic27.win_method.WinDef.BYTE;
 import io.github.greymagic27.win_method.WinDef.HBRUSH;
 import io.github.greymagic27.win_method.WinDef.HCURSOR;
 import io.github.greymagic27.win_method.WinDef.HDC;
+import io.github.greymagic27.win_method.WinDef.HGDIOBJ;
 import io.github.greymagic27.win_method.WinDef.HICON;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HMODULE;
 import io.github.greymagic27.win_method.WinDef.HWND;
-import io.github.greymagic27.win_method.WinDef.UINT;
-import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
-import io.github.greymagic27.win_method.WinNT.LPCWSTR;
-import io.github.greymagic27.win_method.WinNT.LPWSTR;
-import io.github.greymagic27.win_method.WinNT.SHORT;
-import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
+import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
+import io.github.greymagic27.win_method.WinNT.LONG;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.WinNT.LPWSTR;
+import io.github.greymagic27.win_method.WinNT.SHORT;
 import io.github.greymagic27.win_method.platform.WinDef;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -73,7 +74,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class)) {
+        for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
     }
@@ -144,7 +145,7 @@ class TypeMapperTest {
 
     @Test
     void testToNative_Structure() {
-        @SuppressWarnings("unused")
+        @SuppressWarnings({"unused", "deprecation"})
         @Structure.FieldOrder("x")
         class TestPoint extends Structure {
             private int x;
@@ -334,6 +335,7 @@ class TypeMapperTest {
             assertEquals(0L, TypeMapper.toNative(null, WPARAM.class, arena));
         }
     }
+
     @Test
     void testToNative_HINSTANCE() {
         try (Arena arena = Arena.ofConfined()) {
@@ -588,6 +590,22 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_HGDIOBJ() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            HGDIOBJ hgdiobj = new HGDIOBJ(segment);
+            assertEquals(segment, TypeMapper.toNative(hgdiobj, HGDIOBJ.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_HGDIOBJNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HGDIOBJ.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -834,6 +852,14 @@ class TypeMapperTest {
     }
 
     @Test
+    void testFromNative_HGDIOBJ() {
+        MemorySegment segment = MemorySegment.ofAddress(0x5678);
+        Object result = TypeMapper.fromNative(segment, HGDIOBJ.class);
+        assertInstanceOf(HGDIOBJ.class, result);
+        assertEquals(0x5678L, ((HGDIOBJ) result).segment.address());
+    }
+
+    @Test
     void testPrimitiveReturns() {
         Object floatResult = TypeMapper.fromNative(9999f, float.class);
         assertInstanceOf(Float.class, floatResult);
@@ -850,7 +876,7 @@ class TypeMapperTest {
         WinDef.POINT result = (WinDef.POINT) TypeMapper.fromNative(p.pointer().segment, WinDef.POINT.class);
         assertNotNull(result);
         result.read();
-        assertEquals(new LONG(42), result.x);
+        assertEquals(new LONG(42).intValue(), result.x.intValue());
     }
 
     static class CustomPointer extends Pointer {

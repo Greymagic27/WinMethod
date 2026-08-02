@@ -5,6 +5,7 @@ import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.Library;
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
+import io.github.greymagic27.win_method.WinDef.HBRUSH;
 import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HMENU;
@@ -160,12 +161,10 @@ public interface User32 extends Library {
     /// @return The return value is always nonzero
     BOOL EndPaint(HWND hWnd, WinUser.PAINTSTRUCT lpPaint);
 
-    // TODO: Add test
-
     /// Redraws the menu bar of the specified window
     ///
     /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose menu bar is to be redrawn
-    /// @return If the function succeeds, the return value is nonzero. If the fuction fails, the return value is zero
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL DrawMenuBar(HWND hWnd);
 
     /// Retrieves the specified system metric or system configuration setting
@@ -182,6 +181,21 @@ public interface User32 extends Library {
     /// @param uType     The contents and behaviour of the dialogue box. This can be a combination of flags from the [following groups](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-messageboxw)
     /// @return If the message box has a cancel button, the function returns IDCANCEL. If an MB_OK button is displayed, the return value will be IDOK
     int MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType);
+
+    /// Fills a rectangle by using the specified brush. This function includes the left and top borders, but excludes the right and bottom borders of the rectangle
+    ///
+    /// @param hdc  A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the device context
+    /// @param lprc A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure that contains the logical coordinates of the rectangle to be filled
+    /// @param hbr  A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the brush used to fill the rectangle
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    int FillRect(HDC hdc, WinDef.RECT lprc, HBRUSH hbr);
+
+    /// Releases a device context (DC), freeing it for use by other applications
+    ///
+    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose DC is to be released
+    /// @param hdc  A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the DC to be released
+    /// @return The return value indicates whether the DC was released. If the DC was released, the return value is 1. If the DC was not released, the return value is zero
+    int ReleaseDC(HWND hWnd, HDC hdc);
 
     /// Calls the default window procedure to provide default processing for any window messages that an application does not process
     ///
@@ -231,6 +245,12 @@ public interface User32 extends Library {
     /// @param lpPaint {@link io.github.greymagic27.win_method.Pointer} to the {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure that will receive painting information
     /// @return If the function succeeds, the return value is the handle to a display device context for the specified window. If the function fails, the return value is NULL
     HDC BeginPaint(HWND hWnd, WinUser.PAINTSTRUCT lpPaint);
+
+    /// Retries a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to a device context for the client area of a specific window or for the entire screen
+    ///
+    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose DC is to be retried. If NULL, the function retries the DC for the entire screen
+    /// @return If the function succeeds, the return value is a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the DC for the specified window's client area. If the function fails, the return value is NULL
+    HDC GetDC(HWND hWnd);
 
     /// Indicates to the system that a thread has made a request to terminate. It is typically used in response to a WM_DESTROY message.
     ///

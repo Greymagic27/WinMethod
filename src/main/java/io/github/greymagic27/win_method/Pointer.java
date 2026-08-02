@@ -35,7 +35,7 @@ public class Pointer {
 
     /// Reads an integer value from the memory segment pointed to by a pointer
     ///
-    ///  @param offset The byte offset from the pointer address
+    /// @param offset The byte offset from the pointer address
     /// @return The integer value stored at the specified offset
     public int getInt(long offset) {
         return segment.get(ValueLayout.JAVA_INT, offset);
@@ -60,7 +60,7 @@ public class Pointer {
     /// Writes an integer value to the memory pointed to by a pointer
     ///
     /// @param offset The byte offset from the pointer address
-    /// @param value The integer value to write
+    /// @param value  The integer value to write
     public void setInt(long offset, int value) {
         segment.set(ValueLayout.JAVA_INT, offset, value);
     }
@@ -68,7 +68,7 @@ public class Pointer {
     /// Writes a Long value to the memory pointed to by a pointer
     ///
     /// @param offset The byte offset from the pointer address
-    /// @param value The long value to write
+    /// @param value  The long value to write
     public void setLong(long offset, long value) {
         segment.set(ValueLayout.JAVA_LONG, offset, value);
     }

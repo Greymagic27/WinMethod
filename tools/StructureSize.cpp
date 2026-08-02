@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <commdlg.h>
+#include <wingdi.h>
 #include <iostream>
 
 #define PRINT_SIZE(type) \
@@ -13,5 +14,8 @@ int main()
     PRINT_SIZE(MSG);
     PRINT_SIZE(PAINTSTRUCT);
     PRINT_SIZE(WNDCLASSEXW);
+    PRINT_SIZE(BITMAPINFO);
+    PRINT_SIZE(BITMAPINFOHEADER);
+    PRINT_SIZE(RGBQUAD);
     return 0;
 }
