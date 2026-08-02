@@ -1,4 +1,4 @@
-package io.github.greymagic27.win_method.platform;
+package io.github.greymagic27.win_method.types;
 
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.Structure;

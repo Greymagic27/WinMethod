@@ -1,4 +1,4 @@
-package io.github.greymagic27.win_method.platform;
+package io.github.greymagic27.win_method.types;
 
 import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.Callback;
@@ -14,6 +14,7 @@ import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
+import io.github.greymagic27.win_method.platform.Comdlg32;
 
 /// Values defined in commdlg.h
 public interface Commdlg {

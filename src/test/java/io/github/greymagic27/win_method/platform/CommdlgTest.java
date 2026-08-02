@@ -6,12 +6,13 @@ import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.types.Commdlg;
 import org.junit.jupiter.api.Test;
 
-import static io.github.greymagic27.win_method.platform.Commdlg.OFN_EXPLORER;
-import static io.github.greymagic27.win_method.platform.Commdlg.OFN_FILEMUSTEXIST;
-import static io.github.greymagic27.win_method.platform.Commdlg.OFN_HIDEREADONLY;
-import static io.github.greymagic27.win_method.platform.Commdlg.OFN_PATHMUSTEXIST;
+import static io.github.greymagic27.win_method.types.Commdlg.OFN_EXPLORER;
+import static io.github.greymagic27.win_method.types.Commdlg.OFN_FILEMUSTEXIST;
+import static io.github.greymagic27.win_method.types.Commdlg.OFN_HIDEREADONLY;
+import static io.github.greymagic27.win_method.types.Commdlg.OFN_PATHMUSTEXIST;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

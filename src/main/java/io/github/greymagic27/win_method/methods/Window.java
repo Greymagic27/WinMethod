@@ -7,7 +7,7 @@ import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.platform.Kernel32;
 import io.github.greymagic27.win_method.platform.User32;
-import io.github.greymagic27.win_method.platform.WinUser;
+import io.github.greymagic27.win_method.types.WinUser;
 import java.util.Objects;
 
 /// Helpers to create a window without rewriting lines of code

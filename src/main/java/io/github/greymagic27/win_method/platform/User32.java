@@ -17,6 +17,8 @@ import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
+import io.github.greymagic27.win_method.types.WinDef;
+import io.github.greymagic27.win_method.types.WinUser;
 
 /// Interface for User32.dll
 public interface User32 extends Library {
@@ -25,7 +27,7 @@ public interface User32 extends Library {
 
     /// Registers a window class for subsequent use in calls to the {@link #CreateWindowExW(DWORD, LPCWSTR, LPCWSTR, DWORD, int, int, int, int, HWND, HMENU, HINSTANCE, LPVOID)} function.
     ///
-    /// @param pointer A pointer to a {@link io.github.greymagic27.win_method.platform.WinUser.WNDCLASSEXW} structure
+    /// @param pointer A pointer to a {@link WinUser.WNDCLASSEXW} structure
     /// @return Return value is a class atom that uniquely identifies the class being registered. If the function fails, the return value is zero
     ATOM RegisterClassExW(WinUser.WNDCLASSEXW pointer);
 
@@ -44,21 +46,21 @@ public interface User32 extends Library {
     /// Retrieves the dimensions of the bounding rectangle of the specified window. These are relative to the upper-left corner of the screen
     ///
     /// @param hWnd   A  {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window
-    /// @param lpRect Pointer to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure
+    /// @param lpRect Pointer to a {@link WinDef.RECT} structure
     /// @return Return value is nonzero. If the function fails, the return value is zero
     BOOL GetWindowRect(HWND hWnd, WinDef.RECT lpRect);
 
     /// Retrieves the coordinates of the window's client area
     ///
     /// @param hWnd   A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose client coordinates are to be retrieved
-    /// @param lpRect A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure that retrieves the client coordinates
+    /// @param lpRect A {@link io.github.greymagic27.win_method.Pointer} to a {@link WinDef.RECT} structure that retrieves the client coordinates
     /// @return Return value is nonzero. If the function fails, the return value is zero
     BOOL GetClientRect(HWND hWnd, WinDef.RECT lpRect);
 
     /// Adds a rectangle to the specified window's update region. The update region is the portion of the client that must be redrawn
     ///
     /// @param hWnd   A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose update region has changed
-    /// @param lpRect A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure that contains the client coordinates of the rectangle to be added to the update region
+    /// @param lpRect A {@link io.github.greymagic27.win_method.Pointer} to a {@link WinDef.RECT} structure that contains the client coordinates of the rectangle to be added to the update region
     /// @param bErase Specifies whether the background within the update region is to be erased when the update region is processed
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL InvalidateRect(HWND hWnd, WinDef.RECT lpRect, BOOL bErase);
@@ -84,7 +86,7 @@ public interface User32 extends Library {
 
     /// Translates virtual-key messages into character messages. These are posted to the calling thread's message queue, to be read the next time the thread calls {@link #GetMessageW(WinUser.MSG, HWND, UINT, UINT)} or PeekMessage functions
     ///
-    /// @param msg Pointer to a {@link io.github.greymagic27.win_method.platform.WinUser.MSG} structure that contains message information
+    /// @param msg Pointer to a {@link WinUser.MSG} structure that contains message information
     /// @return If the message is translated, the return value is nonzero. If not translated, the return value is zero
     BOOL TranslateMessage(WinUser.MSG msg);
 
@@ -105,7 +107,7 @@ public interface User32 extends Library {
 
     /// Retrieves a message from the calling thread's message queue
     ///
-    /// @param lpMsg         Pointer to a {@link io.github.greymagic27.win_method.platform.WinUser.MSG} structure that receives message information
+    /// @param lpMsg         Pointer to a {@link WinUser.MSG} structure that receives message information
     /// @param hWnd          Handle to the window whose messages are to be retrieved. The window must belong to the current thread
     /// @param wMsgFilterMin Integer value of the lowest message value to be retrieved. Use WM_KEYFIRST to specify first keyboard message or WM_MOUSEFIRST to specify first mouse message
     /// @param wMsgFilterMax Integer value of the highest message value to be retrieved. Use WM_KEYLAST to specify last keyboard message or WM_MOUSELAST to specify last mouse message
@@ -157,7 +159,7 @@ public interface User32 extends Library {
     /// Marks the end of painting in the specified window
     ///
     /// @param hWnd    {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window that has been repainted
-    /// @param lpPaint {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure that contains the painting information retrieved by {@link #BeginPaint(HWND, WinUser.PAINTSTRUCT)}
+    /// @param lpPaint {@link io.github.greymagic27.win_method.Pointer} to a {@link WinUser.PAINTSTRUCT} structure that contains the painting information retrieved by {@link #BeginPaint(HWND, WinUser.PAINTSTRUCT)}
     /// @return The return value is always nonzero
     BOOL EndPaint(HWND hWnd, WinUser.PAINTSTRUCT lpPaint);
 
@@ -185,7 +187,7 @@ public interface User32 extends Library {
     /// Fills a rectangle by using the specified brush. This function includes the left and top borders, but excludes the right and bottom borders of the rectangle
     ///
     /// @param hdc  A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the device context
-    /// @param lprc A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure that contains the logical coordinates of the rectangle to be filled
+    /// @param lprc A {@link io.github.greymagic27.win_method.Pointer} to a {@link WinDef.RECT} structure that contains the logical coordinates of the rectangle to be filled
     /// @param hbr  A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the brush used to fill the rectangle
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     int FillRect(HDC hdc, WinDef.RECT lprc, HBRUSH hbr);
@@ -239,10 +241,10 @@ public interface User32 extends Library {
     /// @return Specifies the status of the specified virtual key
     SHORT GetKeyState(int nVirtKey);
 
-    /// Prepares the specified window for painting and fills a {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure with information about the painting
+    /// Prepares the specified window for painting and fills a {@link WinUser.PAINTSTRUCT} structure with information about the painting
     ///
     /// @param hWnd    {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window to be repainted
-    /// @param lpPaint {@link io.github.greymagic27.win_method.Pointer} to the {@link io.github.greymagic27.win_method.platform.WinUser.PAINTSTRUCT} structure that will receive painting information
+    /// @param lpPaint {@link io.github.greymagic27.win_method.Pointer} to the {@link WinUser.PAINTSTRUCT} structure that will receive painting information
     /// @return If the function succeeds, the return value is the handle to a display device context for the specified window. If the function fails, the return value is NULL
     HDC BeginPaint(HWND hWnd, WinUser.PAINTSTRUCT lpPaint);
 

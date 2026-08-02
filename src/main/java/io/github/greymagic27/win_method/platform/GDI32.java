@@ -6,6 +6,7 @@ import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HGDIOBJ;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.UINT;
+import io.github.greymagic27.win_method.types.WinGdi;
 
 /// Interface for Gdi32.dll
 public interface GDI32 extends Library {

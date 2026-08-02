@@ -25,7 +25,7 @@ import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
-import io.github.greymagic27.win_method.platform.WinDef;
+import io.github.greymagic27.win_method.types.WinDef;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;

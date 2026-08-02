@@ -3,6 +3,7 @@ package io.github.greymagic27.win_method.platform;
 import io.github.greymagic27.win_method.Library;
 import io.github.greymagic27.win_method.Pointer;
 import io.github.greymagic27.win_method.WinDef.BOOL;
+import io.github.greymagic27.win_method.types.Commdlg;
 
 /// Interface for Comdlg32.dll
 public interface Comdlg32 extends Library {

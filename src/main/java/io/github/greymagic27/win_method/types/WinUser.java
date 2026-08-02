@@ -1,4 +1,4 @@
-package io.github.greymagic27.win_method.platform;
+package io.github.greymagic27.win_method.types;
 
 import io.github.greymagic27.win_method.Callback;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
@@ -16,6 +16,7 @@ import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.platform.User32;
 import org.jspecify.annotations.NonNull;
 
 /// Values defined in Winuser.h
@@ -338,7 +339,7 @@ public interface WinUser {
         public HDC hdc;
         /// Indicates whether the background must be erased
         public BOOL fErase;
-        /// A {@link io.github.greymagic27.win_method.platform.WinDef.RECT} structure that specifies the upper left and lower right corners of the rectangle in which the painting is requested
+        /// A {@link WinDef.RECT} structure that specifies the upper left and lower right corners of the rectangle in which the painting is requested
         public WinDef.RECT rcPaint;
         /// Reserved; used internally by the system
         public BOOL fRestore;

@@ -4,11 +4,12 @@ import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.BYTE;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
+import io.github.greymagic27.win_method.types.WinGdi;
 import org.junit.jupiter.api.Test;
 
-import static io.github.greymagic27.win_method.platform.WinGdi.DIB_RGB_COLORS;
-import static io.github.greymagic27.win_method.platform.WinGdi.SRCCOPY;
-import static io.github.greymagic27.win_method.platform.WinGdi.WHITE_BRUSH;
+import static io.github.greymagic27.win_method.types.WinGdi.DIB_RGB_COLORS;
+import static io.github.greymagic27.win_method.types.WinGdi.SRCCOPY;
+import static io.github.greymagic27.win_method.types.WinGdi.WHITE_BRUSH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

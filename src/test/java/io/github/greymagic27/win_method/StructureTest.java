@@ -1,9 +1,9 @@
 package io.github.greymagic27.win_method;
 
-import io.github.greymagic27.win_method.platform.Commdlg;
-import io.github.greymagic27.win_method.platform.WinDef;
-import io.github.greymagic27.win_method.platform.WinGdi;
-import io.github.greymagic27.win_method.platform.WinUser;
+import io.github.greymagic27.win_method.types.Commdlg;
+import io.github.greymagic27.win_method.types.WinDef;
+import io.github.greymagic27.win_method.types.WinGdi;
+import io.github.greymagic27.win_method.types.WinUser;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import org.junit.jupiter.api.Test;

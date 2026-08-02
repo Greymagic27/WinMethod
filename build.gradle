@@ -54,8 +54,12 @@ tasks.withType(JavaCompile).configureEach {
 tasks.withType(Javadoc).configureEach {
     options.addStringOption("Xdoclint:-missing", "-quiet")
 }
+tasks.named("publishToMavenCentral") {
+    dependsOn("publishToMavenLocal")
+}
 tasks.javadoc {
     include("io/github/greymagic27/win_method/platform/**")
+    include("io/github/greymagic27/win_method/types/**")
     include("io/github/greymagic27/win_method/methods/**")
     include("io/github/greymagic27/win_method/WinDef/**")
     include("io/github/greymagic27/win_method/WinNT/**")

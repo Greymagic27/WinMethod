@@ -2,6 +2,7 @@ package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.BOOL;
+import io.github.greymagic27.win_method.types.Commdlg;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
