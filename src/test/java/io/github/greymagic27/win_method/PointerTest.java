@@ -15,32 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class PointerTest {
 
     @Test
-    void testIntOperations() {
-        try (Arena arena = Arena.ofConfined()) {
-            MemorySegment segment = arena.allocate(ValueLayout.JAVA_INT);
-            Pointer ptr = new Pointer(segment);
-            assertFalse(ptr.isNull());
-            ptr.setInt(0, 42);
-            assertEquals(42, ptr.getInt(0));
-            MemorySegment multiSegment = arena.allocate(ValueLayout.JAVA_INT, 2);
-            Pointer ptr2 = new Pointer(multiSegment);
-            ptr2.setInt(4, 99);
-            assertEquals(99, ptr2.getInt(4));
-        }
-    }
-
-    @Test
-    void testLongOperations() {
-        try (Arena arena = Arena.ofConfined()) {
-            MemorySegment segment = arena.allocate(ValueLayout.JAVA_LONG);
-            Pointer ptr = new Pointer(segment);
-            long value = 0xFFFFFFF;
-            ptr.setLong(0, value);
-            assertEquals(value, ptr.getLong(0));
-        }
-    }
-
-    @Test
     void testGetWideString() {
         try (Arena arena = Arena.ofConfined()) {
             String expected = "expected string";
@@ -92,16 +66,5 @@ class PointerTest {
         assertFalse(ptr.isNull());
         Pointer nullPtr = Pointer.MAKEINTRESOURCEW(0);
         assertTrue(nullPtr.isNull());
-    }
-
-    @Test
-    void testGetPointer() {
-        try (Arena arena = Arena.ofConfined()) {
-            MemorySegment target = arena.allocate(8);
-            MemorySegment holder = arena.allocate(ValueLayout.ADDRESS);
-            holder.set(ValueLayout.ADDRESS, 0, target);
-            Pointer ptr = new Pointer(holder);
-            assertEquals(target.address(), ptr.getPointer(0).segment.address());
-        }
     }
 }

@@ -33,46 +33,6 @@ public class Pointer {
         return segment.equals(MemorySegment.NULL) || segment.address() == 0;
     }
 
-    /// Reads an integer value from the memory segment pointed to by a pointer
-    ///
-    /// @param offset The byte offset from the pointer address
-    /// @return The integer value stored at the specified offset
-    public int getInt(long offset) {
-        return segment.get(ValueLayout.JAVA_INT, offset);
-    }
-
-    /// Reads a long value from the memory segment pointed to by a pointer
-    ///
-    /// @param offset The byte offset from the pointer address
-    /// @return The long value stored at the specified offset
-    public long getLong(long offset) {
-        return segment.get(ValueLayout.JAVA_LONG, offset);
-    }
-
-    /// Reads a native pointer value from the memory segment pointed to by a pointer
-    ///
-    /// @param offset The byte offset from the pointer address
-    /// @return A new {@code Pointer} representing the native address
-    public Pointer getPointer(long offset) {
-        return new Pointer(segment.get(ValueLayout.ADDRESS, offset));
-    }
-
-    /// Writes an integer value to the memory pointed to by a pointer
-    ///
-    /// @param offset The byte offset from the pointer address
-    /// @param value  The integer value to write
-    public void setInt(long offset, int value) {
-        segment.set(ValueLayout.JAVA_INT, offset, value);
-    }
-
-    /// Writes a Long value to the memory pointed to by a pointer
-    ///
-    /// @param offset The byte offset from the pointer address
-    /// @param value  The long value to write
-    public void setLong(long offset, long value) {
-        segment.set(ValueLayout.JAVA_LONG, offset, value);
-    }
-
     /// Reads a null-terminated UTF-16LE string from native memory
     ///
     /// @param offset The byte offset from the pointer address where the string starts
