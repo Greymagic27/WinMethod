@@ -1,4 +1,4 @@
-package io.github.greymagic27.win_method.platform;
+package io.github.greymagic27.win_method.types;
 
 import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
@@ -6,7 +6,6 @@ import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
-import io.github.greymagic27.win_method.types.Commdlg;
 import org.junit.jupiter.api.Test;
 
 import static io.github.greymagic27.win_method.types.Commdlg.OFN_EXPLORER;

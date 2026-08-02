@@ -1,10 +1,9 @@
-package io.github.greymagic27.win_method.platform;
+package io.github.greymagic27.win_method.types;
 
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.BYTE;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
-import io.github.greymagic27.win_method.types.WinGdi;
 import org.junit.jupiter.api.Test;
 
 import static io.github.greymagic27.win_method.types.WinGdi.DIB_RGB_COLORS;

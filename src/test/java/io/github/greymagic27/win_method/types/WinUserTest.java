@@ -1,4 +1,4 @@
-package io.github.greymagic27.win_method.platform;
+package io.github.greymagic27.win_method.types;
 
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.BYTE;
@@ -10,8 +10,6 @@ import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
-import io.github.greymagic27.win_method.types.WinDef;
-import io.github.greymagic27.win_method.types.WinUser;
 import java.lang.foreign.MemorySegment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

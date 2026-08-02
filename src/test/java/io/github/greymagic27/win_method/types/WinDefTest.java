@@ -1,7 +1,6 @@
-package io.github.greymagic27.win_method.platform;
+package io.github.greymagic27.win_method.types;
 
 import io.github.greymagic27.win_method.WinNT.LONG;
-import io.github.greymagic27.win_method.types.WinDef;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
