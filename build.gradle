@@ -92,7 +92,7 @@ mavenPublishing {
     }
 }
 
-abstract class CheckStructureSize extends DefaultTask {
+abstract class CheckStructSize extends DefaultTask {
 
     @Inject
     abstract ExecOperations getExecOperations()
@@ -127,4 +127,4 @@ abstract class CheckStructureSize extends DefaultTask {
     }
 }
 
-tasks.register("checkStructSizes", CheckStructureSize)
+tasks.register("checkStructSize", CheckStructSize)
