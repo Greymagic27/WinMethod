@@ -1,6 +1,5 @@
 #include <windows.h>
 #include <commdlg.h>
-#include <wingdi.h>
 #include <iostream>
 
 #define PRINT_SIZE(type) \
