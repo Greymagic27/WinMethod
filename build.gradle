@@ -66,6 +66,7 @@ tasks.javadoc {
     include("io/github/greymagic27/win_method/BaseTsd/**")
     include("io/github/greymagic27/win_method/IntSafe/**")
     include("io/github/greymagic27/win_method/Pointer.java")
+    include("io/github/greymagic27/win_method/Memory.java")
 }
 mavenPublishing {
     coordinates(group, "WinMethod", version)
