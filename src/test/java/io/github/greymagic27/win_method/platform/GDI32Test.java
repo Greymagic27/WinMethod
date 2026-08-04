@@ -1,6 +1,7 @@
 package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.IntSafe.DWORD;
+import io.github.greymagic27.win_method.Memory;
 import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HGDIOBJ;
 import io.github.greymagic27.win_method.WinDef.HWND;
@@ -11,8 +12,6 @@ import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.types.WinGdi;
 import io.github.greymagic27.win_method.types.WinUser;
-import java.lang.foreign.Arena;
-import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,9 +51,8 @@ class GDI32Test {
     void testStretchDIBits() {
         int width = 2;
         int height = 2;
-        try (Arena arena = Arena.ofConfined()) {
-            MemorySegment pixels = arena.allocate(width * height * 4);
-            for (int i = 0; i < width * height; i++) pixels.set(ValueLayout.JAVA_INT, i * 4, 0xFFFF0000);
+        try (Memory pixels = new Memory(width * height * 4)) {
+            for (int i = 0; i < width * height; i++) pixels.segment.set(ValueLayout.JAVA_INT, i * 4, 0xFFFF0000);
             WinGdi.BITMAPINFO bmi = new WinGdi.BITMAPINFO();
             bmi.bmiHeader.biSize = new DWORD(bmi.size());
             bmi.bmiHeader.biWidth = new LONG(width);
