@@ -7,7 +7,7 @@ import io.github.greymagic27.win_method.types.WinGdi.BITMAPINFO;
 import io.github.greymagic27.win_method.types.WinGdi.BITMAPINFOHEADER;
 import org.jspecify.annotations.NonNull;
 
-/// Helper to create a bitmapinfoheader more easily
+/// Helper to create a {@link BITMAPINFOHEADER} more easily
 public class BitmapInfoHeader {
 
     /// Creates a {@link BITMAPINFOHEADER} that contains information about the dimension and colour format of a device-independent bitmap (DIB)
