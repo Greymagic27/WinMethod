@@ -2,6 +2,7 @@ package io.github.greymagic27.win_method.types;
 
 import io.github.greymagic27.win_method.Callback;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
+import io.github.greymagic27.win_method.Pointer;
 import io.github.greymagic27.win_method.Structure;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.BYTE;
@@ -17,6 +18,7 @@ import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.platform.User32;
+import java.lang.foreign.MemorySegment;
 import org.jspecify.annotations.NonNull;
 
 /// Values defined in Winuser.h
@@ -258,6 +260,14 @@ public interface WinUser {
     /// Redraws the entire window if a movement or size adjustment changes the height of the client area
     int CS_VREDRAW = 0x0001;
 
+    /// Creates a pointer value from an integer resource
+    ///
+    /// @param i The integer resource
+    /// @return A {@link Pointer} containing the integer resource value
+    static @NonNull Pointer MAKEINTRESOURCEW(int i) {
+        return new Pointer(MemorySegment.ofAddress(i));
+    }
+
     /// A callback function which is defined in the application
     interface Wndproc extends Callback {
         /// Creates a standard window with default {@link #WM_DESTROY} handling
@@ -305,7 +315,7 @@ public interface WinUser {
         public HCURSOR hCursor;
         /// A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the class background brush. This member can be a handle to a brush or a colour value, however this must be one of the standard system colours. If a colour value is given, it must be converted to an <a href="https://learn.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-wndclassexw">HBRUSH type</a>
         public HBRUSH hbrBackground;
-        /// Pointer to a null-terminated character string that specifies the resource name of the clas menu. If an integer is used, it must be used via the {@link io.github.greymagic27.win_method.Pointer#MAKEINTRESOURCEW(int)} function
+        /// {@link Pointer} to a null-terminated character string that specifies the resource name of the clas menu. If an integer is used, it must be used via the {@link #MAKEINTRESOURCEW(int)} function
         public LPCWSTR lpszMenuName;
         /// A pointer to a null-terminated character string or is an atom. If this is an atom, it must be a class atom created by a previous call to the {@link User32#RegisterClassExW(WNDCLASSEXW)} function
         public LPCWSTR lpszClassName;

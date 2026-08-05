@@ -1,5 +1,6 @@
 package io.github.greymagic27.win_method;
 
+import io.github.greymagic27.win_method.types.WinUser;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -61,10 +62,10 @@ class PointerTest {
     @Test
     void testMakeIntResource() {
         int id = 99999;
-        Pointer ptr = Pointer.MAKEINTRESOURCEW(id);
+        Pointer ptr = WinUser.MAKEINTRESOURCEW(id);
         assertEquals(id, ptr.segment.address());
         assertFalse(ptr.isNull());
-        Pointer nullPtr = Pointer.MAKEINTRESOURCEW(0);
+        Pointer nullPtr = WinUser.MAKEINTRESOURCEW(0);
         assertTrue(nullPtr.isNull());
     }
 }

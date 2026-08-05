@@ -1,9 +1,10 @@
 package io.github.greymagic27.win_method;
 
+import java.io.Closeable;
 import java.lang.foreign.Arena;
 import org.jspecify.annotations.NonNull;
 
-public class Memory extends Pointer implements AutoCloseable {
+public class Memory extends Pointer implements Closeable {
 
     private final Arena arena;
     private final long size;

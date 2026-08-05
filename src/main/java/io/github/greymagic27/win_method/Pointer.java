@@ -18,14 +18,6 @@ public class Pointer {
         this.segment = segment;
     }
 
-    /// Creates a pointer value from an integer resource
-    ///
-    /// @param i The integer resource
-    /// @return A pointer containing the integer resource value
-    public static @NonNull Pointer MAKEINTRESOURCEW(int i) {
-        return new Pointer(MemorySegment.ofAddress(i));
-    }
-
     /// Checks whether the pointer is null
     ///
     /// @return Returns {@code true} if the pointer address is zero, otherwise returns {@code false}
