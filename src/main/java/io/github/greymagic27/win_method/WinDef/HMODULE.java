@@ -4,6 +4,10 @@ import java.lang.foreign.MemorySegment;
 
 /// A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to a module. This is the base address of the module in memory. This is the same as {@link HINSTANCE}
 public class HMODULE extends HINSTANCE {
+
+    /// Creates an {@code HMODULE} from a memory segment
+    ///
+    /// @param segment The memory segment containing the module handle
     public HMODULE(MemorySegment segment) {
         super(segment);
     }

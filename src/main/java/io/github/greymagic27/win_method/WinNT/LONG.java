@@ -7,7 +7,9 @@ public class LONG {
 
     private final int value;
 
-    /// @param value A {@link Integer} value
+    /// Creates a {@code LONG} from an {@code int} value
+    ///
+    /// @param value The value to store
     public LONG(int value) {
         this.value = value;
     }

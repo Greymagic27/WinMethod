@@ -7,7 +7,9 @@ public class BOOL {
 
     private final int value;
 
-    /// @param value An {@link Integer} value
+    /// Creates a {@code BOOL} from an {@code int} value
+    ///
+    /// @param value The integer value to store
     public BOOL(int value) {
         this.value = value;
     }

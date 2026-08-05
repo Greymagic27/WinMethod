@@ -6,6 +6,7 @@ import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.HBRUSH;
 import io.github.greymagic27.win_method.WinDef.HDC;
+import io.github.greymagic27.win_method.WinDef.HGDIOBJ;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
 import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HWND;
@@ -165,7 +166,9 @@ class User32Test {
         rect.top = new LONG(0);
         rect.right = new LONG(100);
         rect.bottom = new LONG(100);
-        HBRUSH hbrush = GDI32.INSTANCE.GetStockObject(WinGdi.WHITE_BRUSH);
+        HGDIOBJ object = GDI32.INSTANCE.GetStockObject(WinGdi.WHITE_BRUSH);
+        assertNotNull(object);
+        HBRUSH hbrush = new HBRUSH(object);
         assertNotNull(hbrush);
         int result = user32.FillRect(hdc, rect, hbrush);
         assertTrue(result != 0);

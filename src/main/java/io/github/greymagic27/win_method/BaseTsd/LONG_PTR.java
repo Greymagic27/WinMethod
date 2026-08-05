@@ -7,7 +7,9 @@ public class LONG_PTR {
 
     private final long value;
 
-    /// @param value A {@link Long} value
+    /// Creates a {@code LONG_PTR} from a {@code long} value
+    ///
+    /// @param value The value to store
     public LONG_PTR(long value) {
         this.value = value;
     }

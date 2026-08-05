@@ -7,7 +7,9 @@ public class BYTE {
 
     private final byte value;
 
-    /// @param value A {@link Byte} value
+    /// Creates a {@code BYTE} from a {@code byte} value
+    ///
+    /// @param value The value to store
     public BYTE(byte value) {
         this.value = value;
     }
