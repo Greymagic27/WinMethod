@@ -249,16 +249,6 @@ class StructureTest {
 
     @Test
     void testNestedStructureField() {
-        @Structure.AutoFieldOrder
-        class Inner extends Structure {
-            private int a;
-            private int b;
-        }
-        @Structure.AutoFieldOrder
-        class Outer extends Structure {
-            private Inner inner = new Inner();
-            private int c;
-        }
         Outer o = new Outer();
         o.inner.a = 1;
         o.inner.b = 2;
@@ -287,6 +277,19 @@ class StructureTest {
         assertEquals(44, new WinGdi.BITMAPINFO().size());
         assertEquals(40, new WinGdi.BITMAPINFOHEADER().size());
         assertEquals(4, new WinGdi.RGBQUAD().size());
+    }
+
+    @Structure.AutoFieldOrder
+    static class Inner extends Structure {
+        private int a;
+        private int b;
+    }
+
+    @SuppressWarnings("unused")
+    @Structure.AutoFieldOrder
+    static class Outer extends Structure {
+        private Inner inner;
+        private int c;
     }
 
     @Structure.FieldOrder({"x", "y"})
