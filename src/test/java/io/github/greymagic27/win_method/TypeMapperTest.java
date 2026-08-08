@@ -17,6 +17,7 @@ import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HMODULE;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
+import io.github.greymagic27.win_method.WinDef.LPCVOID;
 import io.github.greymagic27.win_method.WinDef.LPDWORD;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
@@ -79,7 +80,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class)) {
+        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class, LPCVOID.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class, HKEY.class)) {
@@ -682,9 +683,48 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_PVOIDFromPointer() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            Pointer pointer = new Pointer(segment);
+            PVOID pvoid = new PVOID(pointer);
+            Object result = TypeMapper.toNative(pvoid, PVOID.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
     void testToNative_PVOIDNull() {
         try (Arena arena = Arena.ofConfined()) {
             assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, PVOID.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_LPCVOID() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            LPCVOID lpcvoid = new LPCVOID(segment);
+            Object result = TypeMapper.toNative(lpcvoid, LPCVOID.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_LPCVOIDFromPointer() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            Pointer pointer = new Pointer(segment);
+            LPCVOID lpcvoid = new LPCVOID(pointer);
+            Object result = TypeMapper.toNative(lpcvoid, LPCVOID.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_LPCVOIDNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, LPCVOID.class, arena));
         }
     }
 
@@ -891,6 +931,17 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_LPVOIDFromPointer() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            Pointer pointer = new Pointer(segment);
+            LPVOID lpvoid = new LPVOID(pointer);
+            Object result = TypeMapper.toNative(lpvoid, LPVOID.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
     void testFromNative_UINTPTR() {
         Object result = TypeMapper.fromNative(9999L, UINT_PTR.class);
         assertInstanceOf(UINT_PTR.class, result);
@@ -987,6 +1038,21 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(segment, PVOID.class);
         assertInstanceOf(PVOID.class, result);
         assertEquals(0x1234L, ((PVOID) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_LPCVOID() {
+        MemorySegment segment = MemorySegment.ofAddress(0x1234);
+        Object result = TypeMapper.fromNative(segment, LPCVOID.class);
+        assertInstanceOf(LPCVOID.class, result);
+        assertEquals(0x1234L, ((LPCVOID) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_LPCVOIDNull() {
+        Object result = TypeMapper.fromNative(MemorySegment.NULL, LPCVOID.class);
+        assertInstanceOf(LPCVOID.class, result);
+        assertTrue(((LPCVOID) result).isNull());
     }
 
     @Test
