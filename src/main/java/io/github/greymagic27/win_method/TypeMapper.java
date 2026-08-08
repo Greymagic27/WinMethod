@@ -11,6 +11,7 @@ import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
+import io.github.greymagic27.win_method.WinNT.WCHAR;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemoryLayout;
 import java.lang.foreign.MemorySegment;
@@ -28,6 +29,7 @@ public final class TypeMapper {
         if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
         if (javaType == float.class || javaType == Float.class) return ValueLayout.JAVA_FLOAT;
+        if (javaType == char.class || javaType == Character.class || javaType == WCHAR.class) return ValueLayout.JAVA_CHAR;
         if (javaType == String.class) return ValueLayout.ADDRESS;
         if (Structure.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType) || Pointer.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         if (WORD.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_SHORT;
@@ -90,6 +92,9 @@ public final class TypeMapper {
         }
         if (javaType == UINT.class) {
             return ((UINT) value).intValue();
+        }
+        if (javaType == WCHAR.class) {
+            return ((WCHAR) value).charValue();
         }
         return value;
     }
@@ -157,6 +162,9 @@ public final class TypeMapper {
         if (returnType == UINT.class) {
             return new UINT((Integer) raw);
         }
+        if (returnType == WCHAR.class) {
+            return new WCHAR((Character) raw);
+        }
         return raw;
     }
 
@@ -180,6 +188,9 @@ public final class TypeMapper {
         }
         if (layout.equals(ValueLayout.JAVA_DOUBLE)) {
             return 0.0d;
+        }
+        if (layout.equals(ValueLayout.JAVA_CHAR)) {
+            return '\0';
         }
         if (layout.equals(ValueLayout.ADDRESS)) {
             return MemorySegment.NULL;

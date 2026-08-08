@@ -25,6 +25,7 @@ import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
+import io.github.greymagic27.win_method.WinNT.WCHAR;
 import io.github.greymagic27.win_method.types.WinDef;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -67,6 +68,9 @@ class TypeMapperTest {
         }
         for (Class<?> type : List.of(float.class, Float.class)) {
             assertEquals(ValueLayout.JAVA_FLOAT, TypeMapper.layoutMappings(type));
+        }
+        for (Class<?> type : List.of(char.class, Character.class, WCHAR.class)) {
+            assertEquals(ValueLayout.JAVA_CHAR, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
@@ -606,6 +610,22 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_WCHAR() {
+        try (Arena arena = Arena.ofConfined()) {
+            WCHAR value = new WCHAR('A');
+            Object result = TypeMapper.toNative(value, WCHAR.class, arena);
+            assertEquals('A', result);
+        }
+    }
+
+    @Test
+    void testToNative_WCHARNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals('\0', TypeMapper.toNative(null, WCHAR.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -860,12 +880,28 @@ class TypeMapperTest {
     }
 
     @Test
+    void testFromNative_WCHAR() {
+        Object result = TypeMapper.fromNative('A', WCHAR.class);
+        assertInstanceOf(WCHAR.class, result);
+        assertEquals('A', ((WCHAR) result).charValue());
+    }
+
+    @SuppressWarnings("UnnecessaryUnicodeEscape")
+    @Test
+    void testFromNative_WCHARUnicode() {
+        Object result = TypeMapper.fromNative('\u03A9', WCHAR.class);
+        assertInstanceOf(WCHAR.class, result);
+        assertEquals('\u03A9', ((WCHAR) result).charValue());
+    }
+
+    @Test
     void testPrimitiveReturns() {
         Object floatResult = TypeMapper.fromNative(9999f, float.class);
         assertInstanceOf(Float.class, floatResult);
         assertEquals(9999f, (Float) floatResult, 0.001f);
         assertEquals((short) 5, TypeMapper.fromNative((short) 5, short.class));
         assertEquals(true, TypeMapper.fromNative(1, boolean.class));
+        assertEquals('A', TypeMapper.fromNative('A', char.class));
     }
 
     @Test
