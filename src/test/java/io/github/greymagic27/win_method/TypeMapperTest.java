@@ -11,10 +11,12 @@ import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HGDIOBJ;
 import io.github.greymagic27.win_method.WinDef.HICON;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
+import io.github.greymagic27.win_method.WinDef.HKEY;
 import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HMODULE;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
+import io.github.greymagic27.win_method.WinDef.LPDWORD;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.UINT;
@@ -75,10 +77,10 @@ class TypeMapperTest {
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class)) {
+        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class)) {
+        for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class, HKEY.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
     }
@@ -626,6 +628,24 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_LPDWORD() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            LPDWORD lpdword = new LPDWORD(segment);
+            Object result = TypeMapper.toNative(lpdword, LPDWORD.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_LPDWORDNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, LPDWORD.class, arena));
+        }
+    }
+
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -892,6 +912,15 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative('\u03A9', WCHAR.class);
         assertInstanceOf(WCHAR.class, result);
         assertEquals('\u03A9', ((WCHAR) result).charValue());
+    }
+
+
+    @Test
+    void testFromNative_LPDWORD() {
+        MemorySegment segment = MemorySegment.ofAddress(0x1234);
+        Object result = TypeMapper.fromNative(segment, LPDWORD.class);
+        assertInstanceOf(LPDWORD.class, result);
+        assertEquals(0x1234L, ((LPDWORD) result).segment.address());
     }
 
     @Test
