@@ -27,6 +27,7 @@ import io.github.greymagic27.win_method.WinNT.HANDLE;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
+import io.github.greymagic27.win_method.WinNT.PVOID;
 import io.github.greymagic27.win_method.WinNT.SHORT;
 import io.github.greymagic27.win_method.WinNT.WCHAR;
 import io.github.greymagic27.win_method.types.WinDef;
@@ -78,7 +79,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class)) {
+        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class, HKEY.class)) {
@@ -671,6 +672,23 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_PVOID() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            PVOID pvoid = new PVOID(segment);
+            Object result = TypeMapper.toNative(pvoid, PVOID.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_PVOIDNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, PVOID.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -961,6 +979,14 @@ class TypeMapperTest {
         assertInstanceOf(ULONG_PTR.class, result);
         assertEquals(-1L, ((ULONG_PTR) result).longValue());
         assertEquals("18446744073709551615", Long.toUnsignedString(((ULONG_PTR) result).longValue()));
+    }
+
+    @Test
+    void testFromNative_PVOID() {
+        MemorySegment segment = MemorySegment.ofAddress(0x1234);
+        Object result = TypeMapper.fromNative(segment, PVOID.class);
+        assertInstanceOf(PVOID.class, result);
+        assertEquals(0x1234L, ((PVOID) result).segment.address());
     }
 
     @Test
