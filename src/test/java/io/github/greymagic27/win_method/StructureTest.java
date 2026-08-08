@@ -248,6 +248,35 @@ class StructureTest {
     }
 
     @Test
+    void testNestedStructureField() {
+        @Structure.AutoFieldOrder
+        class Inner extends Structure {
+            private int a;
+            private int b;
+        }
+        @Structure.AutoFieldOrder
+        class Outer extends Structure {
+            private Inner inner = new Inner();
+            private int c;
+        }
+        Outer o = new Outer();
+        o.inner.a = 1;
+        o.inner.b = 2;
+        o.c = 3;
+        MemorySegment seg = o.pointer().segment;
+        assertEquals(1, seg.get(ValueLayout.JAVA_INT, 0));
+        assertEquals(2, seg.get(ValueLayout.JAVA_INT, 4));
+        assertEquals(3, seg.get(ValueLayout.JAVA_INT, 8));
+        o.inner.a = 0;
+        o.inner.b = 0;
+        o.c = 0;
+        o.read();
+        assertEquals(1, o.inner.a);
+        assertEquals(2, o.inner.b);
+        assertEquals(3, o.c);
+    }
+
+    @Test
     void testStructureSizes() {
         assertEquals(152, new Commdlg.OPENFILENAMEW().size());
         assertEquals(8, new WinDef.POINT().size());

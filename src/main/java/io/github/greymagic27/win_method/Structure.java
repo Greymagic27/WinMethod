@@ -25,7 +25,7 @@ public abstract class Structure {
 
     private final Arena arena;
     private final Map<String, VarHandle> handles = new LinkedHashMap<>();
-    private final Map<String, Field> fields = new LinkedHashMap<>();
+    protected final Map<String, Field> fields = new LinkedHashMap<>();
     private final MemoryLayout layout;
     private MemorySegment segment;
 
@@ -95,6 +95,7 @@ public abstract class Structure {
         List<MemoryLayout> members = new ArrayList<>();
         long currentOffset = 0;
         long maxAlign = 1;
+        long maxSize = 0;
         for (Field f : orderedFields) {
             f.setAccessible(true);
             MemoryLayout ml;
@@ -116,11 +117,18 @@ public abstract class Structure {
                 } catch (IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
-                if (nested == null) throw new IllegalStateException("Nested structure field " + f.getName() + " must be initialised");
+                if (nested == null) throw new IllegalStateException("Nested structure field '" + f.getName() + "' must be initialised");
                 ml = ((Structure) nested).layout;
             } else {
                 ml = TypeMapper.layoutMappings(f.getType());
                 if (ml == null) throw new IllegalStateException("Unsupported struct field type: " + f.getType() + " on " + f.getName());
+            }
+            if (isUnion()) {
+                members.add(ml.withName(f.getName()));
+                fields.put(f.getName(), f);
+                maxAlign = Math.max(maxAlign, ml.byteAlignment());
+                maxSize = Math.max(maxSize, ml.byteSize());
+                continue;
             }
             long align = ml.byteAlignment();
             long pad = (align - (currentOffset % align)) % align;
@@ -135,9 +143,16 @@ public abstract class Structure {
             maxAlign = Math.max(maxAlign, align);
         }
         if (members.isEmpty()) throw new IllegalStateException(getClass().getSimpleName() + " declares no usable fields");
-        long trailingPad = (maxAlign - (currentOffset % maxAlign)) % maxAlign;
-        if (trailingPad > 0) members.add(MemoryLayout.paddingLayout(trailingPad));
-        GroupLayout group = MemoryLayout.structLayout(members.toArray(new MemoryLayout[0]));
+        GroupLayout group;
+        if (isUnion()) {
+            long totalSize = ((maxSize + maxAlign - 1) / maxAlign) * maxAlign;
+            if (totalSize > maxSize) members.add(MemoryLayout.paddingLayout(totalSize - maxSize));
+            group = MemoryLayout.unionLayout(members.toArray(new MemoryLayout[0]));
+        } else {
+            long trailingPad = (maxAlign - (currentOffset % maxAlign)) % maxAlign;
+            if (trailingPad > 0) members.add(MemoryLayout.paddingLayout(trailingPad));
+            group = MemoryLayout.structLayout(members.toArray(new MemoryLayout[0]));
+        }
         for (Field f : orderedFields) {
             if (f.getType().isArray()) continue;
             if (Structure.class.isAssignableFrom(f.getType())) continue;
@@ -308,48 +323,56 @@ public abstract class Structure {
     }
 
     public void write() {
-        for (Map.Entry<String, Field> e : fields.entrySet()) {
-            try {
-                Field f = e.getValue();
-                Object javaValue = f.get(this);
-                if (f.getType().isArray()) {
-                    if (javaValue == null) throw new IllegalStateException("Array field " + f.getName() + " cannot be null");
-                    writeArray(f, javaValue);
-                    continue;
-                }
-                if (Structure.class.isAssignableFrom(f.getType())) {
-                    if (javaValue == null) throw new IllegalStateException("Nested structure field " + f.getName() + " cannot be null");
-                    writeNestedStructure(f, javaValue);
-                    continue;
-                }
-                Object nativeValue = TypeMapper.toNative(javaValue, f.getType(), arena);
-                handles.get(e.getKey()).set(segment, 0, nativeValue);
-            } catch (IllegalAccessException ex) {
-                throw new RuntimeException(ex);
-            }
+        for (Field f : fields.values()) writeField(f);
+    }
+
+    protected void writeField(@NonNull Field f) {
+        Object javaValue;
+        try {
+            javaValue = f.get(this);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
+        if (f.getType().isArray()) {
+            if (javaValue == null) throw new IllegalStateException("Array field " + f.getName() + " cannot be null");
+            writeArray(f, javaValue);
+            return;
+        }
+        if (Structure.class.isAssignableFrom(f.getType())) {
+            if (javaValue == null) throw new IllegalStateException("Nested structure field " + f.getName() + " cannot be null");
+            writeNestedStructure(f, javaValue);
+            return;
+        }
+        Object nativeValue = TypeMapper.toNative(javaValue, f.getType(), arena);
+        handles.get(f.getName()).set(segment, 0, nativeValue);
     }
 
     public void read() {
-        for (Map.Entry<String, Field> e : fields.entrySet()) {
+        for (Field f : fields.values()) readField(f);
+    }
+
+    protected void readField(@NonNull Field f) {
+        if (f.getType().isArray()) {
+            readArray(f);
+            return;
+        }
+        if (Structure.class.isAssignableFrom(f.getType())) {
+            Object nestedValue;
             try {
-                Field f = e.getValue();
-                if (f.getType().isArray()) {
-                    readArray(f);
-                    continue;
-                }
-                if (Structure.class.isAssignableFrom(f.getType())) {
-                    Object nestedValue = f.get(this);
-                    if (nestedValue == null) throw new IllegalStateException("Nested structure field: " + f.getName() + " cannot be null");
-                    readNestedStructure(f, nestedValue);
-                    continue;
-                }
-                if (!TypeMapper.isReadable(f.getType())) continue;
-                Object raw = handles.get(e.getKey()).get(segment, 0);
-                f.set(this, TypeMapper.fromNative(raw, f.getType()));
-            } catch (IllegalAccessException ex) {
-                throw new RuntimeException(ex);
+                nestedValue = f.get(this);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
             }
+            if (nestedValue == null) throw new IllegalStateException("Nested structure field : " + f.getName() + " cannot be null");
+            readNestedStructure(f, nestedValue);
+            return;
+        }
+        if (!TypeMapper.isReadable(f.getType())) return;
+        Object raw = handles.get(f.getName()).get(segment, 0);
+        try {
+            f.set(this, TypeMapper.fromNative(raw, f.getType()));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -372,6 +395,10 @@ public abstract class Structure {
 
     public void useMemory(MemorySegment segment) {
         this.segment = segment;
+    }
+
+    protected boolean isUnion() {
+        return false;
     }
 
     /// Structure field order is manually set using field names
