@@ -93,4 +93,75 @@ class MemoryTest {
         Memory finalMem = mem;
         assertThrows(IllegalStateException.class, () -> finalMem.segment.get(ValueLayout.JAVA_INT, 0));
     }
+
+    @Test
+    void testGetByteArray() {
+        memory.segment.set(ValueLayout.JAVA_BYTE, 0, (byte) 1);
+        memory.segment.set(ValueLayout.JAVA_BYTE, 1, (byte) 2);
+        memory.segment.set(ValueLayout.JAVA_BYTE, 2, (byte) 3);
+        memory.segment.set(ValueLayout.JAVA_BYTE, 3, (byte) 4);
+        byte[] bytes = memory.getByteArray();
+        assertEquals(4, bytes.length);
+        assertEquals(1, bytes[0]);
+        assertEquals(2, bytes[1]);
+        assertEquals(3, bytes[2]);
+        assertEquals(4, bytes[3]);
+    }
+
+    @Test
+    void testGetByteArrayWithOffsetAndLength() {
+        memory.segment.set(ValueLayout.JAVA_BYTE, 0, (byte) 1);
+        memory.segment.set(ValueLayout.JAVA_BYTE, 1, (byte) 2);
+        memory.segment.set(ValueLayout.JAVA_BYTE, 2, (byte) 3);
+        memory.segment.set(ValueLayout.JAVA_BYTE, 3, (byte) 4);
+        byte[] bytes = memory.getByteArray(1, 2);
+        assertEquals(2, bytes.length);
+        assertEquals(2, bytes[0]);
+        assertEquals(3, bytes[1]);
+    }
+
+    @Test
+    void testGetByteArrayWithZeroLength() {
+        byte[] bytes = memory.getByteArray(0, 0);
+        assertEquals(0, bytes.length);
+    }
+
+    @Test
+    void testGetByteArrayAtEndOfMemory() {
+        byte[] bytes = memory.getByteArray(4, 0);
+        assertEquals(0, bytes.length);
+    }
+
+    @Test
+    void testGetByteArrayRejectsNegativeOffset() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.getByteArray(-1, 1));
+    }
+
+    @Test
+    void testGetByteArrayRejectsNegativeLength() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.getByteArray(0, -1));
+    }
+
+    @Test
+    void testGetByteArrayRejectsOffsetBeyondMemory() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.getByteArray(5, 0));
+    }
+
+    @Test
+    void testGetByteArrayRejectsLengthBeyondMemory() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.getByteArray(0, 5));
+    }
+
+    @Test
+    void testGetByteArrayRejectsOffsetAndLengthBeyondMemory() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.getByteArray(3, 2));
+    }
+
+    @Test
+    void testGetByteArrayDoesNotModifyMemory() {
+        memory.segment.set(ValueLayout.JAVA_BYTE, 0, (byte) 42);
+        byte[] bytes = memory.getByteArray();
+        assertEquals(42, bytes[0]);
+        assertEquals(42, memory.segment.get(ValueLayout.JAVA_BYTE, 0));
+    }
 }

@@ -2,6 +2,7 @@ package io.github.greymagic27.win_method;
 
 import java.io.Closeable;
 import java.lang.foreign.Arena;
+import java.lang.foreign.MemorySegment;
 import org.jspecify.annotations.NonNull;
 
 public class Memory extends Pointer implements Closeable {
@@ -44,5 +45,19 @@ public class Memory extends Pointer implements Closeable {
         closed = true;
         clear();
         arena.close();
+    }
+
+    public byte[] getByteArray() {
+        if (size > Integer.MAX_VALUE) throw new IllegalStateException("Memory size exceeds maximum byte array size");
+        return getByteArray(0, Math.toIntExact(size));
+    }
+
+    public byte[] getByteArray(long offset, int length) {
+        if (offset < 0) throw new IndexOutOfBoundsException("Offset must be more than or equal to 0");
+        if (length < 0) throw new IndexOutOfBoundsException("Length must be more than or equal to 0");
+        if (offset > size || length > size - offset) throw new IndexOutOfBoundsException("Offset & Length exceeds memory size: offset=" + offset + ", length=" + length + ", size=" + size);
+        byte[] bytes = new byte[length];
+        MemorySegment.copy(segment, offset, MemorySegment.ofArray(bytes), 0, length);
+        return bytes;
     }
 }
