@@ -267,6 +267,40 @@ class StructureTest {
     }
 
     @Test
+    void testNestedStructureAndUnion() {
+        @SuppressWarnings("unused")
+        @Structure.AutoFieldOrder
+        class OuterStruct extends Structure {
+            long first;
+            long second;
+            InnerUnion union;
+            Pointer handle;
+
+            @AutoFieldOrder
+            static class InnerStruct extends Structure {
+                int offset;
+                int offsetHigh;
+            }
+
+            @AutoFieldOrder
+            static class InnerUnion extends Union {
+                InnerStruct inner;
+                Pointer pointer;
+            }
+        }
+        OuterStruct outer = new OuterStruct();
+        assertEquals(32, outer.size());
+        assertEquals(8, outer.union.size());
+        assertEquals(8, outer.union.inner.size());
+        MemorySegment segment = outer.pointer().segment;
+        assertEquals(0, segment.get(ValueLayout.JAVA_LONG, 0));
+        assertEquals(0, segment.get(ValueLayout.JAVA_LONG, 8));
+        assertEquals(0, segment.get(ValueLayout.JAVA_INT, 16));
+        assertEquals(0, segment.get(ValueLayout.JAVA_INT, 20));
+        assertEquals(0, segment.get(ValueLayout.ADDRESS, 24).address());
+    }
+
+    @Test
     void testStructureSizes() {
         assertEquals(152, new Commdlg.OPENFILENAMEW().size());
         assertEquals(8, new WinDef.POINT().size());

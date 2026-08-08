@@ -299,7 +299,7 @@ public abstract class Structure {
 
     private void writeNestedStructure(@NonNull Field field, Object nestedValue) {
         Structure nested = (Structure) nestedValue;
-        nested.write();
+        if (!(nested instanceof Union union) || union.hasActiveField()) nested.write();
         long offset = layout.byteOffset(PathElement.groupElement(field.getName()));
         long size = nested.layout.byteSize();
         MemorySegment.copy(nested.segment, 0, segment, offset, size);

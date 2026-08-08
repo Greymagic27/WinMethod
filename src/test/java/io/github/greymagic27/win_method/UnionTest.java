@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -111,5 +112,12 @@ class UnionTest {
         u.i = 42;
         String str = assertDoesNotThrow(u::toString);
         assertTrue(str.contains("i=42"));
+    }
+
+    @Test
+    void testHasActiveField() {
+        assertFalse(u.hasActiveField());
+        u.setType("i");
+        assertTrue(u.hasActiveField());
     }
 }

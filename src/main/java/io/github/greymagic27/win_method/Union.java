@@ -42,4 +42,8 @@ public abstract class Union extends Structure {
         if (activeField == null) return;
         readField(activeField);
     }
+
+    public boolean hasActiveField() {
+        return activeField != null;
+    }
 }
