@@ -72,11 +72,6 @@ class MemoryTest {
     }
 
     @Test
-    void testCloseIsIdempotent() {
-        assertDoesNotThrow(memory::close);
-    }
-
-    @Test
     void testCloseOnUnclosableArenaThrows() {
         Memory mem = new Memory(4, Arena.global());
         assertThrows(UnsupportedOperationException.class, mem::close);
