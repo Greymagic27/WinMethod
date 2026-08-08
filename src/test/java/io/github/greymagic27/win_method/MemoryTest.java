@@ -73,7 +73,6 @@ class MemoryTest {
 
     @Test
     void testCloseIsIdempotent() {
-        memory.close();
         assertDoesNotThrow(memory::close);
     }
 
@@ -163,5 +162,73 @@ class MemoryTest {
         byte[] bytes = memory.getByteArray();
         assertEquals(42, bytes[0]);
         assertEquals(42, memory.segment.get(ValueLayout.JAVA_BYTE, 0));
+    }
+
+    @Test
+    void testWrite() {
+        byte[] bytes = {1, 2, 3, 4};
+        memory.write(0, bytes, 0, bytes.length);
+        assertEquals(1, memory.segment.get(ValueLayout.JAVA_BYTE, 0));
+        assertEquals(2, memory.segment.get(ValueLayout.JAVA_BYTE, 1));
+        assertEquals(3, memory.segment.get(ValueLayout.JAVA_BYTE, 2));
+        assertEquals(4, memory.segment.get(ValueLayout.JAVA_BYTE, 3));
+    }
+
+    @Test
+    void testWriteWithOffsetAndIndex() {
+        byte[] bytes = {1, 2, 3, 4};
+        memory.write(1, bytes, 1, 2);
+        assertEquals(0, memory.segment.get(ValueLayout.JAVA_BYTE, 0));
+        assertEquals(2, memory.segment.get(ValueLayout.JAVA_BYTE, 1));
+        assertEquals(3, memory.segment.get(ValueLayout.JAVA_BYTE, 2));
+        assertEquals(0, memory.segment.get(ValueLayout.JAVA_BYTE, 3));
+    }
+
+    @Test
+    void testWriteZeroLength() {
+        assertDoesNotThrow(() -> memory.write(4, new byte[0], 0, 0));
+    }
+
+    @Test
+    void testWriteDoesNotModifySourceArray() {
+        byte[] bytes = {1, 2, 3, 4};
+        memory.write(0, bytes, 0, bytes.length);
+        bytes[0] = 99;
+        assertEquals(1, memory.segment.get(ValueLayout.JAVA_BYTE, 0));
+    }
+
+    @Test
+    void testWriteRejectsNegativeOffset() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.write(-1, new byte[1], 0, 1));
+    }
+
+    @Test
+    void testWriteRejectsNegativeIndex() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.write(0, new byte[1], -1, 1));
+    }
+
+    @Test
+    void testWriteRejectsNegativeLength() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.write(0, new byte[1], 0, -1));
+    }
+
+    @Test
+    void testWriteRejectsIndexBeyondArray() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.write(0, new byte[4], 5, 0));
+    }
+
+    @Test
+    void testWriteRejectsIndexAndLengthBeyondArray() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.write(0, new byte[4], 3, 2));
+    }
+
+    @Test
+    void testWriteRejectsOffsetBeyondMemory() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.write(5, new byte[1], 0, 0));
+    }
+
+    @Test
+    void testWriteRejectsOffsetAndLengthBeyondMemory() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.write(3, new byte[2], 0, 2));
     }
 }

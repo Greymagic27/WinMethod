@@ -60,4 +60,13 @@ public class Memory extends Pointer implements Closeable {
         MemorySegment.copy(segment, offset, MemorySegment.ofArray(bytes), 0, length);
         return bytes;
     }
+
+    public void write(long offset, byte[] bytes, int index, int length) {
+        if (offset < 0) throw new IndexOutOfBoundsException("Offset must be more than or equal to 0");
+        if (index < 0) throw new IndexOutOfBoundsException("Index must be more than or equal to 0");
+        if (length < 0) throw new IndexOutOfBoundsException("Length must be more than or equal to 0");
+        if (index > bytes.length || length > bytes.length - index) throw new IndexOutOfBoundsException("Index & Length exceeds array size: index=" + index + ", length=" + length + ", size=" + bytes.length);
+        if (offset > size || length > size - offset) throw new IndexOutOfBoundsException("Offset & Length exceeds memory size: offset=" + offset + ", length=" + length + ", size=" + size);
+        MemorySegment.copy(MemorySegment.ofArray(bytes), index, segment, offset, length);
+    }
 }
