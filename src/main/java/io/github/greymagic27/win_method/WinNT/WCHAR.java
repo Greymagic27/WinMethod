@@ -22,4 +22,17 @@ public class WCHAR {
     public @NonNull String toString() {
         return String.valueOf(charValue());
     }
+
+    /// Converts a null-terminated array of {@link WCHAR} values to a string.
+    ///
+    /// @param value The array of {@link WCHAR} values
+    /// @return The string represented by the array
+    public static @NonNull String toString(@NonNull WCHAR @NonNull [] value) {
+        StringBuilder result = new StringBuilder(value.length);
+        for (WCHAR character : value) {
+            if (character.charValue() == '\0') break;
+            result.append(character.charValue());
+        }
+        return result.toString();
+    }
 }

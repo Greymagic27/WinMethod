@@ -30,4 +30,10 @@ class WCharTest {
     void testToStringContainsValue() {
         assertEquals("A", new WCHAR('A').toString());
     }
+
+    @Test
+    void testToStringArray() {
+        WCHAR[] value = {new WCHAR('H'), new WCHAR('e'), new WCHAR('l'), new WCHAR('l'), new WCHAR('o'), new WCHAR('\0'), new WCHAR('X')};
+        assertEquals("Hello", WCHAR.toString(value));
+    }
 }
