@@ -17,6 +17,7 @@ import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
+import io.github.greymagic27.win_method.methods.CreateWindowEx;
 import io.github.greymagic27.win_method.types.WinDef;
 import io.github.greymagic27.win_method.types.WinGdi;
 import io.github.greymagic27.win_method.types.WinUser;
@@ -42,7 +43,7 @@ class User32Test {
 
     @BeforeEach
     void setUp() {
-        window = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC"), null, new DWORD(WinUser.WS_OVERLAPPED), 100, 100, 500, 400, null, null, null, null);
+        window = CreateWindowEx.createStaticWindow(null, null, 0, 1, 1, 800, 600);
         hdc = user32.GetDC(window);
         msg = new WinUser.MSG();
         rect = new WinDef.RECT();
@@ -86,7 +87,7 @@ class User32Test {
 
     @Test
     void testDestroyWindow() {
-        HWND hwnd1 = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC"), new LPCWSTR("Temp"), new DWORD(WinUser.WS_OVERLAPPED), 0, 0, 10, 10, null, null, null, null);
+        HWND hwnd1 = CreateWindowEx.createStaticWindow(null, null, 0, 0, 0, 800, 600);
         BOOL result = user32.DestroyWindow(hwnd1);
         assertTrue(result.booleanValue());
     }

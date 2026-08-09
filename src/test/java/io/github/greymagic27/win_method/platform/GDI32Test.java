@@ -9,9 +9,8 @@ import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
-import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.methods.CreateWindowEx;
 import io.github.greymagic27.win_method.types.WinGdi;
-import io.github.greymagic27.win_method.types.WinUser;
 import java.lang.foreign.ValueLayout;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +29,7 @@ class GDI32Test {
 
     @BeforeEach
     void setUp() {
-        window = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC"), null, new DWORD(WinUser.WS_OVERLAPPED), 100, 100, 500, 400, null, null, null, null);
+        window = CreateWindowEx.createStaticWindow(null, null, 0, 0, 0, 800, 600);
         hdc = user32.GetDC(window);
     }
 
