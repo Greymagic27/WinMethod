@@ -208,6 +208,15 @@ public interface User32 extends Library {
     /// @return Return value is the result of the message processing and depends on the message
     LRESULT DefWindowProcW(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 
+    /// Sends the specified message to a window or windows
+    ///
+    /// @param hWnd   A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose window procedure will receive the message
+    /// @param Msg    The message to be sent
+    /// @param wParam Additional message-specific information
+    /// @param lParam Additional message-specific information
+    /// @return The return value specifies the result of the message processing; it depends on the message sent
+    LRESULT SendMessageW(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+
     /// Creates an overlapped, pop-up or child window with an extended window style
     ///
     /// @param dwExStyle    The <a href="https://learn.microsoft.com/en-us/windows/desktop/winmsg/extended-window-styles">extended window style</a> of the window

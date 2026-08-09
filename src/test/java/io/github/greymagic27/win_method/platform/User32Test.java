@@ -382,4 +382,26 @@ class User32Test {
         assertEquals(window.segment.address(), parent.segment.address());
         user32.DestroyWindow(child);
     }
+
+    @Test
+    void testSendMessage() {
+        int testMessage = WinUser.WM_COMMAND;
+        long expected = 12345;
+        WinUser.WNDCLASSEXW wc = new WinUser.WNDCLASSEXW();
+        wc.lpszClassName = new LPCWSTR("ClassName");
+        wc.cbSize = new UINT(wc.size());
+        wc.lpfnWndProc = (hWnd, uMsg, wParam, lParam) -> {
+            if (uMsg.intValue() == testMessage) return new LRESULT(expected);
+            return User32.INSTANCE.DefWindowProcW(hWnd, uMsg, wParam, lParam);
+        };
+        ATOM atom = user32.RegisterClassExW(wc);
+        assertNotNull(atom);
+        assertNotEquals(0, atom.shortValue());
+        HWND testWindow = user32.CreateWindowExW(new DWORD(0), wc.lpszClassName, new LPCWSTR("SendMessageTest"), new DWORD(WinUser.WS_OVERLAPPED), 0, 0, 100, 100, null, null, null, null);
+        assertNotNull(testWindow);
+        assertNotEquals(0, testWindow.segment.address());
+        LRESULT result = user32.SendMessageW(testWindow, new UINT(testMessage), new WPARAM(0), new LPARAM(0));
+        assertNotNull(result);
+        assertEquals(expected, result.longValue());
+    }
 }
