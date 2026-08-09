@@ -199,12 +199,6 @@ public interface User32 extends Library {
     /// @return The return value indicates whether the DC was released. If the DC was released, the return value is 1. If the DC was not released, the return value is zero
     int ReleaseDC(HWND hWnd, HDC hdc);
 
-    /// Retrieves the identifier of the specified control
-    ///
-    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the control
-    /// @return If the function succeeds, the return value is the identifier of the control. If the function fails, the return value is zero
-    int GetDlgCtrlID(HWND hWnd);
-
     /// Calls the default window procedure to provide default processing for any window messages that an application does not process
     ///
     /// @param hWnd   Handle to the window procedure that received the message

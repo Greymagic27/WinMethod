@@ -257,6 +257,10 @@ public interface WinUser {
     int CS_HREDRAW = 0x0002;
     /// Redraws the entire window if a movement or size adjustment changes the height of the client area
     int CS_VREDRAW = 0x0001;
+
+    /// Notifies the application that the user has double-clicked an item in a list box
+    int LBN_DBLCICK = 2;
+
     /// Designates a multiline edit control
     LONG ES_MULTILINE = new LONG(0x0004);
     /// Automatically scrolls text up one page when the user presses the ENTER key on the last line

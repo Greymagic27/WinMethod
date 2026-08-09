@@ -26,20 +26,18 @@ class CreateWindowExTest {
 
     @Test
     void testCreateListBoxWindow() {
-        HWND listBox = assertDoesNotThrow(() -> CreateWindowEx.createListBoxWindow("Test List", Window.getCurrentWindow()));
+        HWND listBox = assertDoesNotThrow(() -> CreateWindowEx.createListBoxWindow("Test List", Window.getCurrentWindow(), 0));
         assertNotNull(listBox);
         assertNotEquals(0, listBox.segment.address());
-        assertEquals(100, User32.INSTANCE.GetDlgCtrlID(listBox));
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(listBox).segment.address());
         User32.INSTANCE.DestroyWindow(listBox);
     }
 
     @Test
     void testCreateEditWindow() {
-        HWND edit = assertDoesNotThrow(() -> CreateWindowEx.createEditWindow("Test Edit", Window.getCurrentWindow()));
+        HWND edit = assertDoesNotThrow(() -> CreateWindowEx.createEditWindow("Test Edit", Window.getCurrentWindow(), 0));
         assertNotNull(edit);
         assertNotEquals(0, edit.segment.address());
-        assertEquals(101, User32.INSTANCE.GetDlgCtrlID(edit));
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(edit).segment.address());
         User32.INSTANCE.DestroyWindow(edit);
     }

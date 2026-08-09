@@ -21,6 +21,7 @@ import static io.github.greymagic27.win_method.types.WinUser.ES_AUTOVSCROLL;
 import static io.github.greymagic27.win_method.types.WinUser.ES_MULTILINE;
 import static io.github.greymagic27.win_method.types.WinUser.ES_WANTRETURN;
 import static io.github.greymagic27.win_method.types.WinUser.IDOK;
+import static io.github.greymagic27.win_method.types.WinUser.LBN_DBLCICK;
 import static io.github.greymagic27.win_method.types.WinUser.LBS_HASSTRINGS;
 import static io.github.greymagic27.win_method.types.WinUser.LBS_NOTIFY;
 import static io.github.greymagic27.win_method.types.WinUser.MB_ERRORICON;
@@ -295,6 +296,7 @@ class WinUserTest {
     void testMiscValues() {
         assertEquals(0x004, SWP_NOZORDER);
         assertEquals(1, IDOK);
+        assertEquals(2, LBN_DBLCICK);
     }
 
     @Test
