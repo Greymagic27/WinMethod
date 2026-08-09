@@ -11,11 +11,14 @@ import io.github.greymagic27.win_method.WinDef.HCURSOR;
 import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HICON;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
+import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
+import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.platform.User32;
 import java.lang.foreign.MemorySegment;
@@ -66,6 +69,8 @@ public interface WinUser {
     int WM_KEYDOWN = 0x0100;
     /// Sent to the focus window when the mouse wheel is rotated
     int WM_MOUSEWHEEL = 0x020A;
+    /// Sent when an application requests that a window be created by calling the {@link User32#CreateWindowExW(DWORD, LPCWSTR, LPCWSTR, DWORD, int, int, int, int, HWND, HMENU, HINSTANCE, LPVOID)} or CreateWindow function
+    int WM_CREATE = 0x0001;
 
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;
@@ -79,13 +84,6 @@ public interface WinUser {
 
     /// Retains the current Z order
     int SWP_NOZORDER = 0x0004;
-
-    /// Designates a multiline edit control
-    int ES_MULTILINE = 0x0004;
-    /// Automatically scrolls text up one page when the user presses the ENTER key on the last line
-    int ES_AUTOVSCROLL = 0x0040;
-    /// Specifies that a carriage return be inserted when the user presses the ENTER key while entering text into a multiline edit control in a dialogue box
-    int ES_WANTRETURN = 0x1000;
 
     /// Specifies that the menu item is a text string
     int MF_STRING = 0x00000000;
@@ -259,6 +257,19 @@ public interface WinUser {
     int CS_HREDRAW = 0x0002;
     /// Redraws the entire window if a movement or size adjustment changes the height of the client area
     int CS_VREDRAW = 0x0001;
+    /// Designates a multiline edit control
+    LONG ES_MULTILINE = new LONG(0x0004);
+    /// Automatically scrolls text up one page when the user presses the ENTER key on the last line
+    LONG ES_AUTOVSCROLL = new LONG(0x0040);
+    /// Automatically scrolls text to the right by 10 characters when the user types a character at the end of the line. When the user presses the ENTER key, the control scrolls all text back to position zero
+    LONG ES_AUTOHSCROLL = new LONG(0x0080);
+    /// Specifies that a carriage return be inserted when the user presses the ENTER key while entering text into a multiline edit control in a dialogue box
+    LONG ES_WANTRETURN = new LONG(0x1000);
+
+    /// Causes the list box to send a notification code to the parent window whenever the user clicks a list box item, double-clicks an item, or cancels the selection
+    LONG LBS_NOTIFY = new LONG(0x0001);
+    /// Specifies that a list box contains items consisting of strings
+    LONG LBS_HASSTRINGS = new LONG(0x0040);
 
     /// Creates a pointer value from an integer resource
     ///

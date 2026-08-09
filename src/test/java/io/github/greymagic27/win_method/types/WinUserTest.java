@@ -16,10 +16,13 @@ import org.junit.jupiter.api.Test;
 
 import static io.github.greymagic27.win_method.types.WinUser.CS_HREDRAW;
 import static io.github.greymagic27.win_method.types.WinUser.CS_VREDRAW;
+import static io.github.greymagic27.win_method.types.WinUser.ES_AUTOHSCROLL;
 import static io.github.greymagic27.win_method.types.WinUser.ES_AUTOVSCROLL;
 import static io.github.greymagic27.win_method.types.WinUser.ES_MULTILINE;
 import static io.github.greymagic27.win_method.types.WinUser.ES_WANTRETURN;
 import static io.github.greymagic27.win_method.types.WinUser.IDOK;
+import static io.github.greymagic27.win_method.types.WinUser.LBS_HASSTRINGS;
+import static io.github.greymagic27.win_method.types.WinUser.LBS_NOTIFY;
 import static io.github.greymagic27.win_method.types.WinUser.MB_ERRORICON;
 import static io.github.greymagic27.win_method.types.WinUser.MB_OK;
 import static io.github.greymagic27.win_method.types.WinUser.MF_POPUP;
@@ -108,6 +111,7 @@ import static io.github.greymagic27.win_method.types.WinUser.VK_Y;
 import static io.github.greymagic27.win_method.types.WinUser.VK_Z;
 import static io.github.greymagic27.win_method.types.WinUser.WM_CLOSE;
 import static io.github.greymagic27.win_method.types.WinUser.WM_COMMAND;
+import static io.github.greymagic27.win_method.types.WinUser.WM_CREATE;
 import static io.github.greymagic27.win_method.types.WinUser.WM_DESTROY;
 import static io.github.greymagic27.win_method.types.WinUser.WM_KEYDOWN;
 import static io.github.greymagic27.win_method.types.WinUser.WM_MOUSEWHEEL;
@@ -159,6 +163,7 @@ class WinUserTest {
         assertEquals(0x000F, WM_PAINT);
         assertEquals(0x0100, WM_KEYDOWN);
         assertEquals(0x020A, WM_MOUSEWHEEL);
+        assertEquals(0x0001, WM_CREATE);
     }
 
     @Test
@@ -175,9 +180,10 @@ class WinUserTest {
 
     @Test
     void testEsValues() {
-        assertEquals(0x0004, ES_MULTILINE);
-        assertEquals(0x0040, ES_AUTOVSCROLL);
-        assertEquals(0x1000, ES_WANTRETURN);
+        assertEquals(0x0004, ES_MULTILINE.intValue());
+        assertEquals(0x0040, ES_AUTOVSCROLL.intValue());
+        assertEquals(0x1000, ES_WANTRETURN.intValue());
+        assertEquals(0x0080, ES_AUTOHSCROLL.intValue());
     }
 
     @Test
@@ -277,6 +283,12 @@ class WinUserTest {
     void testCsValues() {
         assertEquals(0x0002, CS_HREDRAW);
         assertEquals(0x0001, CS_VREDRAW);
+    }
+
+    @Test
+    void testLbsValues() {
+        assertEquals(0x0001, LBS_NOTIFY.intValue());
+        assertEquals(0x0040, LBS_HASSTRINGS.intValue());
     }
 
     @Test

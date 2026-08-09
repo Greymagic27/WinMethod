@@ -199,6 +199,12 @@ public interface User32 extends Library {
     /// @return The return value indicates whether the DC was released. If the DC was released, the return value is 1. If the DC was not released, the return value is zero
     int ReleaseDC(HWND hWnd, HDC hdc);
 
+    /// Retrieves the identifier of the specified control
+    ///
+    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the control
+    /// @return If the function succeeds, the return value is the identifier of the control. If the function fails, the return value is zero
+    int GetDlgCtrlID(HWND hWnd);
+
     /// Calls the default window procedure to provide default processing for any window messages that an application does not process
     ///
     /// @param hWnd   Handle to the window procedure that received the message
@@ -253,6 +259,12 @@ public interface User32 extends Library {
     /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose DC is to be retried. If NULL, the function retries the DC for the entire screen
     /// @return If the function succeeds, the return value is a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the DC for the specified window's client area. If the function fails, the return value is NULL
     HDC GetDC(HWND hWnd);
+
+    /// Retries a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the specified window's parent or owner
+    ///
+    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose parent window handle is to be retrieved
+    /// @return If the window is a child window, the return value is a handle to the parent window. If the window is a top-level window with the WS_POPUP style, the return value is a handle to the owner window. If the function fails, the return value is NULL
+    HWND GetParent(HWND hWnd);
 
     /// Indicates to the system that a thread has made a request to terminate. It is typically used in response to a WM_DESTROY message.
     ///

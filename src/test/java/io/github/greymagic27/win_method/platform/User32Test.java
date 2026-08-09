@@ -371,4 +371,26 @@ class User32Test {
         int result = user32.ReleaseDC(window, hdc);
         assertEquals(1, result);
     }
+
+    @Test
+    void testGetParent() {
+        HWND child = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC") ,new LPCWSTR("Child"), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE), 0, 0, 100, 100, window, new HMENU(MemorySegment.ofAddress(0)), null, null);
+        assertNotNull(child);
+        assertNotEquals(0, child.segment.address());
+        HWND parent = user32.GetParent(child);
+        assertNotNull(parent);
+        assertEquals(window.segment.address(), parent.segment.address());
+        user32.DestroyWindow(child);
+    }
+
+    @Test
+    void testGetDlgCtrlID() {
+        int id = 100;
+        HWND child = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC") ,new LPCWSTR("Child"), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE), 0, 0, 100, 100, window, new HMENU(MemorySegment.ofAddress(id)), null, null);
+        assertNotNull(child);
+        assertNotEquals(0, child.segment.address());
+        int result = user32.GetDlgCtrlID(child);
+        assertEquals(id, result);
+        user32.DestroyWindow(child);
+    }
 }
