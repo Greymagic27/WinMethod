@@ -27,9 +27,9 @@ public interface User32 extends Library {
 
     /// Registers a window class for subsequent use in calls to the {@link #CreateWindowExW(DWORD, LPCWSTR, LPCWSTR, DWORD, int, int, int, int, HWND, HMENU, HINSTANCE, LPVOID)} function.
     ///
-    /// @param pointer A pointer to a {@link WinUser.WNDCLASSEXW} structure
+    /// @param unnamedParam1 A {@link io.github.greymagic27.win_method.Pointer} to a {@link WinUser.WNDCLASSEXW} structure
     /// @return Return value is a class atom that uniquely identifies the class being registered. If the function fails, the return value is zero
-    ATOM RegisterClassExW(WinUser.WNDCLASSEXW pointer);
+    ATOM RegisterClassExW(WinUser.WNDCLASSEXW unnamedParam1);
 
     /// Destroys the specified window. The function sends WM_DESTROY and WM_NCDESTROY messages to the window to deactivate and remove keyboard focus
     ///
