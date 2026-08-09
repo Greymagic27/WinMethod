@@ -24,6 +24,9 @@ import static io.github.greymagic27.win_method.types.WinUser.IDOK;
 import static io.github.greymagic27.win_method.types.WinUser.LBN_DBLCICK;
 import static io.github.greymagic27.win_method.types.WinUser.LBS_HASSTRINGS;
 import static io.github.greymagic27.win_method.types.WinUser.LBS_NOTIFY;
+import static io.github.greymagic27.win_method.types.WinUser.LB_ADDSTRING;
+import static io.github.greymagic27.win_method.types.WinUser.LB_GETCURSEL;
+import static io.github.greymagic27.win_method.types.WinUser.LB_RESETCONTENT;
 import static io.github.greymagic27.win_method.types.WinUser.MB_ERRORICON;
 import static io.github.greymagic27.win_method.types.WinUser.MB_OK;
 import static io.github.greymagic27.win_method.types.WinUser.MF_POPUP;
@@ -287,16 +290,19 @@ class WinUserTest {
     }
 
     @Test
-    void testLbsValues() {
+    void testLbValues() {
         assertEquals(0x0001, LBS_NOTIFY.intValue());
         assertEquals(0x0040, LBS_HASSTRINGS.intValue());
+        assertEquals(2, LBN_DBLCICK);
+        assertEquals(0x0184, LB_RESETCONTENT);
+        assertEquals(0x0180, LB_ADDSTRING);
+        assertEquals(0x0188, LB_GETCURSEL);
     }
 
     @Test
     void testMiscValues() {
         assertEquals(0x004, SWP_NOZORDER);
         assertEquals(1, IDOK);
-        assertEquals(2, LBN_DBLCICK);
     }
 
     @Test

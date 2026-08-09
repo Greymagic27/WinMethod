@@ -261,6 +261,13 @@ public interface WinUser {
     /// Notifies the application that the user has double-clicked an item in a list box
     int LBN_DBLCICK = 2;
 
+    /// Removes all items from a list box
+    int LB_RESETCONTENT = 0x0184;
+    /// Adds a string to a list box. If the list box does not have the {@code LBS_SORT} style, the string is added to the end of the list. Otherwise, the string is inserted into the list and the list is sorted
+    int LB_ADDSTRING = 0x0180;
+    /// Gets the index of the currently selected item, if any, in a single-selection list box
+    int LB_GETCURSEL = 0x0188;
+
     /// Designates a multiline edit control
     LONG ES_MULTILINE = new LONG(0x0004);
     /// Automatically scrolls text up one page when the user presses the ENTER key on the last line
