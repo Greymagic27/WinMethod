@@ -20,35 +20,6 @@ class UnionTest {
         u = new IntLongUnion();
     }
 
-    @SuppressWarnings("unused")
-    @Structure.AutoFieldOrder
-    static class IntLongUnion extends Union {
-        public int i;
-        public long l;
-    }
-
-    @SuppressWarnings("unused")
-    @Structure.AutoFieldOrder
-    static class LargeSizeSmallAlignUnion extends Union {
-        @ArrayLength(2)
-        public int[] arr;
-        public short s;
-    }
-
-    @SuppressWarnings("unused")
-    @Structure.AutoFieldOrder
-    static class OffsetStruct extends Structure {
-        public int offset;
-        public int offsetHigh;
-    }
-
-    @SuppressWarnings("unused")
-    @Structure.AutoFieldOrder
-    static class DummyUnion extends Union {
-        public OffsetStruct dummyStructName;
-        public Pointer pointerField;
-    }
-
     @Test
     void testSizeIsLargestMember() {
         assertEquals(8, new IntLongUnion().size());
@@ -119,5 +90,34 @@ class UnionTest {
         assertFalse(u.hasActiveField());
         u.setType("i");
         assertTrue(u.hasActiveField());
+    }
+
+    @SuppressWarnings("unused")
+    @Structure.AutoFieldOrder
+    static class IntLongUnion extends Union {
+        public int i;
+        public long l;
+    }
+
+    @SuppressWarnings("unused")
+    @Structure.AutoFieldOrder
+    static class LargeSizeSmallAlignUnion extends Union {
+        @ArrayLength(2)
+        public int[] arr;
+        public short s;
+    }
+
+    @SuppressWarnings("unused")
+    @Structure.AutoFieldOrder
+    static class OffsetStruct extends Structure {
+        public int offset;
+        public int offsetHigh;
+    }
+
+    @SuppressWarnings("unused")
+    @Structure.AutoFieldOrder
+    static class DummyUnion extends Union {
+        public OffsetStruct dummyStructName;
+        public Pointer pointerField;
     }
 }

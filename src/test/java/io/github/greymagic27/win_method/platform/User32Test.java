@@ -374,7 +374,7 @@ class User32Test {
 
     @Test
     void testGetParent() {
-        HWND child = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC") ,new LPCWSTR("Child"), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE), 0, 0, 100, 100, window, new HMENU(MemorySegment.ofAddress(0)), null, null);
+        HWND child = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC"), new LPCWSTR("Child"), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE), 0, 0, 100, 100, window, new HMENU(MemorySegment.ofAddress(0)), null, null);
         assertNotNull(child);
         assertNotEquals(0, child.segment.address());
         HWND parent = user32.GetParent(child);
@@ -386,7 +386,7 @@ class User32Test {
     @Test
     void testGetDlgCtrlID() {
         int id = 100;
-        HWND child = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC") ,new LPCWSTR("Child"), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE), 0, 0, 100, 100, window, new HMENU(MemorySegment.ofAddress(id)), null, null);
+        HWND child = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC"), new LPCWSTR("Child"), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE), 0, 0, 100, 100, window, new HMENU(MemorySegment.ofAddress(id)), null, null);
         assertNotNull(child);
         assertNotEquals(0, child.segment.address());
         int result = user32.GetDlgCtrlID(child);

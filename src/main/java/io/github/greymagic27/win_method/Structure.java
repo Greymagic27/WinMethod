@@ -23,9 +23,9 @@ import org.jspecify.annotations.Nullable;
 
 public abstract class Structure {
 
+    protected final Map<String, Field> fields = new LinkedHashMap<>();
     private final Arena arena;
     private final Map<String, VarHandle> handles = new LinkedHashMap<>();
-    protected final Map<String, Field> fields = new LinkedHashMap<>();
     private final MemoryLayout layout;
     private MemorySegment segment;
 
