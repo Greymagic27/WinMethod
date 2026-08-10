@@ -1,6 +1,7 @@
 package io.github.greymagic27.win_method;
 
 import io.github.greymagic27.win_method.types.Commdlg;
+import io.github.greymagic27.win_method.types.MinWinBase;
 import io.github.greymagic27.win_method.types.WinDef;
 import io.github.greymagic27.win_method.types.WinGdi;
 import io.github.greymagic27.win_method.types.WinUser;
@@ -311,6 +312,8 @@ class StructureTest {
         assertEquals(44, new WinGdi.BITMAPINFO().size());
         assertEquals(40, new WinGdi.BITMAPINFOHEADER().size());
         assertEquals(4, new WinGdi.RGBQUAD().size());
+        assertEquals(592, new MinWinBase.WIN32_FIND_DATAW().size());
+        assertEquals(8, new MinWinBase.FILETIME().size());
     }
 
     @Structure.AutoFieldOrder
