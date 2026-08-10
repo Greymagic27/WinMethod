@@ -2,6 +2,7 @@ package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
+import io.github.greymagic27.win_method.Memory;
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.HBRUSH;
@@ -16,6 +17,7 @@ import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
 import io.github.greymagic27.win_method.methods.CreateWindowEx;
 import io.github.greymagic27.win_method.types.WinDef;
@@ -404,5 +406,34 @@ class User32Test {
         LRESULT result = user32.SendMessageW(testWindow, new UINT(testMessage), new WPARAM(0), new LPARAM(0));
         assertNotNull(result);
         assertEquals(expected, result.longValue());
+    }
+
+    @Test
+    void testGetWindowText() {
+        assertNotNull(window);
+        assertNotEquals(0, window.segment.address());
+        String title = "Title";
+        BOOL setResult = user32.SetWindowTextW(window, new LPCWSTR(title));
+        assertTrue(setResult.booleanValue());
+        int length = user32.GetWindowTextLengthW(window);
+        assertEquals(title.length(), length);
+        int buffer = length + 1;
+        try (Memory memory = new Memory(buffer * 2L)) {
+            LPWSTR lpString = new LPWSTR(memory.segment);
+            int copied = user32.GetWindowTextW(window, lpString, buffer);
+            assertEquals(title.length(), copied);
+            assertEquals(title, memory.getWideString(0));
+        }
+    }
+
+    @Test
+    void testGetWindowTextLength() {
+        assertNotNull(window);
+        assertNotEquals(0, window.segment.address());
+        String title = "Title";
+        BOOL setResult = user32.SetWindowTextW(window, new LPCWSTR(title));
+        assertTrue(setResult.booleanValue());
+        int length = user32.GetWindowTextLengthW(window);
+        assertEquals(title.length(), length);
     }
 }
