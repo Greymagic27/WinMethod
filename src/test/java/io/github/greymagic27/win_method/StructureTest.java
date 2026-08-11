@@ -314,6 +314,8 @@ class StructureTest {
         assertEquals(4, new WinGdi.RGBQUAD().size());
         assertEquals(592, new MinWinBase.WIN32_FIND_DATAW().size());
         assertEquals(8, new MinWinBase.FILETIME().size());
+        assertEquals(24, new MinWinBase.SECURITY_ATTRIBUTES().size());
+        assertEquals(32, new MinWinBase.OVERLAPPED().size());
     }
 
     @Structure.AutoFieldOrder

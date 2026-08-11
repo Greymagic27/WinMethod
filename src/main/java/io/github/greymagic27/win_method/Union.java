@@ -37,12 +37,6 @@ public abstract class Union extends Structure {
         writeField(activeField);
     }
 
-    @Override
-    public void read() {
-        if (activeField == null) return;
-        readField(activeField);
-    }
-
     public boolean hasActiveField() {
         return activeField != null;
     }

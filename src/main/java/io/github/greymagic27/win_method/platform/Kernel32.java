@@ -1,9 +1,15 @@
 package io.github.greymagic27.win_method.platform;
 
+import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.Library;
+import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.HMODULE;
+import io.github.greymagic27.win_method.WinDef.LPCVOID;
+import io.github.greymagic27.win_method.WinDef.LPDWORD;
+import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.types.MinWinBase;
 
 /// Interface for Kernel32.dll
 public interface Kernel32 extends Library {
@@ -14,6 +20,25 @@ public interface Kernel32 extends Library {
     ///
     /// @return Pseudo handle to the current process
     HANDLE GetCurrentProcess();
+
+    /// Searches a directory for a file or subdirectory with a name that matches a specific name (or partial name if wildcards are used)
+    ///
+    /// @param lpFileName     The directory or path, and the file name. this should not be NULL and can include wildcard characters
+    /// @param lpFindFileData A {@link io.github.greymagic27.win_method.Pointer} to the {@link io.github.greymagic27.win_method.types.MinWinBase.WIN32_FIND_DATAW} structure that receives information about a found file or directory
+    /// @return If the function succeeds, the return value is a search handle used in a subsequent call to FindNextFile or FindClose, and the <i>lpFindFileData</i> parameter contains information about the first file or directory found. If the function fails the return value is <b>INVALID_HANDLE_VALUE</b> and the contents of <i>lpFindFileData</i> are indeterminate
+    HANDLE FindFirstFileW(LPCWSTR lpFileName, MinWinBase.WIN32_FIND_DATAW lpFindFileData);
+
+    /// Creates or opens a file or I/O device
+    ///
+    /// @param lpFileName            The name of the file or device to be created or opened
+    /// @param dwDesiredAccess       The requested access to the file or device. The most common values are {@link io.github.greymagic27.win_method.types.WinNT#GENERIC_READ} and/or {@link io.github.greymagic27.win_method.types.WinNT#GENERIC_WRITE}
+    /// @param dwShareMode           The requested sharing mode of the file or device. The list of these can be found [here](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew)
+    /// @param lpSecurityAttributes  A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.types.MinWinBase.SECURITY_ATTRIBUTES} structure that contains two separate but related data members. These are an optional security descriptor and a {@link Boolean} value that determines whether the returned handle can be inherited by child processes. This parameter can be NULL
+    /// @param dwCreationDisposition An action to take on a file or device that exists or does not exist. This can be one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew)
+    /// @param dwFlagsAndAttributes  The file or device attributes, and flags. This can be one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/fileapi/nf-fileapi-createfilew)
+    /// @param hTemplateFile         A valid {@link HANDLE} to a template file with {@link io.github.greymagic27.win_method.types.WinNT#GENERIC_READ} access right. This can be NULL
+    /// @return If the function succeeds, the return value is an open handle to the specified file, device, named pipe, or mail slot. If the function fails, the return value is INVALID_HANDLE_VALUE
+    HANDLE CreateFileW(LPCWSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, MinWinBase.SECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
 
     /// Retrieves a module handle for the specified module. The module must have been loaded by the calling process
     ///
@@ -26,6 +51,52 @@ public interface Kernel32 extends Library {
     /// @param lpLibFileName The name of the module. This can be a module name or an executable
     /// @return If the function succeeds, the return is a {@link HANDLE} to the module. If the function fails, the return value is NULL
     HMODULE LoadLibraryW(LPCWSTR lpLibFileName);
+
+    /// Continues a file search from a previous call to the {@link FindFirstFileW}, FindFirstFileEx, or FindFirstFileTransacted functions
+    ///
+    /// @param hFindFile      The search handle returned by a previous call to the {@link FindFirstFileW} or FindFirstFileEx function
+    /// @param lpFindFileData A {@link io.github.greymagic27.win_method.Pointer} to the {@link io.github.greymagic27.win_method.types.MinWinBase.WIN32_FIND_DATAW} structure that receives information about the found file or subdirectory
+    /// @return If the function succeeds, the return value is nonzero and the <i>lpFindFileData</i> parameter contains information about the next file or directory found. If the function fails, the return value is zero and the contents of <i>lpFindFileData</i> are indeterminate
+    BOOL FindNextFileW(HANDLE hFindFile, MinWinBase.WIN32_FIND_DATAW lpFindFileData);
+
+    /// Closes a file search handle opened by the {@link FindFirstFileW}, FindFirstFileEx, FindFirstFileNameW, FindFirstFileNameTransactedW, FindFirstFileTransacted, FindFirstStreamTransactedW, or FindFirstStreamW functions
+    ///
+    /// @param hFindFile The file search handle
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL FindClose(HANDLE hFindFile);
+
+    /// Reads data from the specified file or input/output (I/O) device. Reads occur at the position specified by the file pointer if supported by the device
+    ///
+    /// @param hFile                A {@link HANDLE} to the device (for example, a file, file stream, physical disk, volume, console buffer, tape drive, socket, communications resource, mailslot, or pipe)
+    /// @param lpBuffer             A {@link io.github.greymagic27.win_method.Pointer} to the buffer that receives the data read from a file or device
+    /// @param nNumberOfBytesToRead The maximum number of bytes to be read
+    /// @param lpNumberOfBytesRead  A {@link io.github.greymagic27.win_method.Pointer} to the variable that receives the number of bytes read when using a synchronous hFile parameter. {@link #ReadFile(HANDLE, LPVOID, DWORD, LPDWORD, MinWinBase.OVERLAPPED)} sets this value to zero before doing any work or error checking. Use NULL for this parameter if this is an asynchronous operation to avoid potentially erroneous results. This can only be NULL when the <i>lpOverlapped</i> parameter is not NULL
+    /// @param lpOverlapped         A {@link io.github.greymagic27.win_method.Pointer} to an {@link io.github.greymagic27.win_method.types.MinWinBase.OVERLAPPED} structure is required if the hFile parameter was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL
+    /// @return If the function succeeds, the return value is nonzero <b>(TRUE)</b>. If the function fails, the return value is zero <b>(FALSE)</b>
+    BOOL ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead, MinWinBase.OVERLAPPED lpOverlapped);
+
+    /// Writes data to the specified file or input/output (I/O) device
+    ///
+    /// @param hFile A {@link HANDLE} to the file or I/O device (for example, a file, file stream, physical disk, volume, console buffer, tape drive, socket, communications resource, mailslot, or pipe
+    /// @param lpBuffer A {@link io.github.greymagic27.win_method.Pointer} to the buffer containing the data to be written to the file or device
+    /// @param nNumberOfBytesToWrite The number of bytes to be written to the file or device
+    /// @param lpNumberOfBytesWritten A {@link io.github.greymagic27.win_method.Pointer} to the variable that receives the number of bytes written when using a synchronous hFile parameter. {@link #WriteFile(HANDLE, LPCVOID, DWORD, LPDWORD, MinWinBase.OVERLAPPED)} sets this value to zero before doing any work or error checking. Use NULL for this parameter if this is an asynchronous operation to avoid potentially erroneous results. This parameter can be NULL only when the lpOverlapped parameter is not NULL
+    /// @param lpOverlapped A {@link io.github.greymagic27.win_method.Pointer} to an {@link io.github.greymagic27.win_method.types.MinWinBase.OVERLAPPED} structure is required if the hFile parameter was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL
+    /// @return If the function succeeds, the return value is nonzero <b>(TRUE)</b>. If the function fails, the return value is zero <b>(FALSE)</b>
+    BOOL WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, MinWinBase.OVERLAPPED lpOverlapped);
+
+    /// Closes an open object {@link HANDLE}
+    ///
+    /// @param hObject A valid {@link HANDLE} to an open object
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL CloseHandle(HANDLE hObject);
+
+    /// Retrieves the size of the specified file, in bytes
+    ///
+    /// @param hFile A {@link HANDLE} to the file
+    /// @param lpFileSizeHigh A {@link io.github.greymagic27.win_method.Pointer} to the variable where the high-order doubleword of the file size is returned. This parameter can be NULL if the application does not require the high-order doubleword
+    /// @return If the function succeeds, the return value is the low-order doubleword of the file size, and, if lpFileSizeHigh is non-NULL, the function puts the high-order doubleword of the file size into the variable pointed to by that parameter. If the function fails and lpFileSizeHigh is NULL, the return value is INVALID_FILE_SIZE
+    DWORD GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh);
 
     /// Retrieves the process identifier of the calling process
     ///

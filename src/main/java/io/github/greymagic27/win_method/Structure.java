@@ -11,6 +11,7 @@ import java.lang.foreign.MemoryLayout.PathElement;
 import java.lang.foreign.MemorySegment;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -73,7 +74,9 @@ public abstract class Structure {
         try {
             if (type.isPrimitive()) return null;
             if (type == String.class) return null;
-            return type.getDeclaredConstructor().newInstance();
+            Constructor<?> ctor = type.getDeclaredConstructor();
+            ctor.setAccessible(true);
+            return ctor.newInstance();
         } catch (NoSuchMethodException e) {
             return null;
         } catch (ReflectiveOperationException e) {
@@ -83,7 +86,9 @@ public abstract class Structure {
 
     private @NonNull Structure instantiateStructure(@NonNull Class<?> structureType) {
         try {
-            return (Structure) structureType.getDeclaredConstructor().newInstance();
+            Constructor<?> ctor = structureType.getDeclaredConstructor();
+            ctor.setAccessible(true);
+            return (Structure) ctor.newInstance();
         } catch (ReflectiveOperationException e) {
             throw new RuntimeException("Could not initialise structure array element of type " + structureType, e);
         }

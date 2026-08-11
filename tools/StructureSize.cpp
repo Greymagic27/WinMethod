@@ -1,5 +1,4 @@
 #include <windows.h>
-#include <commdlg.h>
 #include <iostream>
 
 #define PRINT_SIZE(type) \
@@ -18,5 +17,7 @@ int main()
     PRINT_SIZE(RGBQUAD);
     PRINT_SIZE(WIN32_FIND_DATAW);
     PRINT_SIZE(FILETIME);
+    PRINT_SIZE(SECURITY_ATTRIBUTES);
+    PRINT_SIZE(OVERLAPPED);
     return 0;
 }
