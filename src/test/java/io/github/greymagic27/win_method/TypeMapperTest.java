@@ -9,6 +9,7 @@ import io.github.greymagic27.win_method.WinDef.BYTE;
 import io.github.greymagic27.win_method.WinDef.HBRUSH;
 import io.github.greymagic27.win_method.WinDef.HCURSOR;
 import io.github.greymagic27.win_method.WinDef.HDC;
+import io.github.greymagic27.win_method.WinDef.HFONT;
 import io.github.greymagic27.win_method.WinDef.HGDIOBJ;
 import io.github.greymagic27.win_method.WinDef.HICON;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
@@ -83,7 +84,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class, LPCVOID.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class, HKEY.class)) {
+        for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class, HKEY.class, HFONT.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
     }
@@ -942,6 +943,23 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_HFONT() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            HFONT hfont = new HFONT(segment);
+            Object result = TypeMapper.toNative(hfont, HFONT.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_HFONTNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HFONT.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_UINTPTR() {
         Object result = TypeMapper.fromNative(9999L, UINT_PTR.class);
         assertInstanceOf(UINT_PTR.class, result);
@@ -1053,6 +1071,14 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(MemorySegment.NULL, LPCVOID.class);
         assertInstanceOf(LPCVOID.class, result);
         assertTrue(((LPCVOID) result).isNull());
+    }
+
+    @Test
+    void testFromNative_HFONT() {
+        MemorySegment segment = MemorySegment.ofAddress(0x5678);
+        Object result = TypeMapper.fromNative(segment, HFONT.class);
+        assertInstanceOf(HFONT.class, result);
+        assertEquals(0x5678L, ((HFONT) result).segment.address());
     }
 
     @Test
