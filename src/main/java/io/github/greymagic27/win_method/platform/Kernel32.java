@@ -77,11 +77,11 @@ public interface Kernel32 extends Library {
 
     /// Writes data to the specified file or input/output (I/O) device
     ///
-    /// @param hFile A {@link HANDLE} to the file or I/O device (for example, a file, file stream, physical disk, volume, console buffer, tape drive, socket, communications resource, mailslot, or pipe
-    /// @param lpBuffer A {@link io.github.greymagic27.win_method.Pointer} to the buffer containing the data to be written to the file or device
-    /// @param nNumberOfBytesToWrite The number of bytes to be written to the file or device
+    /// @param hFile                  A {@link HANDLE} to the file or I/O device (for example, a file, file stream, physical disk, volume, console buffer, tape drive, socket, communications resource, mailslot, or pipe
+    /// @param lpBuffer               A {@link io.github.greymagic27.win_method.Pointer} to the buffer containing the data to be written to the file or device
+    /// @param nNumberOfBytesToWrite  The number of bytes to be written to the file or device
     /// @param lpNumberOfBytesWritten A {@link io.github.greymagic27.win_method.Pointer} to the variable that receives the number of bytes written when using a synchronous hFile parameter. {@link #WriteFile(HANDLE, LPCVOID, DWORD, LPDWORD, MinWinBase.OVERLAPPED)} sets this value to zero before doing any work or error checking. Use NULL for this parameter if this is an asynchronous operation to avoid potentially erroneous results. This parameter can be NULL only when the lpOverlapped parameter is not NULL
-    /// @param lpOverlapped A {@link io.github.greymagic27.win_method.Pointer} to an {@link io.github.greymagic27.win_method.types.MinWinBase.OVERLAPPED} structure is required if the hFile parameter was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL
+    /// @param lpOverlapped           A {@link io.github.greymagic27.win_method.Pointer} to an {@link io.github.greymagic27.win_method.types.MinWinBase.OVERLAPPED} structure is required if the hFile parameter was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL
     /// @return If the function succeeds, the return value is nonzero <b>(TRUE)</b>. If the function fails, the return value is zero <b>(FALSE)</b>
     BOOL WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, MinWinBase.OVERLAPPED lpOverlapped);
 
@@ -93,7 +93,7 @@ public interface Kernel32 extends Library {
 
     /// Retrieves the size of the specified file, in bytes
     ///
-    /// @param hFile A {@link HANDLE} to the file
+    /// @param hFile          A {@link HANDLE} to the file
     /// @param lpFileSizeHigh A {@link io.github.greymagic27.win_method.Pointer} to the variable where the high-order doubleword of the file size is returned. This parameter can be NULL if the application does not require the high-order doubleword
     /// @return If the function succeeds, the return value is the low-order doubleword of the file size, and, if lpFileSizeHigh is non-NULL, the function puts the high-order doubleword of the file size into the variable pointed to by that parameter. If the function fails and lpFileSizeHigh is NULL, the return value is INVALID_FILE_SIZE
     DWORD GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh);

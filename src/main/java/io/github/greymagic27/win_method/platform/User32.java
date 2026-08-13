@@ -202,8 +202,8 @@ public interface User32 extends Library {
 
     /// Copies the text of the specified window's title bar (if it has one) into a buffer
     ///
-    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window or control containing the text
-    /// @param lpString The buffer that will receive the text. If the string is as long or longer than the buffer, the string is truncated and terminated with a null character
+    /// @param hWnd      A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window or control containing the text
+    /// @param lpString  The buffer that will receive the text. If the string is as long or longer than the buffer, the string is truncated and terminated with a null character
     /// @param nMaxCount The maximum number of characters to copy to the buffer, including the null character. If the text exceeds this limit, the text is truncated
     /// @return If the function succeeds, the return value is the length, in characters, of the copied string, not including the terminating null character
     int GetWindowTextW(HWND hWnd, LPWSTR lpString, int nMaxCount);
