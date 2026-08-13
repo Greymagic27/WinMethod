@@ -6,7 +6,14 @@ import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import org.junit.jupiter.api.Test;
 
+import static io.github.greymagic27.win_method.types.WinGdi.ANSI_CHARSET;
+import static io.github.greymagic27.win_method.types.WinGdi.CLEARTYPE_QUALITY;
+import static io.github.greymagic27.win_method.types.WinGdi.CLIP_DEFAULT_PRECIS;
 import static io.github.greymagic27.win_method.types.WinGdi.DIB_RGB_COLORS;
+import static io.github.greymagic27.win_method.types.WinGdi.FF_MODERN;
+import static io.github.greymagic27.win_method.types.WinGdi.FIXED_PITCH;
+import static io.github.greymagic27.win_method.types.WinGdi.FW_NORMAL;
+import static io.github.greymagic27.win_method.types.WinGdi.OUT_DEFAULT_PRECIS;
 import static io.github.greymagic27.win_method.types.WinGdi.SRCCOPY;
 import static io.github.greymagic27.win_method.types.WinGdi.WHITE_BRUSH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,6 +26,13 @@ class WinGdiTest {
         assertEquals(0, WHITE_BRUSH);
         assertEquals(0, DIB_RGB_COLORS);
         assertEquals(0xcc0020, SRCCOPY);
+        assertEquals(400, FW_NORMAL);
+        assertEquals(1, ANSI_CHARSET);
+        assertEquals(0, OUT_DEFAULT_PRECIS);
+        assertEquals(0, CLIP_DEFAULT_PRECIS);
+        assertEquals(5, CLEARTYPE_QUALITY);
+        assertEquals(1, FIXED_PITCH);
+        assertEquals(48, FF_MODERN);
     }
 
     @Test

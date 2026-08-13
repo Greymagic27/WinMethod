@@ -15,7 +15,7 @@ public class HFONT extends HANDLE {
         super(segment);
     }
 
-    /// Creates a pointer from an existing {@link Pointer}
+    /// Creates an {@code HFONT} from an existing {@link Pointer}
     ///
     /// @param pointer The pointer to wrap
     public HFONT(@NonNull Pointer pointer) {

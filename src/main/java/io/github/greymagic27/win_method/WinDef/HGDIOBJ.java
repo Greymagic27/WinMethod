@@ -12,4 +12,11 @@ public class HGDIOBJ extends HANDLE {
     public HGDIOBJ(MemorySegment segment) {
         super(segment);
     }
+
+    /// Creates an HGDIOBJ from an existing handle
+    ///
+    /// @param handle The handle to wrap as an HGDIOBJ handle
+    public HGDIOBJ(HANDLE handle) {
+        super(handle);
+    }
 }

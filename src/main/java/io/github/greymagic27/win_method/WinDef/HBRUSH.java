@@ -1,5 +1,6 @@
 package io.github.greymagic27.win_method.WinDef;
 
+import io.github.greymagic27.win_method.Pointer;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
 import java.lang.foreign.MemorySegment;
 import org.jspecify.annotations.NonNull;
@@ -14,10 +15,10 @@ public class HBRUSH extends HANDLE {
         super(segment);
     }
 
-    /// Creates an {@code HBRUSH} from an existing handle
+    /// Creates an {@code HBRUSH} from an existing {@link Pointer}
     ///
-    /// @param handle The handle to wrap as a brush handle
-    public HBRUSH(@NonNull HANDLE handle) {
-        super(handle.segment);
+    /// @param pointer The pointer to wrap
+    public HBRUSH(@NonNull Pointer pointer) {
+        super(pointer.segment);
     }
 }

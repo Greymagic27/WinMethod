@@ -3,19 +3,30 @@ package io.github.greymagic27.win_method.platform;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.Memory;
 import io.github.greymagic27.win_method.WinDef.HDC;
+import io.github.greymagic27.win_method.WinDef.HFONT;
 import io.github.greymagic27.win_method.WinDef.HGDIOBJ;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.methods.CreateWindowEx;
 import io.github.greymagic27.win_method.types.WinGdi;
+import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static io.github.greymagic27.win_method.types.WinGdi.ANSI_CHARSET;
+import static io.github.greymagic27.win_method.types.WinGdi.CLEARTYPE_QUALITY;
+import static io.github.greymagic27.win_method.types.WinGdi.CLIP_DEFAULT_PRECIS;
+import static io.github.greymagic27.win_method.types.WinGdi.FF_MODERN;
+import static io.github.greymagic27.win_method.types.WinGdi.FIXED_PITCH;
+import static io.github.greymagic27.win_method.types.WinGdi.FW_NORMAL;
+import static io.github.greymagic27.win_method.types.WinGdi.OUT_DEFAULT_PRECIS;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,11 +36,13 @@ class GDI32Test {
     private static final GDI32 gdi32 = GDI32.INSTANCE;
     private static final User32 user32 = User32.INSTANCE;
     private HWND window;
+    private HFONT hfont;
     private HDC hdc;
 
     @BeforeEach
     void setUp() {
         window = CreateWindowEx.createStaticWindow(null, null, 0, 0, 0, 800, 600);
+        hfont = gdi32.CreateFontW(16, 0, 0, 0, FW_NORMAL, new DWORD(0), new DWORD(0), new DWORD(0), new DWORD(ANSI_CHARSET), new DWORD(OUT_DEFAULT_PRECIS), new DWORD(CLIP_DEFAULT_PRECIS), new DWORD(CLEARTYPE_QUALITY), new DWORD(FIXED_PITCH | FF_MODERN), new LPCWSTR("Arial"));
         hdc = user32.GetDC(window);
     }
 
@@ -63,5 +76,24 @@ class GDI32Test {
             int result = gdi32.StretchDIBits(hdc, 0, 0, width, height, 0, 0, width, height, new LPVOID(pixels), bmi, new UINT(WinGdi.DIB_RGB_COLORS), new DWORD(WinGdi.SRCCOPY));
             assertTrue(result != 0);
         }
+    }
+
+    @Test
+    void testCreateFont() {
+        assertNotNull(hfont);
+        assertNotEquals(0, hfont.segment.address());
+        assertFalse(hfont.isNull());
+        gdi32.DeleteObject(new HGDIOBJ(hfont));
+    }
+
+    @Test
+    void testDeleteObject() {
+        assertNotNull(hfont);
+        assertNotEquals(0, hfont.segment.address());
+        assertFalse(hfont.isNull());
+        HGDIOBJ hgdiobj = new HGDIOBJ(hfont);
+        assertTrue(gdi32.DeleteObject(hgdiobj).booleanValue());
+        HGDIOBJ invalidObject = new HGDIOBJ(MemorySegment.ofAddress(0));
+        assertFalse(gdi32.DeleteObject(invalidObject).booleanValue());
     }
 }

@@ -15,6 +15,20 @@ public interface WinGdi {
     int DIB_RGB_COLORS = 0;
     /// Copies the source rectangle directly to the destination rectangle
     int SRCCOPY = 0xcc0020;
+    /// Normal font weight
+    int FW_NORMAL = 400;
+    ///    This font supports the Windows ANSI character set
+    int ANSI_CHARSET = 1;
+    /// The default font mapper behaviour
+    int OUT_DEFAULT_PRECIS = 0;
+    /// Specifies default clipping behaviour
+    int CLIP_DEFAULT_PRECIS = 0;
+    ///    If set, text is rendered (when possible) using ClearType antialiasing method
+    int CLEARTYPE_QUALITY = 5;
+    /// Sets the pitch of the font to fixed
+    int FIXED_PITCH = 1;
+    /// Fonts with constant stroke width, with or without serifs. Pica, Elite, and Courier New are examples
+    int FF_MODERN = 3 << 4;
 
     /// Defines the dimensions and colour information for a DIB
     @Structure.AutoFieldOrder
