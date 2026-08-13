@@ -71,6 +71,8 @@ public interface WinUser {
     int WM_MOUSEWHEEL = 0x020A;
     /// Sent when an application requests that a window be created by calling the {@link User32#CreateWindowExW(DWORD, LPCWSTR, LPCWSTR, DWORD, int, int, int, int, HWND, HMENU, HINSTANCE, LPVOID)} or CreateWindow function
     int WM_CREATE = 0x0001;
+    /// Sets the font that a control is to use when drawing text
+    int WM_SETFONT = 0x0030;
 
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;

@@ -120,6 +120,7 @@ import static io.github.greymagic27.win_method.types.WinUser.WM_DESTROY;
 import static io.github.greymagic27.win_method.types.WinUser.WM_KEYDOWN;
 import static io.github.greymagic27.win_method.types.WinUser.WM_MOUSEWHEEL;
 import static io.github.greymagic27.win_method.types.WinUser.WM_PAINT;
+import static io.github.greymagic27.win_method.types.WinUser.WM_SETFONT;
 import static io.github.greymagic27.win_method.types.WinUser.WM_SIZE;
 import static io.github.greymagic27.win_method.types.WinUser.WS_BORDER;
 import static io.github.greymagic27.win_method.types.WinUser.WS_CAPTION;
@@ -168,6 +169,7 @@ class WinUserTest {
         assertEquals(0x0100, WM_KEYDOWN);
         assertEquals(0x020A, WM_MOUSEWHEEL);
         assertEquals(0x0001, WM_CREATE);
+        assertEquals(0x0030, WM_SETFONT);
     }
 
     @Test
