@@ -29,8 +29,7 @@ class LpByteTest {
     @Test
     void testPointerValue() {
         Pointer p = new Pointer(MemorySegment.ofAddress(7));
-        LPBYTE lpbyte = new LPBYTE(p.segment);
-        assertEquals(p, new Pointer(lpbyte.segment));
+        assertEquals(p, new LPBYTE(p));
     }
 
     @Test

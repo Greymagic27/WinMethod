@@ -9,7 +9,10 @@ import io.github.greymagic27.win_method.WinDef.LPDWORD;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.WinNT.LPWSTR;
+import io.github.greymagic27.win_method.WinNT.PHANDLE;
 import io.github.greymagic27.win_method.types.MinWinBase;
+import io.github.greymagic27.win_method.types.ProcessThreadsApi;
 
 /// Interface for Kernel32.dll
 public interface Kernel32 extends Library {
@@ -98,12 +101,51 @@ public interface Kernel32 extends Library {
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL CreateDirectoryW(LPCWSTR lpPathName, MinWinBase.SECURITY_ATTRIBUTES lpSecurityAttributes);
 
+    /// Creates an anonymous pipe, and returns handles to the read and write ends of the pipe
+    ///
+    /// @param hReadPipe        A {@link io.github.greymagic27.win_method.Pointer} to a variable that receives the read handle for the pipe
+    /// @param hWritePipe       A {@link io.github.greymagic27.win_method.Pointer} to a variable that receives the write handle for the pipe
+    /// @param lpPipeAttributes A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.types.MinWinBase.SECURITY_ATTRIBUTES} structure that determines whether the returned handle can be inherited by child processes. If lpPipeAttributes is NULL, the handle cannot be inherited
+    /// @param nSize            The size of the buffer for the pipe, in bytes
+    /// @return If the function succeeds, the return value is nonzero.  If the function fails, the return value is zero
+    BOOL CreatePipe(PHANDLE hReadPipe, PHANDLE hWritePipe, MinWinBase.SECURITY_ATTRIBUTES lpPipeAttributes, DWORD nSize);
+
+    /// Sets certain properties of an object handle
+    ///
+    /// @param hObject A {@link HANDLE} to an object whose information is to be set
+    /// @param dwMask  A mask that specifies the bit flags to be changed. This can be one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-sethandleinformation)
+    /// @param dwFlags Set of bit flags that specifies properties of the object handle. This parameter can be 0 or one or more of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-sethandleinformation)
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL SetHandleInformation(HANDLE hObject, DWORD dwMask, DWORD dwFlags);
+
+    /// Creates a new process and its primary thread. The new process runs in the security context of the calling process
+    ///
+    /// @param lpApplicationName    The name of the module to be executed
+    /// @param lpCommandLine        The command line to be executed. The maximum length of this string is 32,767 characters including the terminating null character
+    /// @param lpProcessAttributes  A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.types.MinWinBase.SECURITY_ATTRIBUTES} structure that determines whether the returned handle to the new process object can be inherited by child processes. If lpProcessAttributes is NULL, the handle cannot be inherited
+    /// @param lpThreadAttributes   A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.types.MinWinBase.SECURITY_ATTRIBUTES} structure that specifies a security descriptor for the new thread and determines whether child processes can inherit the returned handle. If lpThreadAttributes is NULL, the thread gets a default security descriptor and the handle cannot be inherited
+    /// @param bInheritHandles      If this parameter is TRUE, each inheritable handle in the calling process is inherited by the new process. If the parameter is FALSE, the handles are not inherited
+    /// @param dwCreationFlags      The flags that control the priority class and the creation of the process. For a list of values, see [Process Creation Flags](https://learn.microsoft.com/en-us/windows/desktop/ProcThread/process-creation-flags)
+    /// @param lpEnvironment        A {@link  io.github.greymagic27.win_method.Pointer} to the environment block for the new process. If this parameter is NULL, the new process uses the environment of the calling process
+    /// @param lpCurrentDirectory   The full path to the current directory for the process. The string can also specify a UNC path
+    /// @param lpStartupInfo        A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.types.ProcessThreadsApi.STARTUPINFOW} or STARTUPINFOEX structure
+    /// @param lpProcessInformation A {@link io.github.greymagic27.win_method.Pointer} to a {@link io.github.greymagic27.win_method.types.ProcessThreadsApi.PROCESS_INFORMATION} structure that receives identification information about the new process
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL CreateProcessW(LPCWSTR lpApplicationName, LPWSTR lpCommandLine, MinWinBase.SECURITY_ATTRIBUTES lpProcessAttributes, MinWinBase.SECURITY_ATTRIBUTES lpThreadAttributes, BOOL bInheritHandles, DWORD dwCreationFlags, LPVOID lpEnvironment, LPCWSTR lpCurrentDirectory, ProcessThreadsApi.STARTUPINFOW lpStartupInfo, ProcessThreadsApi.PROCESS_INFORMATION lpProcessInformation);
+
     /// Retrieves the size of the specified file, in bytes
     ///
     /// @param hFile          A {@link HANDLE} to the file
     /// @param lpFileSizeHigh A {@link io.github.greymagic27.win_method.Pointer} to the variable where the high-order doubleword of the file size is returned. This parameter can be NULL if the application does not require the high-order doubleword
     /// @return If the function succeeds, the return value is the low-order doubleword of the file size, and, if lpFileSizeHigh is non-NULL, the function puts the high-order doubleword of the file size into the variable pointed to by that parameter. If the function fails and lpFileSizeHigh is NULL, the return value is INVALID_FILE_SIZE
     DWORD GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh);
+
+    /// Waits until the specified object is in the signalled state or the time-out interval elapses
+    ///
+    /// @param hHandle A {@link HANDLE} to the object
+    /// @param dwMilliseconds The time-out interval, in millisecond
+    /// @return If the function succeeds, the return value indicates the event that caused the function to return. It can be one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject)
+    DWORD WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
 
     /// Retrieves the process identifier of the calling process
     ///

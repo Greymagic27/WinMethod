@@ -9,7 +9,11 @@ import io.github.greymagic27.win_method.WinDef.LPDWORD;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.WinNT.LPWSTR;
+import io.github.greymagic27.win_method.WinNT.PHANDLE;
 import io.github.greymagic27.win_method.types.MinWinBase;
+import io.github.greymagic27.win_method.types.ProcessThreadsApi;
+import io.github.greymagic27.win_method.types.WinBase;
 import java.io.IOException;
 import java.lang.foreign.ValueLayout;
 import java.nio.charset.StandardCharsets;
@@ -201,6 +205,89 @@ class Kernel32Test {
         assertTrue(Files.isDirectory(directory));
         result = kernel32.CreateDirectoryW(new LPCWSTR(directory.toString()), null);
         assertFalse(result.booleanValue());
+    }
+
+    @Test
+    void testCreatePipe() {
+        try (Memory readMemory = new Memory(ValueLayout.ADDRESS.byteSize()); Memory writeMemory = new Memory(ValueLayout.ADDRESS.byteSize())) {
+            PHANDLE readPipe = new PHANDLE(readMemory.segment);
+            PHANDLE writePipe = new PHANDLE(writeMemory.segment);
+            BOOL result = kernel32.CreatePipe(readPipe, writePipe, null, new DWORD(0));
+            assertTrue(result.booleanValue());
+            HANDLE readHandle = new HANDLE(readMemory.segment.get(ValueLayout.ADDRESS, 0));
+            HANDLE writeHandle = new HANDLE(writeMemory.segment.get(ValueLayout.ADDRESS, 0));
+            assertNotNull(readHandle);
+            assertNotNull(writeHandle);
+            assertFalse(readHandle.isNull());
+            assertFalse(writeHandle.isNull());
+            assertTrue(kernel32.CloseHandle(readHandle).booleanValue());
+            assertTrue(kernel32.CloseHandle(writeHandle).booleanValue());
+        }
+    }
+
+    @Test
+    void testSetHandleInformation() {
+        try (Memory readMemory = new Memory(ValueLayout.ADDRESS.byteSize()); Memory writeMemory = new Memory(ValueLayout.ADDRESS.byteSize())) {
+            PHANDLE readPipe = new PHANDLE(readMemory.segment);
+            PHANDLE writePipe = new PHANDLE(writeMemory.segment);
+            BOOL createResult = kernel32.CreatePipe(readPipe, writePipe, null, new DWORD(0));
+            assertTrue(createResult.booleanValue());
+            HANDLE readHandle = new HANDLE(readMemory.segment.get(ValueLayout.ADDRESS, 0));
+            HANDLE writeHandle = new HANDLE(writeMemory.segment.get(ValueLayout.ADDRESS, 0));
+            try {
+                assertFalse(readHandle.isNull());
+                assertFalse(writeHandle.isNull());
+                BOOL result = kernel32.SetHandleInformation(readHandle, new DWORD(WinBase.HANDLE_FLAG_INHERIT), new DWORD(WinBase.HANDLE_FLAG_INHERIT));
+                assertTrue(result.booleanValue(), "SetHandleInformation should set HANDLE_FLAG_INHERIT");
+                result = kernel32.SetHandleInformation(readHandle, new DWORD(WinBase.HANDLE_FLAG_INHERIT), new DWORD(0));
+                assertTrue(result.booleanValue(), "SetHandleInformation should clear HANDLE_FLAG_INHERIT");
+            } finally {
+                assertTrue(kernel32.CloseHandle(readHandle).booleanValue());
+                assertTrue(kernel32.CloseHandle(writeHandle).booleanValue());
+            }
+        }
+    }
+
+    @Test
+    void testCreateProcessW() {
+        ProcessThreadsApi.STARTUPINFOW startupInfo = new ProcessThreadsApi.STARTUPINFOW();
+        ProcessThreadsApi.PROCESS_INFORMATION processInfo = new ProcessThreadsApi.PROCESS_INFORMATION();
+        startupInfo.cb = new DWORD(startupInfo.size());
+        LPWSTR commandLine = new LPWSTR("cmd.exe /c exit 0");
+        BOOL result = kernel32.CreateProcessW(null, commandLine, null, null, new BOOL(0), new DWORD(0), null, null, startupInfo, processInfo);
+        assertTrue(result.booleanValue(), "CreateProcessW should succeed");
+        assertNotNull(processInfo.hProcess);
+        assertNotNull(processInfo.hThread);
+        assertFalse(processInfo.hProcess.isNull(), "Process handle should not be null");
+        assertFalse(processInfo.hThread.isNull(), "Thread handle should not be null");
+        try {
+            DWORD waitResult = kernel32.WaitForSingleObject(processInfo.hProcess, new DWORD(1000));
+            assertEquals(WinBase.WAIT_OBJECT_0, waitResult.intValue());
+        } finally {
+            assertTrue(kernel32.CloseHandle(processInfo.hThread).booleanValue());
+            assertTrue(kernel32.CloseHandle(processInfo.hProcess).booleanValue());
+        }
+    }
+
+    @Test
+    void testWaitForSingleObject() {
+        ProcessThreadsApi.STARTUPINFOW startupinfow = new ProcessThreadsApi.STARTUPINFOW();
+        ProcessThreadsApi.PROCESS_INFORMATION processInformation = new ProcessThreadsApi.PROCESS_INFORMATION();
+        startupinfow.cb = new DWORD(startupinfow.size());
+        LPWSTR cmdLine = new LPWSTR("cmd.exe /c exit 0");
+        BOOL result = kernel32.CreateProcessW(null, cmdLine, null, null, new BOOL(0), new DWORD(0), null, null, startupinfow, processInformation);
+        assertTrue(result.booleanValue());
+        assertNotNull(processInformation.hProcess);
+        assertNotNull(processInformation.hThread);
+        assertFalse(processInformation.hProcess.isNull());
+        assertFalse(processInformation.hThread.isNull());
+        try {
+            DWORD waitResult = kernel32.WaitForSingleObject(processInformation.hProcess, new DWORD(1000));
+            assertEquals(WinBase.WAIT_OBJECT_0, waitResult.intValue());
+        } finally {
+            assertTrue(kernel32.CloseHandle(processInformation.hThread).booleanValue());
+            assertTrue(kernel32.CloseHandle(processInformation.hProcess).booleanValue());
+        }
     }
 
     private HANDLE openTestFile() {

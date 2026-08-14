@@ -55,12 +55,12 @@ public interface ProcessThreadsApi {
     @Structure.AutoFieldOrder
     class PROCESS_INFORMATION extends Structure {
         /// A {@link HANDLE} to the newly created process. The handle is used to specify the process in all functions that perform operations on the process object
-        HANDLE hProcess;
+        public HANDLE hProcess;
         /// A {@link HANDLE} to the primary thread of the newly created process. The handle is used to specify the thread in all functions that perform operations on the thread object
-        HANDLE hThread;
+        public HANDLE hThread;
         /// A value that can be used to identify a process. The value is valid from the time the process is created until all handles to the process are closed and the process object is freed; at this point, the identifier may be reused
-        DWORD dwProcessId;
+        public DWORD dwProcessId;
         /// A value that can be used to identify a thread. The value is valid from the time the thread is created until all handles to the thread are closed and the thread object is freed; at this point, the identifier may be reused
-        DWORD dwThreadId;
+        public DWORD dwThreadId;
     }
 }
