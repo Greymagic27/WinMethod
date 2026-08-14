@@ -108,7 +108,7 @@ class Kernel32Test {
 
     @Test
     void testFindClose() {
-        HANDLE hFind = findTestDirectory();
+        HANDLE hFind = kernel32.FindFirstFileW(new LPCWSTR(tempDir + "\\*"), new MinWinBase.WIN32_FIND_DATAW());
         assertNotNull(hFind);
         assertFalse(hFind.isNull());
         assertTrue(kernel32.FindClose(hFind).booleanValue());
@@ -193,11 +193,17 @@ class Kernel32Test {
         assertEquals(-1, hFile2.segment.address());
     }
 
-    private HANDLE openTestFile() {
-        return kernel32.CreateFileW(new LPCWSTR(testFile.toString()), new DWORD(GENERIC_READ.intValue()), new DWORD(FILE_SHARE_READ), null, new DWORD(OPEN_EXISTING), new DWORD(0), null);
+    @Test
+    void testCreateDirectory() {
+        Path directory = tempDir.resolve("test-directory");
+        BOOL result = kernel32.CreateDirectoryW(new LPCWSTR(directory.toString()), null);
+        assertTrue(result.booleanValue());
+        assertTrue(Files.isDirectory(directory));
+        result = kernel32.CreateDirectoryW(new LPCWSTR(directory.toString()), null);
+        assertFalse(result.booleanValue());
     }
 
-    private HANDLE findTestDirectory() {
-        return kernel32.FindFirstFileW(new LPCWSTR(tempDir + "\\*"), new MinWinBase.WIN32_FIND_DATAW());
+    private HANDLE openTestFile() {
+        return kernel32.CreateFileW(new LPCWSTR(testFile.toString()), new DWORD(GENERIC_READ.intValue()), new DWORD(FILE_SHARE_READ), null, new DWORD(OPEN_EXISTING), new DWORD(0), null);
     }
 }

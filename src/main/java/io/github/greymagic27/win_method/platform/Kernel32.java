@@ -91,6 +91,13 @@ public interface Kernel32 extends Library {
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL CloseHandle(HANDLE hObject);
 
+    /// Creates a new directory. If the underlying file system supports security on files and directories, the function applies a specified security descriptor to the new directory
+    ///
+    /// @param lpPathName           The path of the directory to be created
+    /// @param lpSecurityAttributes A pointer to a {@link io.github.greymagic27.win_method.types.MinWinBase.SECURITY_ATTRIBUTES} structure. The lpSecurityDescriptor member of the structure specifies a security descriptor for the new directory. If lpSecurityAttributes is NULL, the directory gets a default security descriptor
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL CreateDirectoryW(LPCWSTR lpPathName, MinWinBase.SECURITY_ATTRIBUTES lpSecurityAttributes);
+
     /// Retrieves the size of the specified file, in bytes
     ///
     /// @param hFile          A {@link HANDLE} to the file
