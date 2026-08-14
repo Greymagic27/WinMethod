@@ -18,6 +18,7 @@ import io.github.greymagic27.win_method.WinDef.HMENU;
 import io.github.greymagic27.win_method.WinDef.HMODULE;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPARAM;
+import io.github.greymagic27.win_method.WinDef.LPBYTE;
 import io.github.greymagic27.win_method.WinDef.LPCVOID;
 import io.github.greymagic27.win_method.WinDef.LPDWORD;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
@@ -81,7 +82,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class, LPCVOID.class)) {
+        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class, LPCVOID.class, LPBYTE.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class, HKEY.class, HFONT.class)) {
@@ -960,6 +961,24 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_LPBYTE() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(ValueLayout.JAVA_BYTE);
+            LPBYTE value = new LPBYTE(segment);
+            Object result = TypeMapper.toNative(value, LPBYTE.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_LPBYTENull() {
+        try (Arena arena = Arena.ofConfined()) {
+            Object result = TypeMapper.toNative(null, LPBYTE.class, arena);
+            assertEquals(MemorySegment.NULL, result);
+        }
+    }
+
+    @Test
     void testFromNative_UINTPTR() {
         Object result = TypeMapper.fromNative(9999L, UINT_PTR.class);
         assertInstanceOf(UINT_PTR.class, result);
@@ -1079,6 +1098,14 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(segment, HFONT.class);
         assertInstanceOf(HFONT.class, result);
         assertEquals(0x5678L, ((HFONT) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_LPBYTE() {
+        MemorySegment segment = MemorySegment.ofAddress(0x1234);
+        Object result = TypeMapper.fromNative(segment, LPBYTE.class);
+        assertInstanceOf(LPBYTE.class, result);
+        assertEquals(segment, ((LPBYTE) result).segment);
     }
 
     @Test
