@@ -31,6 +31,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -432,5 +433,19 @@ class User32Test {
         assertTrue(setResult.booleanValue());
         int length = user32.GetWindowTextLengthW(window);
         assertEquals(title.length(), length);
+    }
+
+    @Test
+    void testEnableWindow() {
+        user32.EnableWindow(window, new BOOL(1));
+        BOOL result = user32.EnableWindow(window, new BOOL(0));
+        assertNotNull(result);
+        assertFalse(result.booleanValue());
+        result = user32.EnableWindow(window, new BOOL(1));
+        assertNotNull(result);
+        assertTrue(result.booleanValue());
+        result = user32.EnableWindow(window, new BOOL(0));
+        assertNotNull(result);
+        assertFalse(result.booleanValue());
     }
 }

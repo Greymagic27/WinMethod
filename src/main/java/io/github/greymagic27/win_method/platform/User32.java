@@ -170,6 +170,13 @@ public interface User32 extends Library {
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL DrawMenuBar(HWND hWnd);
 
+    /// Enables or disables mouse and keyboard input to the specified window or control
+    ///
+    /// @param hWnd    A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window to be enabled or disabled
+    /// @param bEnable Indicates whether to enable or disable the window. If this parameter is TRUE (1), the window is enabled. If the parameter is FALSE (0), the window is disabled
+    /// @return If the window was previously disabled, the return value is nonzero. If the window was not previously disabled, the return value is zero
+    BOOL EnableWindow(HWND hWnd, BOOL bEnable);
+
     /// Retrieves the specified system metric or system configuration setting
     ///
     /// @param nIndex System metric or configuration setting to be retrieved
