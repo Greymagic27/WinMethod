@@ -41,4 +41,13 @@ class CreateWindowExTest {
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(edit).segment.address());
         User32.INSTANCE.DestroyWindow(edit);
     }
+
+    @Test
+    void testCreateButtonWindow() {
+        HWND button = assertDoesNotThrow(() -> CreateWindowEx.createButtonWindow("Test Button", Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        assertNotNull(button);
+        assertNotEquals(0, button.segment.address());
+        assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(button).segment.address());
+        User32.INSTANCE.DestroyWindow(button);
+    }
 }

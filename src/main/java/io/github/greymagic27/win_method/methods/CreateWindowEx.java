@@ -21,4 +21,8 @@ public class CreateWindowEx {
     public static HWND createStaticWindow(String windowName, HWND parent, int id, int x, int y, int width, int height) {
         return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC"), new LPCWSTR(windowName), new DWORD(WinUser.WS_OVERLAPPED | WinUser.WS_VISIBLE), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
     }
+
+    public static HWND createButtonWindow(String windowName, HWND parent, int id, int x, int y, int width, int height) {
+        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("BUTTON"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
+    }
 }
