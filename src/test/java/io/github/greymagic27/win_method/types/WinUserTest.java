@@ -14,19 +14,30 @@ import java.lang.foreign.MemorySegment;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static io.github.greymagic27.win_method.types.WinUser.BM_SETIMAGE;
+import static io.github.greymagic27.win_method.types.WinUser.BS_BITMAP;
 import static io.github.greymagic27.win_method.types.WinUser.CS_HREDRAW;
 import static io.github.greymagic27.win_method.types.WinUser.CS_VREDRAW;
+import static io.github.greymagic27.win_method.types.WinUser.EM_REPLACESEL;
+import static io.github.greymagic27.win_method.types.WinUser.EM_SETSEL;
 import static io.github.greymagic27.win_method.types.WinUser.ES_AUTOHSCROLL;
 import static io.github.greymagic27.win_method.types.WinUser.ES_AUTOVSCROLL;
 import static io.github.greymagic27.win_method.types.WinUser.ES_MULTILINE;
 import static io.github.greymagic27.win_method.types.WinUser.ES_WANTRETURN;
+import static io.github.greymagic27.win_method.types.WinUser.GWL_STYLE;
+import static io.github.greymagic27.win_method.types.WinUser.IDCANCEL;
 import static io.github.greymagic27.win_method.types.WinUser.IDOK;
+import static io.github.greymagic27.win_method.types.WinUser.IMAGE_BITMAP;
+import static io.github.greymagic27.win_method.types.WinUser.IMAGE_CURSOR;
+import static io.github.greymagic27.win_method.types.WinUser.IMAGE_ICON;
 import static io.github.greymagic27.win_method.types.WinUser.LBN_DBLCICK;
 import static io.github.greymagic27.win_method.types.WinUser.LBS_HASSTRINGS;
 import static io.github.greymagic27.win_method.types.WinUser.LBS_NOTIFY;
 import static io.github.greymagic27.win_method.types.WinUser.LB_ADDSTRING;
 import static io.github.greymagic27.win_method.types.WinUser.LB_GETCURSEL;
 import static io.github.greymagic27.win_method.types.WinUser.LB_RESETCONTENT;
+import static io.github.greymagic27.win_method.types.WinUser.LR_LOADFROMFILE;
+import static io.github.greymagic27.win_method.types.WinUser.LR_SHARED;
 import static io.github.greymagic27.win_method.types.WinUser.MB_ERRORICON;
 import static io.github.greymagic27.win_method.types.WinUser.MB_OK;
 import static io.github.greymagic27.win_method.types.WinUser.MF_POPUP;
@@ -113,6 +124,7 @@ import static io.github.greymagic27.win_method.types.WinUser.VK_W;
 import static io.github.greymagic27.win_method.types.WinUser.VK_X;
 import static io.github.greymagic27.win_method.types.WinUser.VK_Y;
 import static io.github.greymagic27.win_method.types.WinUser.VK_Z;
+import static io.github.greymagic27.win_method.types.WinUser.WM_APP;
 import static io.github.greymagic27.win_method.types.WinUser.WM_CLOSE;
 import static io.github.greymagic27.win_method.types.WinUser.WM_COMMAND;
 import static io.github.greymagic27.win_method.types.WinUser.WM_CREATE;
@@ -170,6 +182,7 @@ class WinUserTest {
         assertEquals(0x020A, WM_MOUSEWHEEL);
         assertEquals(0x0001, WM_CREATE);
         assertEquals(0x0030, WM_SETFONT);
+        assertEquals(0x80000, WM_APP);
     }
 
     @Test
@@ -302,9 +315,36 @@ class WinUserTest {
     }
 
     @Test
+    void testLrValues() {
+        assertEquals(0x00008000, LR_SHARED);
+        assertEquals(0x00000010, LR_LOADFROMFILE);
+    }
+
+    @Test
+    void testImageValues() {
+        assertEquals(0, IMAGE_BITMAP);
+        assertEquals(1, IMAGE_ICON);
+        assertEquals(2, IMAGE_CURSOR);
+    }
+
+    @Test
+    void testIdValues() {
+        assertEquals(1, IDOK);
+        assertEquals(2, IDCANCEL);
+    }
+
+    @Test
+    void testEmValues() {
+        assertEquals(0x00B1, EM_SETSEL);
+        assertEquals(0x00C2, EM_REPLACESEL);
+    }
+
+    @Test
     void testMiscValues() {
         assertEquals(0x004, SWP_NOZORDER);
-        assertEquals(1, IDOK);
+        assertEquals(0x00000080, BS_BITMAP.intValue());
+        assertEquals(-16, GWL_STYLE);
+        assertEquals(0x00F7, BM_SETIMAGE);
     }
 
     @Test

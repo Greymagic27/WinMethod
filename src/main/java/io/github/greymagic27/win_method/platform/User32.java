@@ -1,5 +1,6 @@
 package io.github.greymagic27.win_method.platform;
 
+import io.github.greymagic27.win_method.BaseTsd.LONG_PTR;
 import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.Library;
@@ -15,6 +16,7 @@ import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.HANDLE;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
@@ -290,6 +292,24 @@ public interface User32 extends Library {
     /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window whose parent window handle is to be retrieved
     /// @return If the window is a child window, the return value is a handle to the parent window. If the window is a top-level window with the WS_POPUP style, the return value is a handle to the owner window. If the function fails, the return value is NULL
     HWND GetParent(HWND hWnd);
+
+    /// Loads an icon, cursor, animated cursor, or bitmap
+    ///
+    /// @param hInst A {@link HANDLE} to the module of either a DLL or executable (.exe) that contains the image to be loaded
+    /// @param name The image to be loaded
+    /// @param type The type of image to be loaded. This can be one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadimagew)
+    /// @param cx The width, in pixels, of the icon or cursor
+    /// @param cy The height, in pixels, of the icon or cursor
+    /// @param fuLoad This parameter can be one or more of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadimagew)
+    /// @return If the function succeeds, the return value is the handle of the newly loaded image. If the function fails, the return value is NULL
+    HANDLE LoadImageW(HINSTANCE hInst, LPCWSTR name, UINT type, int cx, int cy, UINT fuLoad);
+
+    /// Retrieves information about the specified window. The function also retrieves the value at a specified offset into the extra window memory
+    ///
+    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window and, indirectly, the class to which the window belongs
+    /// @param nIndex The zero-based offset to the value to be retrieved. Valid values are in the range zero through the number of bytes of extra window memory, minus the size of a {@link LONG_PTR}. To retrieve any other value, specify one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowlongptrw).
+    /// @return If the function succeeds, the return value is the requested value. If the function fails, the return value is zero
+    LONG_PTR GetWindowLongPtrW(HWND hWnd, int nIndex);
 
     /// Indicates to the system that a thread has made a request to terminate. It is typically used in response to a WM_DESTROY message.
     ///

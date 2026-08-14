@@ -261,7 +261,7 @@ class Kernel32Test {
         assertFalse(processInfo.hProcess.isNull(), "Process handle should not be null");
         assertFalse(processInfo.hThread.isNull(), "Thread handle should not be null");
         try {
-            DWORD waitResult = kernel32.WaitForSingleObject(processInfo.hProcess, new DWORD(1000));
+            DWORD waitResult = kernel32.WaitForSingleObject(processInfo.hProcess, new DWORD(WinBase.INFINITE));
             assertEquals(WinBase.WAIT_OBJECT_0, waitResult.intValue());
         } finally {
             assertTrue(kernel32.CloseHandle(processInfo.hThread).booleanValue());
@@ -282,7 +282,7 @@ class Kernel32Test {
         assertFalse(processInformation.hProcess.isNull());
         assertFalse(processInformation.hThread.isNull());
         try {
-            DWORD waitResult = kernel32.WaitForSingleObject(processInformation.hProcess, new DWORD(1000));
+            DWORD waitResult = kernel32.WaitForSingleObject(processInformation.hProcess, new DWORD(WinBase.INFINITE));
             assertEquals(WinBase.WAIT_OBJECT_0, waitResult.intValue());
         } finally {
             assertTrue(kernel32.CloseHandle(processInformation.hThread).booleanValue());

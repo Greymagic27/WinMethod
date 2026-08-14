@@ -13,4 +13,10 @@ public interface WinBase {
     int HANDLE_FLAG_INHERIT = 0x00000001;
     /// The state of the specified object is signalled
     int WAIT_OBJECT_0 = 0x00000000;
+    /// The hStdInput, hStdOutput, and hStdError members contain additional information
+    int STARTF_USESTDHANDLES = 0x00000100;
+    /// The process is a console application that is being run without a console window. Therefore, the console handle for the application is not set
+    int CREATE_NO_WINDOW = 0x08000000;
+    /// Infinite timeout
+    int INFINITE = 0xffffffff;
 }

@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CreateWindowExTest {
 
@@ -48,6 +49,16 @@ class CreateWindowExTest {
         assertNotNull(button);
         assertNotEquals(0, button.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(button).segment.address());
+        User32.INSTANCE.DestroyWindow(button);
+    }
+
+    @Test
+    void testCreateButtonWindowWithCustomStyle() {
+        HWND button = assertDoesNotThrow(() -> CreateWindowEx.createButtonWindow("Test Button", WinUser.BS_BITMAP.intValue(), Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        assertNotNull(button);
+        assertNotEquals(0, button.segment.address());
+        assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(button).segment.address());
+        assertTrue((User32.INSTANCE.GetWindowLongPtrW(button, WinUser.GWL_STYLE).longValue() & WinUser.BS_BITMAP.intValue()) != 0);
         User32.INSTANCE.DestroyWindow(button);
     }
 }

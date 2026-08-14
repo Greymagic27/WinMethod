@@ -2,7 +2,10 @@ package io.github.greymagic27.win_method.types;
 
 import org.junit.jupiter.api.Test;
 
+import static io.github.greymagic27.win_method.types.WinBase.CREATE_NO_WINDOW;
 import static io.github.greymagic27.win_method.types.WinBase.HANDLE_FLAG_INHERIT;
+import static io.github.greymagic27.win_method.types.WinBase.INFINITE;
+import static io.github.greymagic27.win_method.types.WinBase.STARTF_USESTDHANDLES;
 import static io.github.greymagic27.win_method.types.WinBase.WAIT_OBJECT_0;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,5 +15,8 @@ class WinBaseTest {
     void testValues() {
         assertEquals(0x00000001, HANDLE_FLAG_INHERIT);
         assertEquals(0x00000000, WAIT_OBJECT_0);
+        assertEquals(0x00000100, STARTF_USESTDHANDLES);
+        assertEquals(0x08000000, CREATE_NO_WINDOW);
+        assertEquals(0xffffffff, INFINITE);
     }
 }

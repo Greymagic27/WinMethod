@@ -73,6 +73,8 @@ public interface WinUser {
     int WM_CREATE = 0x0001;
     /// Sets the font that a control is to use when drawing text
     int WM_SETFONT = 0x0030;
+    /// Used to define private messages, usually of the form WM_APP+x, where x is an integer value
+    int WM_APP = 0x80000;
 
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;
@@ -254,6 +256,8 @@ public interface WinUser {
 
     /// The OK button was selected
     int IDOK = 1;
+    /// The Cancel button was selected
+    int IDCANCEL = 2;
 
     /// Redraws the entire window if a movement or size adjustment changes the width of the client area
     int CS_HREDRAW = 0x0002;
@@ -270,6 +274,28 @@ public interface WinUser {
     /// Gets the index of the currently selected item, if any, in a single-selection list box
     int LB_GETCURSEL = 0x0188;
 
+    /// Shares the image handle if the image is loaded multiple times
+    int LR_SHARED = 0x00008000;
+    /// Loads the standalone image from the file specified by name (icon, cursor, or bitmap file)
+    int LR_LOADFROMFILE = 0x00000010;
+
+    /// Retrieves the window styles
+    int GWL_STYLE = -16;
+
+    ///    Loads a bitmap
+    int IMAGE_BITMAP = 0;
+    ///    Loads an icon
+    int IMAGE_ICON = 1;
+    ///    Loads a cursor
+    int IMAGE_CURSOR = 2;
+
+    int BM_SETIMAGE = 0x00F7;
+
+    /// Selects a range of characters in an edit control. You can send this message to either an edit control or a rich edit control
+    int EM_SETSEL = 0x00B1;
+    /// Replaces the selected text in an edit control or a rich edit control with the specified text
+    int EM_REPLACESEL = 0x00C2;
+
     /// Designates a multiline edit control
     LONG ES_MULTILINE = new LONG(0x0004);
     /// Automatically scrolls text up one page when the user presses the ENTER key on the last line
@@ -283,6 +309,8 @@ public interface WinUser {
     LONG LBS_NOTIFY = new LONG(0x0001);
     /// Specifies that a list box contains items consisting of strings
     LONG LBS_HASSTRINGS = new LONG(0x0040);
+
+    LONG BS_BITMAP = new LONG(0x00000080);
 
     /// Creates a pointer value from an integer resource
     ///

@@ -14,6 +14,7 @@ import io.github.greymagic27.win_method.WinDef.LPARAM;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.HANDLE;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
@@ -447,5 +448,23 @@ class User32Test {
         result = user32.EnableWindow(window, new BOOL(0));
         assertNotNull(result);
         assertFalse(result.booleanValue());
+    }
+
+    @Test
+    void testGetWindowLongPtr() {
+        int expectedStyle = WinUser.WS_CHILD | WinUser.WS_VISIBLE;
+        HWND testWindow = user32.CreateWindowExW(new DWORD(0), new LPCWSTR("STATIC"), new LPCWSTR("Test"), new DWORD(expectedStyle), 0, 0, 100, 100, window, null, null, null);
+        assertNotNull(testWindow);
+        assertNotEquals(0, testWindow.segment.address());
+        long actualStyle = user32.GetWindowLongPtrW(testWindow, WinUser.GWL_STYLE).longValue();
+        assertEquals(expectedStyle, actualStyle & 0xFFFFFFFFL);
+        user32.DestroyWindow(testWindow);
+    }
+
+    @Test
+    void testLoadImage() {
+        HANDLE image = user32.LoadImageW(null, new LPCWSTR(MemorySegment.ofAddress(WinUser.MAKEINTRESOURCEW(32512).segment.address())), new UINT(WinUser.IMAGE_ICON), 0, 0, new UINT(WinUser.LR_SHARED));
+        assertNotNull(image);
+        assertNotEquals(0, image.segment.address());
     }
 }
