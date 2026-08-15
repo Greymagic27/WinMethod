@@ -37,6 +37,8 @@ class CreateWindowExTest {
     @Test
     void testCreateEditWindowWithScrollBars() {
         HWND edit = CreateWindowEx.createEditWindow("Test Edit", Window.getCurrentWindow(), 0, 0, 0, 800, 600, true);
+        assertNotNull(edit);
+        assertNotEquals(0, edit.segment.address());
         long style = User32.INSTANCE.GetWindowLongPtrW(edit, WinUser.GWL_STYLE).longValue();
         assertNotEquals(0, style & WinUser.WS_VSCROLL);
         assertNotEquals(0, style & WinUser.WS_HSCROLL);
@@ -46,6 +48,8 @@ class CreateWindowExTest {
     @Test
     void testCreateEditWindowWithoutScrollBars() {
         HWND edit = CreateWindowEx.createEditWindow("Test Edit", Window.getCurrentWindow(), 0, 0, 0, 800, 600, false);
+        assertNotNull(edit);
+        assertNotEquals(0, edit.segment.address());
         long style = User32.INSTANCE.GetWindowLongPtrW(edit, WinUser.GWL_STYLE).longValue();
         assertEquals(0, style & WinUser.WS_VSCROLL);
         assertEquals(0, style & WinUser.WS_HSCROLL);
