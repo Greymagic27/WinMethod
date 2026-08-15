@@ -84,10 +84,28 @@ public class CreateWindowEx {
         return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("BUTTON"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | additionalStyle), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
     }
 
+    /// Creates an OK button child window with the specified identifier, position, and dimensions.
+    ///
+    /// @param parent A handle to the parent window of the button
+    /// @param id     The identifier of the button
+    /// @param x      The initial horizontal position of the button
+    /// @param y      The initial vertical position of the button
+    /// @param width  The width, in device units, of the button
+    /// @param height The height, in device units, of the button
+    /// @return If the function succeeds, a handle to the new OK button. If the function fails, the return value is NULL
     public static HWND createOkButtonWindow(HWND parent, int id, int x, int y, int width, int height) {
         return CreateWindowEx.createButtonWindow("Ok", parent, id, x, y, width, height);
     }
 
+    /// Creates a Cancel button child window with the specified identifier, position, and dimensions.
+    ///
+    /// @param parent A handle to the parent window of the button
+    /// @param id     The identifier of the button
+    /// @param x      The initial horizontal position of the button
+    /// @param y      The initial vertical position of the button
+    /// @param width  The width, in device units, of the button
+    /// @param height The height, in device units, of the button
+    /// @return If the function succeeds, a handle to the new Cancel button. If the function fails, the return value is NULL
     public static HWND createCancelButtonWindow(HWND parent, int id, int x, int y, int width, int height) {
         return CreateWindowEx.createButtonWindow("Cancel", parent, id, x, y, width, height);
     }
