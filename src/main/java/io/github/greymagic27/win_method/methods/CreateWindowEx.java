@@ -83,4 +83,12 @@ public class CreateWindowEx {
     public static HWND createButtonWindow(String windowName, int additionalStyle, HWND parent, int id, int x, int y, int width, int height) {
         return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("BUTTON"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | additionalStyle), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
     }
+
+    public static HWND createOkButtonWindow(HWND parent, int id, int x, int y, int width, int height) {
+        return CreateWindowEx.createButtonWindow("Ok", parent, id, x, y, width, height);
+    }
+
+    public static HWND createCancelButtonWindow(HWND parent, int id, int x, int y, int width, int height) {
+        return CreateWindowEx.createButtonWindow("Cancel", parent, id, x, y, width, height);
+    }
 }

@@ -74,4 +74,23 @@ class CreateWindowExTest {
         assertTrue((User32.INSTANCE.GetWindowLongPtrW(button, WinUser.GWL_STYLE).longValue() & WinUser.BS_BITMAP.intValue()) != 0);
         User32.INSTANCE.DestroyWindow(button);
     }
+
+    @Test
+    void testCreateOkButtonWindow() {
+        HWND button = assertDoesNotThrow(() -> CreateWindowEx.createOkButtonWindow(Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        assertNotNull(button);
+        assertNotEquals(0, button.segment.address());
+        assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(button).segment.address());
+        User32.INSTANCE.DestroyWindow(button);
+    }
+
+    @Test
+    void testCreateCancelButtonWindow() {
+        HWND button = assertDoesNotThrow(() -> CreateWindowEx.createCancelButtonWindow(Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        assertNotNull(button);
+        assertNotEquals(0, button.segment.address());
+        assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(button).segment.address());
+        User32.INSTANCE.DestroyWindow(button);
+    }
+
 }
