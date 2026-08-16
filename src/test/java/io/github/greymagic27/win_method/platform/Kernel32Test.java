@@ -290,6 +290,18 @@ class Kernel32Test {
         }
     }
 
+    @Test
+    void testDeleteFile() {
+        Path file = tempDir.resolve("does-not-exist.txt");
+        assertFalse(Files.exists(file));
+        assertTrue(Files.exists(testFile));
+        BOOL result = kernel32.DeleteFileW(new LPCWSTR(testFile.toString()));
+        BOOL result2 = kernel32.DeleteFileW(new LPCWSTR(file.toString()));
+        assertTrue(result.booleanValue());
+        assertFalse(result2.booleanValue());
+        assertFalse(Files.exists(testFile));
+    }
+
     private HANDLE openTestFile() {
         return kernel32.CreateFileW(new LPCWSTR(testFile.toString()), new DWORD(GENERIC_READ.intValue()), new DWORD(FILE_SHARE_READ), null, new DWORD(OPEN_EXISTING), new DWORD(0), null);
     }

@@ -133,6 +133,12 @@ public interface Kernel32 extends Library {
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL CreateProcessW(LPCWSTR lpApplicationName, LPWSTR lpCommandLine, MinWinBase.SECURITY_ATTRIBUTES lpProcessAttributes, MinWinBase.SECURITY_ATTRIBUTES lpThreadAttributes, BOOL bInheritHandles, DWORD dwCreationFlags, LPVOID lpEnvironment, LPCWSTR lpCurrentDirectory, ProcessThreadsApi.STARTUPINFOW lpStartupInfo, ProcessThreadsApi.PROCESS_INFORMATION lpProcessInformation);
 
+    /// Deletes an existing file
+    ///
+    /// @param lpFileName The name of the file to be deleted
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL DeleteFileW(LPCWSTR lpFileName);
+
     /// Retrieves the size of the specified file, in bytes
     ///
     /// @param hFile          A {@link HANDLE} to the file
