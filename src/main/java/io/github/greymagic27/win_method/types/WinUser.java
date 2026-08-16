@@ -100,8 +100,12 @@ public interface WinUser {
 
     /// The message box contains one push button: OK. This is the default
     int MB_OK = 0x00000000;
+    /// The message box contains two push buttons: Yes and No
+    int MB_YESNO = 0x00000004;
     /// A stop-sign icon appears in the message box.
     int MB_ERRORICON = 0x00000010;
+    /// An exclamation-point icon appears in the message box
+    int MB_ICONWARNING = 0x00000030;
 
     /// Left mouse button
     int VK_LBUTTON = 0x01;

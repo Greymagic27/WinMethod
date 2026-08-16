@@ -39,7 +39,9 @@ import static io.github.greymagic27.win_method.types.WinUser.LB_RESETCONTENT;
 import static io.github.greymagic27.win_method.types.WinUser.LR_LOADFROMFILE;
 import static io.github.greymagic27.win_method.types.WinUser.LR_SHARED;
 import static io.github.greymagic27.win_method.types.WinUser.MB_ERRORICON;
+import static io.github.greymagic27.win_method.types.WinUser.MB_ICONWARNING;
 import static io.github.greymagic27.win_method.types.WinUser.MB_OK;
+import static io.github.greymagic27.win_method.types.WinUser.MB_YESNO;
 import static io.github.greymagic27.win_method.types.WinUser.MF_POPUP;
 import static io.github.greymagic27.win_method.types.WinUser.MF_SEPARATOR;
 import static io.github.greymagic27.win_method.types.WinUser.MF_STRING;
@@ -307,7 +309,9 @@ class WinUserTest {
     @Test
     void testMbValues() {
         assertEquals(0x00000000, MB_OK);
+        assertEquals(0x00000004, MB_YESNO);
         assertEquals(0x00000010L, MB_ERRORICON);
+        assertEquals(0x00000030, MB_ICONWARNING);
     }
 
     @Test
