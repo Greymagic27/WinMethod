@@ -75,6 +75,8 @@ public interface WinUser {
     int WM_SETFONT = 0x0030;
     /// Used to define private messages, usually of the form WM_APP+x, where x is an integer value
     int WM_APP = 0x80000;
+    /// Sent to cancel certain modes, such as mouse capture
+    int WM_CANCELMODE = 0x001F;
 
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;
@@ -289,12 +291,34 @@ public interface WinUser {
     ///    Loads a cursor
     int IMAGE_CURSOR = 2;
 
+    /// Associates a new image (icon or bitmap) with the button
     int BM_SETIMAGE = 0x00F7;
 
     /// Selects a range of characters in an edit control. You can send this message to either an edit control or a rich edit control
     int EM_SETSEL = 0x00B1;
     /// Replaces the selected text in an edit control or a rich edit control with the specified text
     int EM_REPLACESEL = 0x00C2;
+
+    /// Centers the shortcut menu horizontally relative to the coordinate specified by the x parameter
+    int TPM_CENTERALIGN = 0x0004;
+    /// Positions the shortcut menu so that its left side is aligned with the coordinate specified by the x parameter
+    int TPM_LEFTALIGN = 0x0000;
+    /// Positions the shortcut menu so that its right side is aligned with the coordinate specified by the x parameter
+    int TPM_RIGHTALIGN = 0x0008;
+    /// Positions the shortcut menu so that its bottom side is aligned with the coordinate specified by the y parameter
+    int TPM_BOTTOMALIGN = 0x0020;
+    /// Positions the shortcut menu so that its top side is aligned with the coordinate specified by the y parameter
+    int TPM_TOPALIGN = 0x0000;
+    /// Centers the shortcut menu vertically relative to the coordinate specified by the y parameter
+    int TPM_VCENTERALIGN = 0x0010;
+    /// The function does not send notification messages when the user clicks a menu item
+    int TPM_NONOTIFY = 0x0080;
+    /// The function returns the menu item identifier of the user's selection in the return value
+    int TPM_RETURNCMD = 0x0100;
+    /// The user can select menu items with only the left mouse button
+    int TPM_LEFTBUTTON = 0x0000;
+    /// The user can select menu items with both the left and right mouse buttons
+    int TPM_RIGHTBUTTON = 0x002;
 
     /// Designates a multiline edit control
     LONG ES_MULTILINE = new LONG(0x0004);
@@ -309,7 +333,7 @@ public interface WinUser {
     LONG LBS_NOTIFY = new LONG(0x0001);
     /// Specifies that a list box contains items consisting of strings
     LONG LBS_HASSTRINGS = new LONG(0x0040);
-
+    /// Specifies that the button displays a bitmap
     LONG BS_BITMAP = new LONG(0x00000080);
 
     /// Creates a pointer value from an integer resource

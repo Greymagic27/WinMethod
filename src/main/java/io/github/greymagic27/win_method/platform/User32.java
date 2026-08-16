@@ -179,6 +179,18 @@ public interface User32 extends Library {
     /// @return If the window was previously disabled, the return value is nonzero. If the window was not previously disabled, the return value is zero
     BOOL EnableWindow(HWND hWnd, BOOL bEnable);
 
+    /// Displays a shortcut menu at the specified location and tracks the selection of items on the menu. The shortcut menu can appear anywhere on the screen
+    ///
+    /// @param hMenu A {@link HANDLE} to the shortcut menu to be displayed
+    /// @param uFlags Flags to specify function options. More information can be found [here](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-trackpopupmenu)
+    /// @param x The horizontal location of the shortcut menu, in screen coordinates
+    /// @param y The vertical location of the shortcut menu, in screen coordinates
+    /// @param nReserved Reserved; must be zero
+    /// @param hWnd A {@link HANDLE} to the window that owns the shortcut menu
+    /// @param prcRect Ignored
+    /// @return If you specify TPM_RETURNCMD in the uFlags parameter, the return value is the menu-item identifier of the item that the user selected. If the user cancels the menu without making a selection, or if an error occurs, the return value is zero. If you do not specify TPM_RETURNCMD in the uFlags parameter, the return value is nonzero if the function succeeds and zero if it fails.
+    BOOL TrackPopupMenu(HMENU hMenu, UINT uFlags, int x, int y, int nReserved, HWND hWnd, WinDef.RECT prcRect);
+
     /// Retrieves the specified system metric or system configuration setting
     ///
     /// @param nIndex System metric or configuration setting to be retrieved

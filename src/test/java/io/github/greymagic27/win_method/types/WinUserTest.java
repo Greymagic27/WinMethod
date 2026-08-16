@@ -48,6 +48,16 @@ import static io.github.greymagic27.win_method.types.WinUser.SM_CYSCREEN;
 import static io.github.greymagic27.win_method.types.WinUser.SWP_NOZORDER;
 import static io.github.greymagic27.win_method.types.WinUser.SW_HIDE;
 import static io.github.greymagic27.win_method.types.WinUser.SW_SHOW;
+import static io.github.greymagic27.win_method.types.WinUser.TPM_BOTTOMALIGN;
+import static io.github.greymagic27.win_method.types.WinUser.TPM_CENTERALIGN;
+import static io.github.greymagic27.win_method.types.WinUser.TPM_LEFTALIGN;
+import static io.github.greymagic27.win_method.types.WinUser.TPM_LEFTBUTTON;
+import static io.github.greymagic27.win_method.types.WinUser.TPM_NONOTIFY;
+import static io.github.greymagic27.win_method.types.WinUser.TPM_RETURNCMD;
+import static io.github.greymagic27.win_method.types.WinUser.TPM_RIGHTALIGN;
+import static io.github.greymagic27.win_method.types.WinUser.TPM_RIGHTBUTTON;
+import static io.github.greymagic27.win_method.types.WinUser.TPM_TOPALIGN;
+import static io.github.greymagic27.win_method.types.WinUser.TPM_VCENTERALIGN;
 import static io.github.greymagic27.win_method.types.WinUser.VK_0;
 import static io.github.greymagic27.win_method.types.WinUser.VK_1;
 import static io.github.greymagic27.win_method.types.WinUser.VK_2;
@@ -125,6 +135,7 @@ import static io.github.greymagic27.win_method.types.WinUser.VK_X;
 import static io.github.greymagic27.win_method.types.WinUser.VK_Y;
 import static io.github.greymagic27.win_method.types.WinUser.VK_Z;
 import static io.github.greymagic27.win_method.types.WinUser.WM_APP;
+import static io.github.greymagic27.win_method.types.WinUser.WM_CANCELMODE;
 import static io.github.greymagic27.win_method.types.WinUser.WM_CLOSE;
 import static io.github.greymagic27.win_method.types.WinUser.WM_COMMAND;
 import static io.github.greymagic27.win_method.types.WinUser.WM_CREATE;
@@ -183,6 +194,7 @@ class WinUserTest {
         assertEquals(0x0001, WM_CREATE);
         assertEquals(0x0030, WM_SETFONT);
         assertEquals(0x80000, WM_APP);
+        assertEquals(0x001F, WM_CANCELMODE);
     }
 
     @Test
@@ -337,6 +349,20 @@ class WinUserTest {
     void testEmValues() {
         assertEquals(0x00B1, EM_SETSEL);
         assertEquals(0x00C2, EM_REPLACESEL);
+    }
+
+    @Test
+    void testTpmValues() {
+        assertEquals(0x0004, TPM_CENTERALIGN);
+        assertEquals(0x0000, TPM_LEFTALIGN);
+        assertEquals(0x0008, TPM_RIGHTALIGN);
+        assertEquals(0x0020, TPM_BOTTOMALIGN);
+        assertEquals(0x0000, TPM_TOPALIGN);
+        assertEquals(0x0010, TPM_VCENTERALIGN);
+        assertEquals(0x0080, TPM_NONOTIFY);
+        assertEquals(0x0100, TPM_RETURNCMD);
+        assertEquals(0x0000, TPM_LEFTBUTTON);
+        assertEquals(0x0002, TPM_RIGHTBUTTON);
     }
 
     @Test

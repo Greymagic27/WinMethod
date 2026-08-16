@@ -20,6 +20,7 @@ import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
 import io.github.greymagic27.win_method.methods.CreateWindowEx;
+import io.github.greymagic27.win_method.methods.Menu;
 import io.github.greymagic27.win_method.types.WinDef;
 import io.github.greymagic27.win_method.types.WinGdi;
 import io.github.greymagic27.win_method.types.WinUser;
@@ -466,5 +467,31 @@ class User32Test {
         HANDLE image = user32.LoadImageW(null, new LPCWSTR(MemorySegment.ofAddress(WinUser.MAKEINTRESOURCEW(32512).segment.address())), new UINT(WinUser.IMAGE_ICON), 0, 0, new UINT(WinUser.LR_SHARED));
         assertNotNull(image);
         assertNotEquals(0, image.segment.address());
+    }
+
+    @Test
+    void testTrackPopupMenu() throws InterruptedException {
+        HMENU menu = user32.CreatePopupMenu();
+        assertNotNull(menu);
+        assertNotEquals(0, menu.segment.address());
+        try {
+            boolean appendResult = Menu.appendString(menu, 1001, "Test Item");
+            assertTrue(appendResult);
+            CountDownLatch started = new CountDownLatch(1);
+            AtomicBoolean completed = new AtomicBoolean(false);
+            Thread tracker = new Thread(() -> {
+                started.countDown();
+                user32.TrackPopupMenu(menu, new UINT(WinUser.TPM_NONOTIFY), 0, 0, 0, window, null);
+                completed.set(true);
+            });
+            tracker.start();
+            assertTrue(started.await(2, TimeUnit.SECONDS));
+            Thread.sleep(100);
+            user32.PostMessageW(window, new UINT(WinUser.WM_CANCELMODE), new WPARAM(0), new LPARAM(0));
+            tracker.join(2000);
+            assertTrue(completed.get());
+        } finally {
+            user32.DestroyMenu(menu);
+        }
     }
 }
