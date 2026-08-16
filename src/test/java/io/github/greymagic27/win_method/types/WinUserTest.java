@@ -26,7 +26,9 @@ import static io.github.greymagic27.win_method.types.WinUser.ES_MULTILINE;
 import static io.github.greymagic27.win_method.types.WinUser.ES_WANTRETURN;
 import static io.github.greymagic27.win_method.types.WinUser.GWL_STYLE;
 import static io.github.greymagic27.win_method.types.WinUser.IDCANCEL;
+import static io.github.greymagic27.win_method.types.WinUser.IDNO;
 import static io.github.greymagic27.win_method.types.WinUser.IDOK;
+import static io.github.greymagic27.win_method.types.WinUser.IDYES;
 import static io.github.greymagic27.win_method.types.WinUser.IMAGE_BITMAP;
 import static io.github.greymagic27.win_method.types.WinUser.IMAGE_CURSOR;
 import static io.github.greymagic27.win_method.types.WinUser.IMAGE_ICON;
@@ -347,6 +349,8 @@ class WinUserTest {
     void testIdValues() {
         assertEquals(1, IDOK);
         assertEquals(2, IDCANCEL);
+        assertEquals(6, IDYES);
+        assertEquals(7, IDNO);
     }
 
     @Test

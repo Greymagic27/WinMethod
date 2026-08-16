@@ -264,6 +264,10 @@ public interface WinUser {
     int IDOK = 1;
     /// The Cancel button was selected
     int IDCANCEL = 2;
+    /// The Yes button was selected
+    int IDYES = 6;
+    /// The No button was selected
+    int IDNO = 7;
 
     /// Redraws the entire window if a movement or size adjustment changes the width of the client area
     int CS_HREDRAW = 0x0002;
