@@ -270,6 +270,12 @@ public interface User32 extends Library {
     /// @return If the function succeeds, the return value is a handle to the new window. If the function fails, the return value is NULL
     HWND CreateWindowExW(DWORD dwExStyle, LPCWSTR lpClassName, LPCWSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
 
+    /// Sets the keyboard focus to the specified window. The window must be attached to the calling thread's message queue
+    ///
+    /// @param hWnd A {@link HANDLE} to the window that will receive the keyboard input. If NULL, keystrokes are ignored
+    /// @return If the function succeeds, the return value is the handle to the window that previously had the keyboard focus. If the hWnd parameter is invalid or the window is not attached to the calling thread's message queue, the return value is NULL
+    HWND SetFocus(HWND hWnd);
+
     /// Creates a menu. This is initially empty but can be filled with menu items by using the [InsertMenuItem](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuitemw), {@link #AppendMenuW(HMENU, UINT, UINT_PTR, LPCWSTR)} and [InsertMenu](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuw) functions
     ///
     /// @return If the function succeeds, the return value is a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the newly created menu. If the function fails, the return value is NULL

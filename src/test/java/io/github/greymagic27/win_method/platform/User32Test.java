@@ -494,4 +494,26 @@ class User32Test {
             user32.DestroyMenu(menu);
         }
     }
+
+    @Test
+    void testSetFocus() {
+        HWND first = CreateWindowEx.createEditWindow("First", window, 1, 0, 0, 100, 25, false);
+        HWND second = CreateWindowEx.createEditWindow("Second", window, 2, 0, 30, 100, 25, false);
+        try {
+            assertNotNull(first);
+            assertNotNull(second);
+            assertNotEquals(0, first.segment.address());
+            assertNotEquals(0, second.segment.address());
+            user32.SetFocus(first);
+            HWND previous = user32.SetFocus(second);
+            assertNotNull(previous);
+            assertEquals(first.segment.address(), previous.segment.address());
+            previous = user32.SetFocus(first);
+            assertNotNull(previous);
+            assertEquals(second.segment.address(), previous.segment.address());
+        } finally {
+            user32.DestroyWindow(first);
+            user32.DestroyWindow(second);
+        }
+    }
 }
