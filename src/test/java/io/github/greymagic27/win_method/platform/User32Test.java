@@ -516,4 +516,20 @@ class User32Test {
             user32.DestroyWindow(second);
         }
     }
+
+    @Test
+    void testFindWindow() {
+        String title = "FindWindowTest";
+        HWND testWindow = CreateWindowEx.createStaticWindow(title, null, 0, 0, 0, 0, 0);
+        assertNotNull(testWindow);
+        assertNotEquals(0, testWindow.segment.address());
+        try {
+            HWND found = user32.FindWindowW(new LPCWSTR("STATIC"), new LPCWSTR(title));
+            assertNotNull(found);
+            assertNotEquals(0, found.segment.address());
+            assertEquals(testWindow.segment.address(), found.segment.address());
+        } finally {
+            user32.DestroyWindow(testWindow);
+        }
+    }
 }

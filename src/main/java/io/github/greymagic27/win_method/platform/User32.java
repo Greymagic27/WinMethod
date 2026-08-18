@@ -276,6 +276,13 @@ public interface User32 extends Library {
     /// @return If the function succeeds, the return value is the handle to the window that previously had the keyboard focus. If the hWnd parameter is invalid or the window is not attached to the calling thread's message queue, the return value is NULL
     HWND SetFocus(HWND hWnd);
 
+    /// Retrieves a handle to the top-level window whose class name and window name match the specified strings. This function does not search child windows. This function does not perform a case-sensitive search
+    ///
+    /// @param lpClassName The class name or a class atom created by a previous call to the RegisterClass or {@link #RegisterClassExW(WinUser.WNDCLASSEXW)} function
+    /// @param lpWindowName The window name (the window's title). If this parameter is NULL, all window names match
+    /// @return If the function succeeds, the return value is a handle to the window that has the specified class name and window name. If the function fails, the return value is NULL
+    HWND FindWindowW(LPCWSTR lpClassName, LPCWSTR lpWindowName);
+
     /// Creates a menu. This is initially empty but can be filled with menu items by using the [InsertMenuItem](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuitemw), {@link #AppendMenuW(HMENU, UINT, UINT_PTR, LPCWSTR)} and [InsertMenu](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuw) functions
     ///
     /// @return If the function succeeds, the return value is a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the newly created menu. If the function fails, the return value is NULL
