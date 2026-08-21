@@ -18,6 +18,11 @@ import static io.github.greymagic27.win_method.types.WinUser.BM_SETIMAGE;
 import static io.github.greymagic27.win_method.types.WinUser.BS_BITMAP;
 import static io.github.greymagic27.win_method.types.WinUser.CS_HREDRAW;
 import static io.github.greymagic27.win_method.types.WinUser.CS_VREDRAW;
+import static io.github.greymagic27.win_method.types.WinUser.EM_GETLINE;
+import static io.github.greymagic27.win_method.types.WinUser.EM_GETSEL;
+import static io.github.greymagic27.win_method.types.WinUser.EM_LINEFROMCHAR;
+import static io.github.greymagic27.win_method.types.WinUser.EM_LINEINDEX;
+import static io.github.greymagic27.win_method.types.WinUser.EM_LINELENGTH;
 import static io.github.greymagic27.win_method.types.WinUser.EM_REPLACESEL;
 import static io.github.greymagic27.win_method.types.WinUser.EM_SETSEL;
 import static io.github.greymagic27.win_method.types.WinUser.ES_AUTOHSCROLL;
@@ -140,6 +145,7 @@ import static io.github.greymagic27.win_method.types.WinUser.VK_Y;
 import static io.github.greymagic27.win_method.types.WinUser.VK_Z;
 import static io.github.greymagic27.win_method.types.WinUser.WM_APP;
 import static io.github.greymagic27.win_method.types.WinUser.WM_CANCELMODE;
+import static io.github.greymagic27.win_method.types.WinUser.WM_CHAR;
 import static io.github.greymagic27.win_method.types.WinUser.WM_CLOSE;
 import static io.github.greymagic27.win_method.types.WinUser.WM_COMMAND;
 import static io.github.greymagic27.win_method.types.WinUser.WM_CREATE;
@@ -199,6 +205,7 @@ class WinUserTest {
         assertEquals(0x0030, WM_SETFONT);
         assertEquals(0x8000, WM_APP);
         assertEquals(0x001F, WM_CANCELMODE);
+        assertEquals(0x0102, WM_CHAR);
     }
 
     @Test
@@ -357,6 +364,11 @@ class WinUserTest {
     void testEmValues() {
         assertEquals(0x00B1, EM_SETSEL);
         assertEquals(0x00C2, EM_REPLACESEL);
+        assertEquals(0x00C9, EM_LINEFROMCHAR);
+        assertEquals(0x00BB, EM_LINEINDEX);
+        assertEquals(0x00C1, EM_LINELENGTH);
+        assertEquals(0x00C4, EM_GETLINE);
+        assertEquals(0x00B0, EM_GETSEL);
     }
 
     @Test

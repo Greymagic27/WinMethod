@@ -77,6 +77,8 @@ public interface WinUser {
     int WM_APP = 0x8000;
     /// Sent to cancel certain modes, such as mouse capture
     int WM_CANCELMODE = 0x001F;
+    /// Posted to the window with the keyboard focus when a {@link #WM_KEYDOWN} message is translated by the {@link User32#TranslateMessage(MSG)} function
+    int WM_CHAR = 0x0102;
 
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;
@@ -306,6 +308,16 @@ public interface WinUser {
     int EM_SETSEL = 0x00B1;
     /// Replaces the selected text in an edit control or a rich edit control with the specified text
     int EM_REPLACESEL = 0x00C2;
+    /// Gets the index of the line that contains the specified character index in a multiline edit control
+    int EM_LINEFROMCHAR = 0x00C9;
+    /// Gets the character index of the first character of a specified line in a multiline edit control
+    int EM_LINEINDEX = 0x00BB;
+    /// Retrieves the length, in characters, of a line in an edit control
+    int EM_LINELENGTH = 0x00C1;
+    /// Copies a line of text from an edit control and places it in a specified buffer
+    int EM_GETLINE = 0x00C4;
+    /// Gets the starting and ending character positions (in TCHARs) of the current selection in an edit control
+    int EM_GETSEL = 0x00B0;
 
     /// Centers the shortcut menu horizontally relative to the coordinate specified by the x parameter
     int TPM_CENTERALIGN = 0x0004;
