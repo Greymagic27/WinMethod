@@ -74,7 +74,7 @@ public interface WinUser {
     /// Sets the font that a control is to use when drawing text
     int WM_SETFONT = 0x0030;
     /// Used to define private messages, usually of the form WM_APP+x, where x is an integer value
-    int WM_APP = 0x80000;
+    int WM_APP = 0x8000;
     /// Sent to cancel certain modes, such as mouse capture
     int WM_CANCELMODE = 0x001F;
 

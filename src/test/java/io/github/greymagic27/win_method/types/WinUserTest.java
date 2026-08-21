@@ -197,7 +197,7 @@ class WinUserTest {
         assertEquals(0x020A, WM_MOUSEWHEEL);
         assertEquals(0x0001, WM_CREATE);
         assertEquals(0x0030, WM_SETFONT);
-        assertEquals(0x80000, WM_APP);
+        assertEquals(0x8000, WM_APP);
         assertEquals(0x001F, WM_CANCELMODE);
     }
 
