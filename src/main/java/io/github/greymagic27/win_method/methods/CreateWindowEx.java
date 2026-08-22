@@ -107,4 +107,18 @@ public class CreateWindowEx {
     public static HWND createCancelButtonWindow(HWND parent, int x, int y, int width, int height) {
         return CreateWindowEx.createButtonWindow("Cancel", parent, WinUser.IDCANCEL, x, y, width, height);
     }
+
+    /// Creates a rich edit child window with the specified name, identifier, position, and dimensions.
+    ///
+    /// @param windowName The window name
+    /// @param parent     A handle to the parent window of the rich edit control
+    /// @param id         The identifier of the rich edit control
+    /// @param x          The initial horizontal position of the rich edit control
+    /// @param y          The initial vertical position of the rich edit control
+    /// @param width      The width, in device units, of the rich edit control
+    /// @param height     The height, in device units, of the rich edit control
+    /// @return If the function succeeds, the return value is a handle to the new rich edit control. If the function fails, the return value is NULL
+    public static HWND createRichEditWindow(String windowName, HWND parent, int id, int x, int y, int width, int height) {
+        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("RICHEDIT50W"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.WS_VSCROLL | WinUser.WS_HSCROLL | WinUser.ES_AUTOVSCROLL.intValue() | WinUser.ES_AUTOHSCROLL.intValue() | WinUser.ES_WANTRETURN.intValue()), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
+    }
 }

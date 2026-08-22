@@ -4,6 +4,8 @@ import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.UINT;
+import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.platform.Kernel32;
 import io.github.greymagic27.win_method.platform.User32;
 import io.github.greymagic27.win_method.types.WinDef;
 import io.github.greymagic27.win_method.types.WinUser;
@@ -34,7 +36,7 @@ class WindowTest {
     private void createTestWindow() {
         CountDownLatch ready = new CountDownLatch(1);
         windowThread = new Thread(() -> {
-            Window.createWindow(WinUser.Wndproc.defaultWndProc(), "Test", 800, 600);
+            Window.createWindow(WinUser.Wndproc.defaultWndProc(), "Test", 800, 600, false);
             Window.setWindowPosition(WindowPosition.CENTER);
             User32.INSTANCE.ShowWindow(Window.getCurrentWindow(), WinUser.SW_HIDE);
             ready.countDown();
@@ -87,7 +89,7 @@ class WindowTest {
     }
 
     @Test
-    void testCustomWndProc() throws InterruptedException {
+    void testCustomWndProc() {
         AtomicBoolean called = new AtomicBoolean(false);
         CountDownLatch ready = new CountDownLatch(1);
         windowThread = new Thread(() -> {
@@ -98,18 +100,46 @@ class WindowTest {
                     return new LRESULT(0);
                 }
                 return User32.INSTANCE.DefWindowProcW(hWnd, uMsg, wParam, lParam);
-            }, "Custom WndProc Test", 800, 600);
+            }, "Custom WndProc Test", 800, 600, false);
             User32.INSTANCE.ShowWindow(Window.getCurrentWindow(), WinUser.SW_HIDE);
             ready.countDown();
             Window.start();
         });
         windowThread.setDaemon(true);
         windowThread.start();
-        assertTrue(ready.await(2, TimeUnit.SECONDS));
+        try {
+            assertTrue(ready.await(2, TimeUnit.SECONDS));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
         User32.INSTANCE.PostMessageW(Window.getCurrentWindow(), new UINT(WinUser.WM_CLOSE), null, null).booleanValue();
         long timeout = System.currentTimeMillis() + 2000;
         while (!called.get() && System.currentTimeMillis() < timeout) Thread.onSpinWait();
         assertTrue(called.get(), "Custom Wndproc was not called");
+    }
+
+    @Test
+    void testRichEditEnabled() {
+        CountDownLatch ready = new CountDownLatch(1);
+        windowThread = new Thread(() -> {
+            Window.createWindow(WinUser.Wndproc.defaultWndProc(), "Rich Edit Test", 800, 600, true);
+            User32.INSTANCE.ShowWindow(Window.getCurrentWindow(), WinUser.SW_HIDE);
+            ready.countDown();
+            Window.start();
+        });
+        windowThread.setDaemon(true);
+        windowThread.start();
+        try {
+            assertTrue(ready.await(2, TimeUnit.SECONDS));
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+        assertNotNull(Window.getCurrentWindow());
+        assertNotEquals(0, Window.getCurrentWindow().segment.address());
+        assertNotEquals(0, Kernel32.INSTANCE.GetModuleHandleW(new LPCWSTR("msftedit.dll")).segment.address());
+        assertNotNull(Kernel32.INSTANCE.GetModuleHandleW(new LPCWSTR("msftedit.dll")));
     }
 
     @Test

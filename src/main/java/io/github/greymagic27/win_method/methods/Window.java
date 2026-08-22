@@ -2,6 +2,7 @@ package io.github.greymagic27.win_method.methods;
 
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.HINSTANCE;
+import io.github.greymagic27.win_method.WinDef.HMODULE;
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
@@ -22,10 +23,14 @@ public class Window {
     /// @param title   Title of the window
     /// @param width   Width of the window
     /// @param height  Height of the window
-    public static void createWindow(WinUser.Wndproc wndproc, String title, int width, int height) {
+    public static void createWindow(WinUser.Wndproc wndproc, String title, int width, int height, boolean richEditEnabled) {
         currentWidth = width;
         currentHeight = height;
         Objects.requireNonNull(wndproc);
+        if (richEditEnabled) {
+            HMODULE richEdit = Kernel32.INSTANCE.LoadLibraryW(new LPCWSTR("msftedit.dll"));
+            if (richEdit.isNull() || richEdit.segment.address() == 0) throw new IllegalStateException("Failed to load msftedit.dll, GetLastError: " + Kernel32.INSTANCE.GetLastError());
+        }
         LPCWSTR className = new LPCWSTR("WindowClass_" + System.nanoTime());
         HINSTANCE hInstance = Kernel32.INSTANCE.GetModuleHandleW(null);
         WinUser.WNDCLASSEXW wc = new WinUser.WNDCLASSEXW();
