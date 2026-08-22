@@ -23,6 +23,7 @@ public class Window {
     /// @param title   Title of the window
     /// @param width   Width of the window
     /// @param height  Height of the window
+    /// @param richEditEnabled Enables rich text via msftedit.dll
     public static void createWindow(WinUser.Wndproc wndproc, String title, int width, int height, boolean richEditEnabled) {
         currentWidth = width;
         currentHeight = height;
