@@ -2,11 +2,11 @@ package io.github.greymagic27.win_method.types;
 
 import org.junit.jupiter.api.Test;
 
-import static io.github.greymagic27.win_method.types.Fileapi.CREATE_ALWAYS;
-import static io.github.greymagic27.win_method.types.Fileapi.OPEN_EXISTING;
+import static io.github.greymagic27.win_method.types.FileApi.CREATE_ALWAYS;
+import static io.github.greymagic27.win_method.types.FileApi.OPEN_EXISTING;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class FileapiTest {
+class FileApiTest {
 
     @Test
     void testValues() {

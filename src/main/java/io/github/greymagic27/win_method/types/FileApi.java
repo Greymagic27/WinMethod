@@ -1,7 +1,7 @@
 package io.github.greymagic27.win_method.types;
 
 /// Values from fileapi.h
-public interface Fileapi {
+public interface FileApi {
 
     /// Creates a new file, always
     int CREATE_ALWAYS = 2;

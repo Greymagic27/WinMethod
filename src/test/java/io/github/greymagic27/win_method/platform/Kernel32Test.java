@@ -23,8 +23,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import static io.github.greymagic27.win_method.types.Fileapi.CREATE_ALWAYS;
-import static io.github.greymagic27.win_method.types.Fileapi.OPEN_EXISTING;
+import static io.github.greymagic27.win_method.types.FileApi.CREATE_ALWAYS;
+import static io.github.greymagic27.win_method.types.FileApi.OPEN_EXISTING;
 import static io.github.greymagic27.win_method.types.WinNT.FILE_SHARE_READ;
 import static io.github.greymagic27.win_method.types.WinNT.GENERIC_READ;
 import static io.github.greymagic27.win_method.types.WinNT.GENERIC_WRITE;
