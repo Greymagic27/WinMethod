@@ -44,8 +44,7 @@ public abstract class Structure {
     }
 
     private void initFields() {
-        for (Field field : getClass().getDeclaredFields()) {
-            if (Modifier.isStatic(field.getModifiers())) continue;
+        for (Field field : getAllInstanceFields()) {
             field.setAccessible(true);
             try {
                 if (field.get(this) == null) {
@@ -168,24 +167,16 @@ public abstract class Structure {
 
     private void validateFieldCount(List<Field> orderedFields) {
         List<String> declaredNames = new ArrayList<>();
-        for (Field f : getClass().getDeclaredFields()) {
-            if (!Modifier.isStatic(f.getModifiers())) {
-                declaredNames.add(f.getName());
-            }
-        }
+        for (Field f : getAllInstanceFields()) declaredNames.add(f.getName());
         List<String> orderedNames = new ArrayList<>();
-        for (Field f : orderedFields) {
-            orderedNames.add(f.getName());
-        }
-        if (orderedFields.size() != new HashSet<>(orderedFields).size()) {
-            throw new IllegalStateException("@FieldOrder on " + getClass().getSimpleName() + " lists a duplicate field name: " + orderedNames);
-        }
+        for (Field f : orderedFields) orderedNames.add(f.getName());
+        if (orderedFields.size() != new HashSet<>(orderedFields).size()) throw new IllegalStateException("@FieldOrder on " + getClass().getSimpleName() + " lists a duplicate field name: " + orderedNames);
         List<String> missing = new ArrayList<>(declaredNames);
         missing.removeAll(orderedNames);
         List<String> unexpected = new ArrayList<>(orderedNames);
         unexpected.removeAll(declaredNames);
         if (!missing.isEmpty() || !unexpected.isEmpty()) {
-            StringBuilder sb = new StringBuilder("@FieldOrder on ").append(getClass().getSimpleName()).append(" doesn't match its declared fields");
+            StringBuilder sb = new StringBuilder("@FieldOrder on " + getClass().getSimpleName() + " doesn't match its declared fields");
             if (!missing.isEmpty()) sb.append(System.lineSeparator()).append("Missing from @FieldOrder ").append(missing);
             if (!unexpected.isEmpty()) sb.append(System.lineSeparator()).append("Not a declared field: ").append(unexpected);
             throw new IllegalStateException(sb.toString());
@@ -198,20 +189,15 @@ public abstract class Structure {
             List<Field> resolved = new ArrayList<>();
             List<String> missing = new ArrayList<>();
             for (String name : order.value()) {
-                try {
-                    resolved.add(getClass().getDeclaredField(name));
-                } catch (NoSuchFieldException e) {
-                    missing.add(name);
-                }
+                Field field = findField(name);
+                if (field == null) missing.add(name);
+                else resolved.add(field);
             }
             if (!missing.isEmpty()) throw new IllegalStateException("@FieldOrder on " + getClass().getSimpleName() + " names " + missing + ", but no such field(s) exist");
             return resolved;
         }
         if (getClass().isAnnotationPresent(AutoFieldOrder.class)) {
-            List<Field> fields = new ArrayList<>();
-            for (Field field : getClass().getDeclaredFields()) {
-                if (!Modifier.isStatic(field.getModifiers())) fields.add(field);
-            }
+            List<Field> fields = getAllInstanceFields();
             if (fields.isEmpty()) throw new IllegalStateException(getClass().getSimpleName() + " declares no fields");
             return fields;
         }
@@ -316,6 +302,43 @@ public abstract class Structure {
         long size = nested.layout.byteSize();
         MemorySegment.copy(segment, offset, nested.segment, 0, size);
         nested.read();
+    }
+
+    private @NonNull List<Field> getAllInstanceFields() {
+        List<Class<?>> hierarchy = new ArrayList<>();
+        Class<?> type = getClass();
+        while (type != null && type != Structure.class && type != Union.class) {
+            hierarchy.addFirst(type);
+            type = type.getSuperclass();
+        }
+        List<Field> result = new ArrayList<>();
+        for (Class<?> clazz : hierarchy) {
+            for (Field field : clazz.getDeclaredFields()) {
+                if (Modifier.isStatic(field.getModifiers())) continue;
+                if (field.isSynthetic()) continue;
+
+                field.setAccessible(true);
+                result.add(field);
+            }
+        }
+        return result;
+    }
+
+    private @Nullable Field findField(@NonNull String name) {
+        Class<?> type = getClass();
+        while (type != null && Structure.class.isAssignableFrom(type)) {
+            try {
+                Field field = type.getDeclaredField(name);
+                if (!Modifier.isStatic(field.getModifiers()) && !field.isSynthetic()) {
+                    field.setAccessible(true);
+                    return field;
+                }
+                return null;
+            } catch (NoSuchFieldException ignored) {
+                type = type.getSuperclass();
+            }
+        }
+        return null;
     }
 
     public Pointer pointer() {

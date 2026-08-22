@@ -155,6 +155,7 @@ import static io.github.greymagic27.win_method.types.WinUser.WM_MOUSEWHEEL;
 import static io.github.greymagic27.win_method.types.WinUser.WM_PAINT;
 import static io.github.greymagic27.win_method.types.WinUser.WM_SETFONT;
 import static io.github.greymagic27.win_method.types.WinUser.WM_SIZE;
+import static io.github.greymagic27.win_method.types.WinUser.WM_USER;
 import static io.github.greymagic27.win_method.types.WinUser.WS_BORDER;
 import static io.github.greymagic27.win_method.types.WinUser.WS_CAPTION;
 import static io.github.greymagic27.win_method.types.WinUser.WS_CHILD;
@@ -206,6 +207,7 @@ class WinUserTest {
         assertEquals(0x8000, WM_APP);
         assertEquals(0x001F, WM_CANCELMODE);
         assertEquals(0x0102, WM_CHAR);
+        assertEquals(0x0400, WM_USER);
     }
 
     @Test

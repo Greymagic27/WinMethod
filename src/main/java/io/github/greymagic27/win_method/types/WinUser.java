@@ -79,6 +79,8 @@ public interface WinUser {
     int WM_CANCELMODE = 0x001F;
     /// Posted to the window with the keyboard focus when a {@link #WM_KEYDOWN} message is translated by the {@link User32#TranslateMessage(MSG)} function
     int WM_CHAR = 0x0102;
+    /// Used to define private messages for use by private window classes, usually of the form WM_USER+x, where x is an integer value
+    int WM_USER = 0x0400;
 
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;

@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <richedit.h>
 #include <iostream>
 
 #define PRINT_SIZE(type) \
@@ -21,5 +22,7 @@ int main()
     PRINT_SIZE(OVERLAPPED);
     PRINT_SIZE(STARTUPINFOW)
     PRINT_SIZE(PROCESS_INFORMATION)
+    PRINT_SIZE(CHARFORMAT2W)
+    PRINT_SIZE(CHARFORMATW)
     return 0;
 }

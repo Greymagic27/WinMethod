@@ -6,6 +6,7 @@ import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.ATOM;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.BYTE;
+import io.github.greymagic27.win_method.WinDef.COLORREF;
 import io.github.greymagic27.win_method.WinDef.HBRUSH;
 import io.github.greymagic27.win_method.WinDef.HCURSOR;
 import io.github.greymagic27.win_method.WinDef.HDC;
@@ -27,6 +28,7 @@ import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
+import io.github.greymagic27.win_method.WinNT.LCID;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
@@ -56,7 +58,7 @@ class TypeMapperTest {
 
     @Test
     void testLayoutMappings() {
-        for (Class<?> type : List.of(int.class, Integer.class, LONG.class, UINT.class, DWORD.class)) {
+        for (Class<?> type : List.of(int.class, Integer.class, LONG.class, UINT.class, DWORD.class, COLORREF.class, LCID.class)) {
             assertEquals(JAVA_INT, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class, UINT_PTR.class, ULONG_PTR.class)) {
@@ -731,6 +733,103 @@ class TypeMapperTest {
         }
     }
 
+
+    @Test
+    void testToNative_LPVOIDFromPointer() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            Pointer pointer = new Pointer(segment);
+            LPVOID lpvoid = new LPVOID(pointer);
+            Object result = TypeMapper.toNative(lpvoid, LPVOID.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_HFONT() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            HFONT hfont = new HFONT(segment);
+            Object result = TypeMapper.toNative(hfont, HFONT.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_HFONTNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HFONT.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_LPBYTE() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(ValueLayout.JAVA_BYTE);
+            LPBYTE value = new LPBYTE(segment);
+            Object result = TypeMapper.toNative(value, LPBYTE.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_LPBYTENull() {
+        try (Arena arena = Arena.ofConfined()) {
+            Object result = TypeMapper.toNative(null, LPBYTE.class, arena);
+            assertEquals(MemorySegment.NULL, result);
+        }
+    }
+
+    @Test
+    void testToNative_PHANDLE() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(ValueLayout.ADDRESS);
+            PHANDLE phandle = new PHANDLE(segment);
+            Object result = TypeMapper.toNative(phandle, PHANDLE.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_PHANDLENull() {
+        try (Arena arena = Arena.ofConfined()) {
+            Object result = TypeMapper.toNative(null, PHANDLE.class, arena);
+            assertEquals(MemorySegment.NULL, result);
+        }
+    }
+
+    @Test
+    void testToNative_COLORREF() {
+        try (Arena arena = Arena.ofConfined()) {
+            COLORREF value = new COLORREF(0x112233);
+            Object result = TypeMapper.toNative(value, COLORREF.class, arena);
+            assertEquals(0x112233, result);
+        }
+    }
+
+    @Test
+    void testToNative_COLORREFNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0, TypeMapper.toNative(null, COLORREF.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_LCID() {
+        try (Arena arena = Arena.ofConfined()) {
+            LCID value = new LCID(1033);
+            Object result = TypeMapper.toNative(value, LCID.class, arena);
+            assertEquals(1033, result);
+        }
+    }
+
+    @Test
+    void testToNative_LCIDNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0, TypeMapper.toNative(null, LCID.class, arena));
+        }
+    }
+
     @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
@@ -934,70 +1033,6 @@ class TypeMapperTest {
     }
 
     @Test
-    void testToNative_LPVOIDFromPointer() {
-        try (Arena arena = Arena.ofConfined()) {
-            MemorySegment segment = arena.allocate(8);
-            Pointer pointer = new Pointer(segment);
-            LPVOID lpvoid = new LPVOID(pointer);
-            Object result = TypeMapper.toNative(lpvoid, LPVOID.class, arena);
-            assertEquals(segment, result);
-        }
-    }
-
-    @Test
-    void testToNative_HFONT() {
-        try (Arena arena = Arena.ofConfined()) {
-            MemorySegment segment = arena.allocate(8);
-            HFONT hfont = new HFONT(segment);
-            Object result = TypeMapper.toNative(hfont, HFONT.class, arena);
-            assertEquals(segment, result);
-        }
-    }
-
-    @Test
-    void testToNative_HFONTNull() {
-        try (Arena arena = Arena.ofConfined()) {
-            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, HFONT.class, arena));
-        }
-    }
-
-    @Test
-    void testToNative_LPBYTE() {
-        try (Arena arena = Arena.ofConfined()) {
-            MemorySegment segment = arena.allocate(ValueLayout.JAVA_BYTE);
-            LPBYTE value = new LPBYTE(segment);
-            Object result = TypeMapper.toNative(value, LPBYTE.class, arena);
-            assertEquals(segment, result);
-        }
-    }
-
-    @Test
-    void testToNative_LPBYTENull() {
-        try (Arena arena = Arena.ofConfined()) {
-            Object result = TypeMapper.toNative(null, LPBYTE.class, arena);
-            assertEquals(MemorySegment.NULL, result);
-        }
-    }
-
-    @Test
-    void testToNative_PHANDLE() {
-        try (Arena arena = Arena.ofConfined()) {
-            MemorySegment segment = arena.allocate(ValueLayout.ADDRESS);
-            PHANDLE phandle = new PHANDLE(segment);
-            Object result = TypeMapper.toNative(phandle, PHANDLE.class, arena);
-            assertEquals(segment, result);
-        }
-    }
-
-    @Test
-    void testToNative_PHANDLENull() {
-        try (Arena arena = Arena.ofConfined()) {
-            Object result = TypeMapper.toNative(null, PHANDLE.class, arena);
-            assertEquals(MemorySegment.NULL, result);
-        }
-    }
-
-    @Test
     void testFromNative_UINTPTR() {
         Object result = TypeMapper.fromNative(9999L, UINT_PTR.class);
         assertInstanceOf(UINT_PTR.class, result);
@@ -1133,6 +1168,20 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(segment, PHANDLE.class);
         assertInstanceOf(PHANDLE.class, result);
         assertEquals(0x1234L, ((PHANDLE) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_COLORREF() {
+        Object result = TypeMapper.fromNative(0x112233, COLORREF.class);
+        assertInstanceOf(COLORREF.class, result);
+        assertEquals(0x112233, ((COLORREF) result).intValue());
+    }
+
+    @Test
+    void testFromNative_LCID() {
+        Object result = TypeMapper.fromNative(1033, LCID.class);
+        assertInstanceOf(LCID.class, result);
+        assertEquals(1033, ((LCID) result).intValue());
     }
 
     @Test

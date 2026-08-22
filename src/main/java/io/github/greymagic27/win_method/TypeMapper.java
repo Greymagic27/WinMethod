@@ -22,7 +22,7 @@ import org.jspecify.annotations.Nullable;
 public final class TypeMapper {
 
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
-        if (javaType == int.class || javaType == Integer.class || javaType == LONG.class || javaType == DWORD.class) return ValueLayout.JAVA_INT;
+        if (javaType == int.class || javaType == Integer.class || javaType == LONG.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class || javaType == UINT.class) return ValueLayout.JAVA_INT;
         if (javaType == long.class || javaType == Long.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class || javaType == SHORT.class) return ValueLayout.JAVA_SHORT;
@@ -33,6 +33,7 @@ public final class TypeMapper {
         if (javaType == String.class) return ValueLayout.ADDRESS;
         if (Structure.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType) || Pointer.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         if (WORD.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_SHORT;
+        if (DWORD.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_INT;
         if (LONG_PTR.class.isAssignableFrom(javaType) || UINT_PTR.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_LONG;
         if (javaType == void.class || javaType == Void.class) return null;
         throw new IllegalArgumentException("No native layout mapping for: " + javaType);
@@ -63,6 +64,9 @@ public final class TypeMapper {
         if (WORD.class.isAssignableFrom(javaType)) {
             return ((WORD) value).shortValue();
         }
+        if (DWORD.class.isAssignableFrom(javaType)) {
+            return ((DWORD) value).intValue();
+        }
         if (LONG_PTR.class.isAssignableFrom(javaType)) {
             return ((LONG_PTR) value).longValue();
         }
@@ -86,9 +90,6 @@ public final class TypeMapper {
         }
         if (javaType == SHORT.class) {
             return ((SHORT) value).shortValue();
-        }
-        if (javaType == DWORD.class) {
-            return ((DWORD) value).intValue();
         }
         if (javaType == UINT.class) {
             return ((UINT) value).intValue();
@@ -117,6 +118,14 @@ public final class TypeMapper {
                 return returnType.getConstructor(short.class).newInstance(value);
             } catch (ReflectiveOperationException e) {
                 throw new RuntimeException("WORD subclass " + returnType + " needs a (short) constructor", e);
+            }
+        }
+        if (DWORD.class.isAssignableFrom(returnType)) {
+            try {
+                int value = (int)raw;
+                return returnType.getConstructor(int.class).newInstance(value);
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException("DWORD subclass " + returnType + "needs an (int) constructor", e);
             }
         }
         if (Structure.class.isAssignableFrom(returnType)) {
