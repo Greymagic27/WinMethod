@@ -117,8 +117,9 @@ public class CreateWindowEx {
     /// @param y          The initial vertical position of the rich edit control
     /// @param width      The width, in device units, of the rich edit control
     /// @param height     The height, in device units, of the rich edit control
+    /// @param scrollBarsVisible Determines if vertical and horizontal scroll bars will be visible on the window
     /// @return If the function succeeds, the return value is a handle to the new rich edit control. If the function fails, the return value is NULL
-    public static HWND createRichEditWindow(String windowName, HWND parent, int id, int x, int y, int width, int height) {
-        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("RICHEDIT50W"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.WS_VSCROLL | WinUser.WS_HSCROLL | WinUser.ES_AUTOVSCROLL.intValue() | WinUser.ES_AUTOHSCROLL.intValue() | WinUser.ES_WANTRETURN.intValue()), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
+    public static HWND createRichEditWindow(String windowName, HWND parent, int id, int x, int y, int width, int height, boolean scrollBarsVisible) {
+        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("RICHEDIT50W"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.ES_MULTILINE.intValue() | WinUser.ES_AUTOVSCROLL.intValue() | WinUser.ES_AUTOHSCROLL.intValue() | WinUser.ES_WANTRETURN.intValue() | (scrollBarsVisible ? WinUser.WS_VSCROLL | WinUser.WS_HSCROLL : 0)), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
     }
 }

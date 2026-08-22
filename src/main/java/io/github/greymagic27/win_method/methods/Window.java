@@ -14,6 +14,7 @@ import java.util.Objects;
 /// Helpers to create a window without rewriting lines of code
 public class Window {
     private static HWND currentWindow;
+    private static HMODULE richEdit;
     private static int currentWidth;
     private static int currentHeight;
 
@@ -28,8 +29,8 @@ public class Window {
         currentWidth = width;
         currentHeight = height;
         Objects.requireNonNull(wndproc);
-        if (richEditEnabled) {
-            HMODULE richEdit = Kernel32.INSTANCE.LoadLibraryW(new LPCWSTR("msftedit.dll"));
+        if (richEditEnabled && (richEdit == null || richEdit.isNull())) {
+            richEdit = Kernel32.INSTANCE.LoadLibraryW(new LPCWSTR("msftedit.dll"));
             if (richEdit.isNull() || richEdit.segment.address() == 0) throw new IllegalStateException("Failed to load msftedit.dll, GetLastError: " + Kernel32.INSTANCE.GetLastError());
         }
         LPCWSTR className = new LPCWSTR("WindowClass_" + System.nanoTime());

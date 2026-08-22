@@ -97,7 +97,7 @@ class CreateWindowExTest {
     void testCreateRichEditWindow() {
         Window.reset();
         Window.createWindow(WinUser.Wndproc.defaultWndProc(), "CreateRichEditWindow", 800, 600, true);
-        HWND richEdit = assertDoesNotThrow(() -> CreateWindowEx.createRichEditWindow("Test Rich Edit", Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        HWND richEdit = assertDoesNotThrow(() -> CreateWindowEx.createRichEditWindow("Test Rich Edit", Window.getCurrentWindow(), 0, 0, 0, 800, 600, false));
         assertNotNull(richEdit);
         assertNotEquals(0, richEdit.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(richEdit).segment.address());
