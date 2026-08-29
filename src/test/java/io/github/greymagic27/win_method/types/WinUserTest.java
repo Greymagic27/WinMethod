@@ -43,6 +43,7 @@ import static io.github.greymagic27.win_method.types.WinUser.LBS_NOTIFY;
 import static io.github.greymagic27.win_method.types.WinUser.LB_ADDSTRING;
 import static io.github.greymagic27.win_method.types.WinUser.LB_GETCURSEL;
 import static io.github.greymagic27.win_method.types.WinUser.LB_RESETCONTENT;
+import static io.github.greymagic27.win_method.types.WinUser.LB_SETCURSEL;
 import static io.github.greymagic27.win_method.types.WinUser.LR_LOADFROMFILE;
 import static io.github.greymagic27.win_method.types.WinUser.LR_SHARED;
 import static io.github.greymagic27.win_method.types.WinUser.MB_ERRORICON;
@@ -341,6 +342,7 @@ class WinUserTest {
         assertEquals(0x0184, LB_RESETCONTENT);
         assertEquals(0x0180, LB_ADDSTRING);
         assertEquals(0x0188, LB_GETCURSEL);
+        assertEquals(0x0186, LB_SETCURSEL);
     }
 
     @Test

@@ -288,6 +288,8 @@ public interface WinUser {
     int LB_ADDSTRING = 0x0180;
     /// Gets the index of the currently selected item, if any, in a single-selection list box
     int LB_GETCURSEL = 0x0188;
+    /// Selects a string and scrolls it into view, if necessary. When the new string is selected, the list box removes the highlight from the previously selected string
+    int LB_SETCURSEL = 0x0186;
 
     /// Shares the image handle if the image is loaded multiple times
     int LR_SHARED = 0x00008000;
