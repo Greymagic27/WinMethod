@@ -81,6 +81,7 @@ public interface WinUser {
     int WM_CHAR = 0x0102;
     /// Used to define private messages for use by private window classes, usually of the form WM_USER+x, where x is an integer value
     int WM_USER = 0x0400;
+    int WM_SETREDRAW = 0x000B;
 
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;
