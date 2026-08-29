@@ -281,6 +281,8 @@ public interface WinUser {
 
     /// Notifies the application that the user has double-clicked an item in a list box
     int LBN_DBLCICK = 2;
+    /// Notifies the application that the selection in a list box has changed as a result of user input
+    int LBN_SELCHANGE = 1;
 
     /// Removes all items from a list box
     int LB_RESETCONTENT = 0x0184;

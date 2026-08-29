@@ -38,6 +38,7 @@ import static io.github.greymagic27.win_method.types.WinUser.IMAGE_BITMAP;
 import static io.github.greymagic27.win_method.types.WinUser.IMAGE_CURSOR;
 import static io.github.greymagic27.win_method.types.WinUser.IMAGE_ICON;
 import static io.github.greymagic27.win_method.types.WinUser.LBN_DBLCICK;
+import static io.github.greymagic27.win_method.types.WinUser.LBN_SELCHANGE;
 import static io.github.greymagic27.win_method.types.WinUser.LBS_HASSTRINGS;
 import static io.github.greymagic27.win_method.types.WinUser.LBS_NOTIFY;
 import static io.github.greymagic27.win_method.types.WinUser.LB_ADDSTRING;
@@ -339,6 +340,7 @@ class WinUserTest {
         assertEquals(0x0001, LBS_NOTIFY.intValue());
         assertEquals(0x0040, LBS_HASSTRINGS.intValue());
         assertEquals(2, LBN_DBLCICK);
+        assertEquals(1, LBN_SELCHANGE);
         assertEquals(0x0184, LB_RESETCONTENT);
         assertEquals(0x0180, LB_ADDSTRING);
         assertEquals(0x0188, LB_GETCURSEL);
