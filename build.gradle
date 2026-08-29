@@ -3,7 +3,7 @@
 plugins {
     id 'java'
     id 'signing'
-    id 'net.ltgt.errorprone' version '5.1.0'
+    id 'net.ltgt.errorprone' version '5.1.1'
     id 'com.vanniktech.maven.publish' version '0.37.0'
 }
 
