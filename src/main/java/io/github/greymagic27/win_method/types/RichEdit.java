@@ -28,35 +28,35 @@ public interface RichEdit {
     @Structure.AutoFieldOrder
     class CHARFORMAT2W extends CHARFORMATW {
         /// Font weight. To use this member, set the CFM_WEIGHT flag in the dwMask member
-        WORD wWeight;
+        public WORD wWeight;
         /// Horizontal spacing between letters, in twips. This value has no effect on the text displayed by a rich edit control. To use this member, set the CFM_SPACING flag in the dwMask member
-        SHORT sSpacing;
+        public SHORT sSpacing;
         /// Background colour. To use this member, set the CFM_BACKCOLOR flag in the dwMask member
-        COLORREF crBackColor;
+        public COLORREF crBackColor;
         /// A 32-bit locale identifier that contains a language identifier in the lower word and a sorting identifier and reserved value in the upper word. This has no effect on the text displayed. To use this member, set the CFM_LCID flag in the dwMask member
-        LCID lcid;
+        public LCID lcid;
         /// Reserved, the value must be zero
-        DWORD dwReserved;
+        public DWORD dwReserved;
         /// Character style handle. This value has no effect on the text displayed by a rich edit control.  To use this member, set the CFM_STYLE flag in the dwMask member
-        SHORT sStyle;
+        public SHORT sStyle;
         /// Value of the font size, above which to kern the character {@link #yHeight}. This value has no effect on the text displayed by a rich edit control. To use this member, set the CFM_KERNING flag in the dwMask member
-        WORD wKerning;
+        public WORD wKerning;
         /// Specifies the underline type. To use this member, set the CFM_UNDERLINETYPE flag in the dwMask member. This can be [one of the following values](https://learn.microsoft.com/en-us/windows/win32/api/richedit/ns-richedit-charformat2w)
-        BYTE bUnderlineType;
+        public BYTE bUnderlineType;
         /// Text animation type. This value has no effect on the text displayed by a rich edit control. To use this member, set the CFM_ANIMATION flag in the dwMask member
-        BYTE bAnimation;
+        public BYTE bAnimation;
         /// An index that identifies the author making a revision. The rich edit control uses different text colours for each different author index. To use this member, set the CFM_REVAUTHOR flag in the dwMask member
-        BYTE bRevAuthor;
+        public BYTE bRevAuthor;
         /// The underline colour. This can be one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/richedit/ns-richedit-charformat2w)
-        BYTE bUnderlineColor;
+        public BYTE bUnderlineColor;
 
         /// Reserved, the value must be zero
         @AutoFieldOrder
         static class ReservedUnion extends Union {
             /// Reserved, the value must be zero
-            DWORD dwReserved;
+            public DWORD dwReserved;
             /// Client cookie
-            DWORD dwCookie;
+            public DWORD dwCookie;
         }
     }
 
