@@ -122,4 +122,8 @@ public class CreateWindowEx {
     public static HWND createRichEditWindow(String windowName, HWND parent, int id, int x, int y, int width, int height, boolean scrollBarsVisible) {
         return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("RICHEDIT50W"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.ES_MULTILINE.intValue() | WinUser.ES_AUTOVSCROLL.intValue() | WinUser.ES_AUTOHSCROLL.intValue() | WinUser.ES_WANTRETURN.intValue() | (scrollBarsVisible ? WinUser.WS_VSCROLL | WinUser.WS_HSCROLL : 0)), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
     }
+
+    public static HWND createPopupWindow(LPCWSTR className, String windowName, HWND parent, int id, int x, int y, int width, int height) {
+        return User32.INSTANCE.CreateWindowExW(new DWORD(0), className, new LPCWSTR(windowName), new DWORD(WinUser.WS_POPUP | WinUser.WS_CAPTION | WinUser.WS_SYSMENU | WinUser.WS_VISIBLE), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
+    }
 }

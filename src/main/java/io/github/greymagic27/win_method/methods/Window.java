@@ -15,6 +15,7 @@ import java.util.Objects;
 public class Window {
     private static HWND currentWindow;
     private static HMODULE richEdit;
+    private static LPCWSTR className;
     private static int currentWidth;
     private static int currentHeight;
 
@@ -33,7 +34,7 @@ public class Window {
             richEdit = Kernel32.INSTANCE.LoadLibraryW(new LPCWSTR("msftedit.dll"));
             if (richEdit.isNull() || richEdit.segment.address() == 0) throw new IllegalStateException("Failed to load msftedit.dll, GetLastError: " + Kernel32.INSTANCE.GetLastError());
         }
-        LPCWSTR className = new LPCWSTR("WindowClass_" + System.nanoTime());
+        className = new LPCWSTR("WindowClass_" + System.nanoTime());
         HINSTANCE hInstance = Kernel32.INSTANCE.GetModuleHandleW(null);
         WinUser.WNDCLASSEXW wc = new WinUser.WNDCLASSEXW();
         wc.cbSize = new UINT(wc.size());
@@ -110,6 +111,11 @@ public class Window {
     /// Returns the current window {@link HWND}
     public static HWND getCurrentWindow() {
         return currentWindow;
+    }
+
+    /// Returns the current {@link #className}
+    public static LPCWSTR getClassName() {
+        return className;
     }
 
     /// Resets window attributes to 0 or null

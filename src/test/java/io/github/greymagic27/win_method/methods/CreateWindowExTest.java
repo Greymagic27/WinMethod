@@ -103,4 +103,17 @@ class CreateWindowExTest {
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(richEdit).segment.address());
         User32.INSTANCE.DestroyWindow(richEdit);
     }
+
+    @Test
+    void testCreatePopupWindow() {
+        HWND popup = assertDoesNotThrow(() -> CreateWindowEx.createPopupWindow(Window.getClassName(), "Test Popup", Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        assertNotNull(popup);
+        assertNotEquals(0, popup.segment.address());
+        assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(popup).segment.address());
+        long style = User32.INSTANCE.GetWindowLongPtrW(popup, WinUser.GWL_STYLE).longValue();
+        assertTrue((style & Integer.toUnsignedLong(WinUser.WS_POPUP)) != 0);
+        assertTrue((style & WinUser.WS_CAPTION) != 0);
+        assertTrue((style & WinUser.WS_SYSMENU) != 0);
+        assertTrue((style & WinUser.WS_VISIBLE) != 0);
+    }
 }
