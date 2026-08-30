@@ -123,18 +123,18 @@ public class CreateWindowEx {
         return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("RICHEDIT50W"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.ES_MULTILINE.intValue() | WinUser.ES_AUTOVSCROLL.intValue() | WinUser.ES_AUTOHSCROLL.intValue() | WinUser.ES_WANTRETURN.intValue() | (scrollBarsVisible ? WinUser.WS_VSCROLL | WinUser.WS_HSCROLL : 0)), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
     }
 
-    /// Creates a popup window with the specified class, name, owner, identifier, position, and dimensions.
+    /// Creates a popup window with the specified class, name, owner, instance, position, and dimensions.
     ///
     /// @param className  The registered window class name
-    /// @param windowName The window name
+    /// @param windowName The name of the popup window
     /// @param parent     A handle to the owner window of the popup
-    /// @param id         The identifier or menu handle of the popup window
     /// @param x          The initial horizontal position of the popup window
     /// @param y          The initial vertical position of the popup window
     /// @param width      The width of the popup window, in device units
     /// @param height     The height of the popup window, in device units
+    /// @param hinstance  A handle to the instance that contains the window procedure of the window class
     /// @return If the function succeeds, the return value is a handle to the new popup window. If the function fails, the return value is NULL
-    public static HWND createPopupWindow(LPCWSTR className, String windowName, HWND parent, int id, int x, int y, int width, int height) {
-        return User32.INSTANCE.CreateWindowExW(new DWORD(0), className, new LPCWSTR(windowName), new DWORD(WinUser.WS_POPUP | WinUser.WS_CAPTION | WinUser.WS_SYSMENU | WinUser.WS_VISIBLE), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
+    public static HWND createPopupWindow(LPCWSTR className, String windowName, HWND parent, int x, int y, int width, int height, HINSTANCE hinstance) {
+        return User32.INSTANCE.CreateWindowExW(new DWORD(0), className, new LPCWSTR(windowName), new DWORD(WinUser.WS_POPUP | WinUser.WS_CAPTION | WinUser.WS_SYSMENU | WinUser.WS_VISIBLE), x, y, width, height, parent, null, hinstance, null);
     }
 }
