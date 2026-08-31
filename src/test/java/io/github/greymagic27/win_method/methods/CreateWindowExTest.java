@@ -106,7 +106,7 @@ class CreateWindowExTest {
 
     @Test
     void testCreatePopupWindow() {
-        HWND popup = assertDoesNotThrow(() -> CreateWindowEx.createPopupWindow(Window.getClassName(), "Test Popup", Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        HWND popup = assertDoesNotThrow(() -> CreateWindowEx.createPopupWindow(Window.getClassName(), "Test Popup", Window.getCurrentWindow(), 0, 0, 0, 800, null));
         assertNotNull(popup);
         assertNotEquals(0, popup.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(popup).segment.address());
