@@ -139,6 +139,12 @@ public interface Kernel32 extends Library {
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL DeleteFileW(LPCWSTR lpFileName);
 
+    /// Deletes an existing empty directory
+    ///
+    /// @param lpPathName The path of the directory to be removed
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL RemoveDirectoryW(LPCWSTR lpPathName);
+
     /// Retrieves the size of the specified file, in bytes
     ///
     /// @param hFile          A {@link HANDLE} to the file

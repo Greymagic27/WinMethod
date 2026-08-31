@@ -302,6 +302,19 @@ class Kernel32Test {
         assertFalse(Files.exists(testFile));
     }
 
+    @Test
+    void testRemoveDirectory() {
+        Path directory = tempDir.resolve("test-directory");
+        BOOL createResult = kernel32.CreateDirectoryW(new LPCWSTR(directory.toString()), null);
+        assertTrue(createResult.booleanValue());
+        assertTrue(Files.isDirectory(directory));
+        BOOL removeResult = kernel32.RemoveDirectoryW(new LPCWSTR(directory.toString()));
+        assertTrue(removeResult.booleanValue());
+        assertFalse(Files.exists(directory));
+        removeResult = kernel32.RemoveDirectoryW(new LPCWSTR(directory.toString()));
+        assertFalse(removeResult.booleanValue());
+    }
+
     private HANDLE openTestFile() {
         return kernel32.CreateFileW(new LPCWSTR(testFile.toString()), new DWORD(GENERIC_READ.intValue()), new DWORD(FILE_SHARE_READ), null, new DWORD(OPEN_EXISTING), new DWORD(0), null);
     }
