@@ -24,6 +24,7 @@ import static io.github.greymagic27.win_method.types.WinUser.EM_LINEFROMCHAR;
 import static io.github.greymagic27.win_method.types.WinUser.EM_LINEINDEX;
 import static io.github.greymagic27.win_method.types.WinUser.EM_LINELENGTH;
 import static io.github.greymagic27.win_method.types.WinUser.EM_REPLACESEL;
+import static io.github.greymagic27.win_method.types.WinUser.EM_SCROLLCARET;
 import static io.github.greymagic27.win_method.types.WinUser.EM_SETSEL;
 import static io.github.greymagic27.win_method.types.WinUser.ES_AUTOHSCROLL;
 import static io.github.greymagic27.win_method.types.WinUser.ES_AUTOVSCROLL;
@@ -377,6 +378,7 @@ class WinUserTest {
         assertEquals(0x00C1, EM_LINELENGTH);
         assertEquals(0x00C4, EM_GETLINE);
         assertEquals(0x00B0, EM_GETSEL);
+        assertEquals(0x00B7, EM_SCROLLCARET);
     }
 
     @Test

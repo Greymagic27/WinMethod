@@ -325,6 +325,8 @@ public interface WinUser {
     int EM_GETLINE = 0x00C4;
     /// Gets the starting and ending character positions (in TCHARs) of the current selection in an edit control
     int EM_GETSEL = 0x00B0;
+    /// Scrolls the caret into view in an edit control. You can send this message to either an edit control or a rich edit control
+    int EM_SCROLLCARET = 0x00B7;
 
     /// Centers the shortcut menu horizontally relative to the coordinate specified by the x parameter
     int TPM_CENTERALIGN = 0x0004;
