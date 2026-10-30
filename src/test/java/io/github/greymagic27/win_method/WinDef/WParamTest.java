@@ -15,8 +15,8 @@ class WParamTest {
     }
 
     @Test
-    void testLongValue() {
-        assertEquals(7L, new WPARAM(7L).longValue());
+    void testMaximumUnsignedValue() {
+        assertEquals(-1L, new WPARAM(-1L).longValue());
     }
 
     @Test

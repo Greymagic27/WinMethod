@@ -15,8 +15,13 @@ class LParamTest {
     }
 
     @Test
-    void testLongValue() {
-        assertEquals(7L, new LPARAM(7).longValue());
+    void testMaximumValue() {
+        assertEquals(Long.MAX_VALUE, new LPARAM(Long.MAX_VALUE).longValue());
+    }
+
+    @Test
+    void testMinimumValue() {
+        assertEquals(Long.MIN_VALUE, new LPARAM(Long.MIN_VALUE).longValue());
     }
 
     @Test

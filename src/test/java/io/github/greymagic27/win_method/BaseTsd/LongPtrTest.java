@@ -15,8 +15,13 @@ public class LongPtrTest {
     }
 
     @Test
-    void testLongValue() {
-        assertEquals(7L, new LONG_PTR(7).longValue());
+    void testMaximumValue() {
+        assertEquals(Long.MAX_VALUE, new LONG_PTR(Long.MAX_VALUE).longValue());
+    }
+
+    @Test
+    void testMinimumValue() {
+        assertEquals(Long.MIN_VALUE, new LONG_PTR(Long.MIN_VALUE).longValue());
     }
 
     @Test

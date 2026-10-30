@@ -13,11 +13,6 @@ class WCharTest {
         assertEquals('\uFFFF', new WCHAR('\uFFFF').charValue());
     }
 
-    @Test
-    void testCharValue() {
-        assertEquals('G', new WCHAR('G').charValue());
-    }
-
     @SuppressWarnings("UnnecessaryUnicodeEscape")
     @Test
     void testUnicodeCharacter() {

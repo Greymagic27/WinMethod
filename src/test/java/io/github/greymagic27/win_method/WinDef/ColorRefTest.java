@@ -15,8 +15,9 @@ class ColorRefTest {
     }
 
     @Test
-    void testColorrefValue() {
-        assertEquals(0x112233, new COLORREF(0x112233).intValue());
+    void testRgbValue() {
+        COLORREF color = new COLORREF(0x00332211);
+        assertEquals(0x00332211, color.intValue());
     }
 
     @Test

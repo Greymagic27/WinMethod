@@ -15,8 +15,13 @@ class LongTest {
     }
 
     @Test
-    void testLongValue() {
-        assertEquals(7, new LONG(7).intValue());
+    void testMaximumValue() {
+        assertEquals(Integer.MAX_VALUE, new LONG(Integer.MAX_VALUE).intValue());
+    }
+
+    @Test
+    void testMinimumValue() {
+        assertEquals(Integer.MIN_VALUE, new LONG(Integer.MIN_VALUE).intValue());
     }
 
     @Test

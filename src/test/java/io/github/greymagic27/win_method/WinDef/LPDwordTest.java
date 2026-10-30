@@ -12,10 +12,8 @@ class LPDwordTest {
     void testConstructorStoresValue() {
         Pointer p = new Pointer(MemorySegment.ofAddress(42));
         assertEquals(42, new LPDWORD(p).segment.address());
-
         Pointer zero = new Pointer(MemorySegment.ofAddress(0));
         assertEquals(0, new LPDWORD(zero).segment.address());
-
         Pointer negative = new Pointer(MemorySegment.ofAddress(-123));
         assertEquals(-123, new LPDWORD(negative).segment.address());
     }

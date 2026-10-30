@@ -15,8 +15,13 @@ class LResultTest {
     }
 
     @Test
-    void testLongValue() {
-        assertEquals(7L, new LRESULT(7).longValue());
+    void testMaximumValue() {
+        assertEquals(Long.MAX_VALUE, new LRESULT(Long.MAX_VALUE).longValue());
+    }
+
+    @Test
+    void testMinimumValue() {
+        assertEquals(Long.MIN_VALUE, new LRESULT(Long.MIN_VALUE).longValue());
     }
 
     @Test

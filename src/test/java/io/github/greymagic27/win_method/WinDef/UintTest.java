@@ -15,8 +15,8 @@ class UintTest {
     }
 
     @Test
-    void testUintValue() {
-        assertEquals(7, new UINT(7).intValue());
+    void testMaximumUnsignedValue() {
+        assertEquals(-1, new UINT(0xFFFFFFFF).intValue());
     }
 
     @Test

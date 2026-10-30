@@ -15,8 +15,13 @@ class ShortTest {
     }
 
     @Test
-    void testShortValue() {
-        assertEquals(7, new SHORT((short) 7).shortValue());
+    void testMaximumValue() {
+        assertEquals(Short.MAX_VALUE, new SHORT(Short.MAX_VALUE).shortValue());
+    }
+
+    @Test
+    void testMinimumValue() {
+        assertEquals(Short.MIN_VALUE, new SHORT(Short.MIN_VALUE).shortValue());
     }
 
     @Test

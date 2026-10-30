@@ -25,6 +25,7 @@ import io.github.greymagic27.win_method.WinDef.LPDWORD;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.UINT;
+import io.github.greymagic27.win_method.WinDef.ULONG;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
@@ -61,7 +62,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(int.class, Integer.class, LONG.class, UINT.class, DWORD.class, COLORREF.class, LCID.class)) {
             assertEquals(JAVA_INT, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class, UINT_PTR.class, ULONG_PTR.class)) {
+        for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class, UINT_PTR.class, ULONG_PTR.class, ULONG.class)) {
             assertEquals(ValueLayout.JAVA_LONG, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(short.class, Short.class, WORD.class, ATOM.class, SHORT.class)) {
@@ -831,6 +832,22 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_ULONG() {
+        try (Arena arena = Arena.ofConfined()) {
+            ULONG value = new ULONG(9999L);
+            Object result = TypeMapper.toNative(value, ULONG.class, arena);
+            assertEquals(9999L, result);
+        }
+    }
+
+    @Test
+    void testToNative_ULONGNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0L, TypeMapper.toNative(null, ULONG.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -1182,6 +1199,13 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(1033, LCID.class);
         assertInstanceOf(LCID.class, result);
         assertEquals(1033, ((LCID) result).intValue());
+    }
+
+    @Test
+    void testFromNative_ULONG() {
+        Object result = TypeMapper.fromNative(9999L, ULONG.class);
+        assertInstanceOf(ULONG.class, result);
+        assertEquals(9999L, ((ULONG) result).longValue());
     }
 
     @Test

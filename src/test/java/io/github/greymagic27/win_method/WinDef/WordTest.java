@@ -15,8 +15,8 @@ class WordTest {
     }
 
     @Test
-    void testShortValue() {
-        assertEquals(7L, new WORD((short) 7).shortValue());
+    void testMaximumUnsignedValue() {
+        assertEquals(-1, new WORD((short) 0xFFFF).shortValue());
     }
 
     @Test

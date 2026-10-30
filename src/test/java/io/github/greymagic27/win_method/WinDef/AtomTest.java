@@ -15,8 +15,8 @@ class AtomTest {
     }
 
     @Test
-    void testShortValue() {
-        assertEquals(7L, new ATOM((short) 7).shortValue());
+    void testMaximumUnsignedValue() {
+        assertEquals(-1, new ATOM((short) 0xFFFF).shortValue());
     }
 
     @Test

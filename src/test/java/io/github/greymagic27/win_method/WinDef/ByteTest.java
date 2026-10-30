@@ -15,8 +15,8 @@ class ByteTest {
     }
 
     @Test
-    void testLongValue() {
-        assertEquals(7L, new BYTE((byte) 7).byteValue());
+    void testMaximumUnsignedValue() {
+        assertEquals(-1, new BYTE((byte) 0xFF).byteValue());
     }
 
     @Test

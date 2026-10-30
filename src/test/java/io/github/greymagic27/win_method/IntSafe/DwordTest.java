@@ -14,8 +14,8 @@ class DwordTest {
     }
 
     @Test
-    void testDwordValue() {
-        assertEquals(7, new DWORD(7).intValue());
+    void testMaximumUnsignedValue() {
+        assertEquals(-1, new DWORD(0xFFFFFFFF).intValue());
     }
 
     @Test

@@ -15,8 +15,8 @@ class UintPtrTest {
     }
 
     @Test
-    void testLongValue() {
-        assertEquals(7L, new UINT_PTR(7).longValue());
+    void testMaximumUnsignedValue() {
+        assertEquals(-1L, new UINT_PTR(-1L).longValue());
     }
 
     @Test

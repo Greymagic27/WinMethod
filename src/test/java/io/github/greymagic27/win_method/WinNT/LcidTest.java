@@ -15,8 +15,8 @@ class LcidTest {
     }
 
     @Test
-    void testLcidValue() {
-        assertEquals(1033, new LCID(1033).intValue());
+    void testMaximumUnsignedValue() {
+        assertEquals(-1, new LCID(0xFFFFFFFF).intValue());
     }
 
     @Test
