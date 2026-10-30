@@ -24,12 +24,14 @@ import io.github.greymagic27.win_method.WinDef.LPCVOID;
 import io.github.greymagic27.win_method.WinDef.LPDWORD;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
+import io.github.greymagic27.win_method.WinDef.PUCHAR;
 import io.github.greymagic27.win_method.WinDef.PULONG;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.ULONG;
 import io.github.greymagic27.win_method.WinDef.USHORT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
+import io.github.greymagic27.win_method.WinNT.BOOLEAN;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
 import io.github.greymagic27.win_method.WinNT.LCID;
 import io.github.greymagic27.win_method.WinNT.LONG;
@@ -73,7 +75,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(short.class, Short.class, WORD.class, ATOM.class, SHORT.class, USHORT.class)) {
             assertEquals(ValueLayout.JAVA_SHORT, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(byte.class, Byte.class, BYTE.class)) {
+        for (Class<?> type : List.of(byte.class, Byte.class, BYTE.class, BOOLEAN.class)) {
             assertEquals(ValueLayout.JAVA_BYTE, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(boolean.class, Boolean.class, BOOL.class)) {
@@ -91,7 +93,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class, LPCVOID.class, LPBYTE.class, PHANDLE.class, PCWSTR.class, PULONG.class, PCSTR.class)) {
+        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class, LPCVOID.class, LPBYTE.class, PHANDLE.class, PCWSTR.class, PULONG.class, PCSTR.class, PUCHAR.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class, HKEY.class, HFONT.class)) {
@@ -931,6 +933,45 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_BOOLEAN() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals((byte) 1, TypeMapper.toNative(new BOOLEAN(true), BOOLEAN.class, arena));
+            assertEquals((byte) 0, TypeMapper.toNative(new BOOLEAN(false), BOOLEAN.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_BOOLEANAnyNonZeroIsTrue() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals((byte) 2, TypeMapper.toNative(new BOOLEAN((byte) 2), BOOLEAN.class, arena));
+            assertEquals((byte) -1, TypeMapper.toNative(new BOOLEAN((byte) -1), BOOLEAN.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_BOOLEANNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals((byte) 0, TypeMapper.toNative(null, BOOLEAN.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_PUCHAR() {
+        MemorySegment segment = MemorySegment.ofAddress(0x1234);
+        PUCHAR puchar = new PUCHAR(segment);
+
+        assertEquals(segment, TypeMapper.toNative(puchar, PUCHAR.class, null));
+    }
+
+    @Test
+    void testToNative_PUCHARNull() {
+        assertEquals(
+                MemorySegment.NULL,
+                TypeMapper.toNative(null, PUCHAR.class, null)
+        );
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -1327,6 +1368,34 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(42L, ULONGLONG.class);
         assertInstanceOf(ULONGLONG.class, result);
         assertEquals(42L, ((ULONGLONG) result).longValue());
+    }
+
+    @Test
+    void testFromNative_BOOLEAN() {
+        Object result = TypeMapper.fromNative((byte) 1, BOOLEAN.class);
+        assertInstanceOf(BOOLEAN.class, result);
+        assertTrue(((BOOLEAN) result).booleanValue());
+        Object result2 = TypeMapper.fromNative((byte) 0, BOOLEAN.class);
+        assertInstanceOf(BOOLEAN.class, result2);
+        assertFalse(((BOOLEAN) result2).booleanValue());
+    }
+
+    @Test
+    void testFromNative_BOOLEANAnyNonZeroIsTrue() {
+        Object result = TypeMapper.fromNative((byte) 2, BOOLEAN.class);
+        assertInstanceOf(BOOLEAN.class, result);
+        assertTrue(((BOOLEAN) result).booleanValue());
+        Object result2 = TypeMapper.fromNative((byte) -1, BOOLEAN.class);
+        assertInstanceOf(BOOLEAN.class, result2);
+        assertTrue(((BOOLEAN) result2).booleanValue());
+    }
+
+    @Test
+    void testFromNative_PUCHAR() {
+        MemorySegment segment = MemorySegment.ofAddress(0x1234);
+        PUCHAR result = (PUCHAR) TypeMapper.fromNative(segment, PUCHAR.class);
+        assertInstanceOf(PUCHAR.class, result);
+        assertEquals(segment, result.segment);
     }
 
     @Test

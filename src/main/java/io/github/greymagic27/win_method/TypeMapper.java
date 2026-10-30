@@ -29,7 +29,7 @@ public final class TypeMapper {
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class || javaType == UINT.class) return ValueLayout.JAVA_INT;
         if (javaType == long.class || javaType == Long.class || javaType == ULONG.class || javaType == ULONGLONG.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class || javaType == SHORT.class || javaType == USHORT.class) return ValueLayout.JAVA_SHORT;
-        if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
+        if (javaType == byte.class || javaType == Byte.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
         if (javaType == float.class || javaType == Float.class) return ValueLayout.JAVA_FLOAT;
         if (javaType == char.class || javaType == Character.class || javaType == WCHAR.class) return ValueLayout.JAVA_CHAR;
@@ -38,6 +38,7 @@ public final class TypeMapper {
         if (WORD.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_SHORT;
         if (DWORD.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_INT;
         if (LONG_PTR.class.isAssignableFrom(javaType) || UINT_PTR.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_LONG;
+        if (BYTE.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_BYTE;
         if (javaType == void.class || javaType == Void.class) return null;
         throw new IllegalArgumentException("No native layout mapping for: " + javaType);
     }
@@ -76,6 +77,9 @@ public final class TypeMapper {
         if (UINT_PTR.class.isAssignableFrom(javaType)) {
             return ((UINT_PTR) value).longValue();
         }
+        if (BYTE.class.isAssignableFrom(javaType)) {
+            return ((BYTE) value).byteValue();
+        }
         if (javaType == Boolean.class || javaType == boolean.class) {
             return ((Boolean) value) ? 1 : 0;
         }
@@ -87,9 +91,6 @@ public final class TypeMapper {
         }
         if (javaType == LONG.class) {
             return ((LONG) value).intValue();
-        }
-        if (javaType == BYTE.class) {
-            return ((BYTE) value).byteValue();
         }
         if (javaType == SHORT.class) {
             return ((SHORT) value).shortValue();
@@ -137,7 +138,7 @@ public final class TypeMapper {
                 int value = (int) raw;
                 return returnType.getConstructor(int.class).newInstance(value);
             } catch (ReflectiveOperationException e) {
-                throw new RuntimeException("DWORD subclass " + returnType + "needs an (int) constructor", e);
+                throw new RuntimeException("DWORD subclass " + returnType + " needs an (int) constructor", e);
             }
         }
         if (Structure.class.isAssignableFrom(returnType)) {
@@ -146,7 +147,7 @@ public final class TypeMapper {
                 structure.useMemory((MemorySegment) raw);
                 return structure;
             } catch (ReflectiveOperationException e) {
-                throw new RuntimeException(returnType + "needs a (MemorySegment) constructor", e);
+                throw new RuntimeException(returnType + " needs a (MemorySegment) constructor", e);
             }
         }
         if (LONG_PTR.class.isAssignableFrom(returnType) || UINT_PTR.class.isAssignableFrom(returnType)) {
@@ -155,6 +156,14 @@ public final class TypeMapper {
                 return returnType.getConstructor(long.class).newInstance(value);
             } catch (ReflectiveOperationException e) {
                 throw new RuntimeException(returnType + " needs a (long) constructor", e);
+            }
+        }
+        if (BYTE.class.isAssignableFrom(returnType)) {
+            try {
+                byte value = (byte) raw;
+                return returnType.getConstructor(byte.class).newInstance(value);
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(returnType + " needs a (byte) constructor", e);
             }
         }
         if (returnType == String.class) {
@@ -167,9 +176,6 @@ public final class TypeMapper {
         }
         if (returnType == BOOL.class) {
             return new BOOL((Integer) raw);
-        }
-        if (returnType == BYTE.class) {
-            return new BYTE((Byte) raw);
         }
         if (returnType == LONG.class) {
             return new LONG((Integer) raw);
