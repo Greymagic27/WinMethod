@@ -35,6 +35,7 @@ import io.github.greymagic27.win_method.WinNT.LCID;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
+import io.github.greymagic27.win_method.WinNT.PCSTR;
 import io.github.greymagic27.win_method.WinNT.PCWSTR;
 import io.github.greymagic27.win_method.WinNT.PHANDLE;
 import io.github.greymagic27.win_method.WinNT.PVOID;
@@ -89,7 +90,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class, LPCVOID.class, LPBYTE.class, PHANDLE.class, PCWSTR.class, PULONG.class)) {
+        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class, LPCVOID.class, LPBYTE.class, PHANDLE.class, PCWSTR.class, PULONG.class, PCSTR.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class, HKEY.class, HFONT.class)) {
@@ -901,6 +902,23 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_PCSTR() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            PCSTR value = new PCSTR(segment);
+            Object result = TypeMapper.toNative(value, PCSTR.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_PCSTRNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, PCSTR.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -1282,6 +1300,14 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(segment, PULONG.class);
         assertInstanceOf(PULONG.class, result);
         assertEquals(0x1234L, ((PULONG) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_PCSTR() {
+        MemorySegment segment = MemorySegment.ofAddress(0x5678);
+        Object result = TypeMapper.fromNative(segment, PCSTR.class);
+        assertInstanceOf(PCSTR.class, result);
+        assertEquals(0x5678L, ((PCSTR) result).segment.address());
     }
 
     @Test
