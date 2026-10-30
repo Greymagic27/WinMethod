@@ -40,6 +40,7 @@ import io.github.greymagic27.win_method.WinNT.PCWSTR;
 import io.github.greymagic27.win_method.WinNT.PHANDLE;
 import io.github.greymagic27.win_method.WinNT.PVOID;
 import io.github.greymagic27.win_method.WinNT.SHORT;
+import io.github.greymagic27.win_method.WinNT.ULONGLONG;
 import io.github.greymagic27.win_method.WinNT.WCHAR;
 import io.github.greymagic27.win_method.types.WinDef;
 import java.lang.foreign.Arena;
@@ -66,7 +67,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(int.class, Integer.class, LONG.class, UINT.class, DWORD.class, COLORREF.class, LCID.class)) {
             assertEquals(JAVA_INT, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class, UINT_PTR.class, ULONG_PTR.class, ULONG.class)) {
+        for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class, UINT_PTR.class, ULONG_PTR.class, ULONG.class, ULONGLONG.class)) {
             assertEquals(ValueLayout.JAVA_LONG, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(short.class, Short.class, WORD.class, ATOM.class, SHORT.class, USHORT.class)) {
@@ -919,6 +920,17 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_ULONGLONG() {
+        ULONGLONG value = new ULONGLONG(42L);
+        assertEquals(42L, TypeMapper.toNative(value, ULONGLONG.class, null));
+    }
+
+    @Test
+    void testToNative_ULONGLONGNull() {
+        assertEquals(0L, TypeMapper.toNative(null, ULONGLONG.class, null));
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -1308,6 +1320,13 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(segment, PCSTR.class);
         assertInstanceOf(PCSTR.class, result);
         assertEquals(0x5678L, ((PCSTR) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_ULONGLONG() {
+        Object result = TypeMapper.fromNative(42L, ULONGLONG.class);
+        assertInstanceOf(ULONGLONG.class, result);
+        assertEquals(42L, ((ULONGLONG) result).longValue());
     }
 
     @Test

@@ -13,6 +13,7 @@ import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
+import io.github.greymagic27.win_method.WinNT.ULONGLONG;
 import io.github.greymagic27.win_method.WinNT.WCHAR;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemoryLayout;
@@ -26,7 +27,7 @@ public final class TypeMapper {
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
         if (javaType == int.class || javaType == Integer.class || javaType == LONG.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class || javaType == UINT.class) return ValueLayout.JAVA_INT;
-        if (javaType == long.class || javaType == Long.class || javaType == ULONG.class) return ValueLayout.JAVA_LONG;
+        if (javaType == long.class || javaType == Long.class || javaType == ULONG.class || javaType == ULONGLONG.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class || javaType == SHORT.class || javaType == USHORT.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
@@ -104,6 +105,9 @@ public final class TypeMapper {
         }
         if (javaType == USHORT.class) {
             return ((USHORT) value).shortValue();
+        }
+        if (javaType == ULONGLONG.class) {
+            return ((ULONGLONG) value).longValue();
         }
         return value;
     }
@@ -187,6 +191,9 @@ public final class TypeMapper {
         }
         if (returnType == USHORT.class) {
             return new USHORT((Short) raw);
+        }
+        if (returnType == ULONGLONG.class) {
+            return new ULONGLONG((Long) raw);
         }
         return raw;
     }
