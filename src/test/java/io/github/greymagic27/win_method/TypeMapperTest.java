@@ -867,6 +867,40 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_PCWSTR() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(8);
+            PCWSTR value = new PCWSTR(segment);
+            Object result = TypeMapper.toNative(value, PCWSTR.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_PCWSTRNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, PCWSTR.class, arena));
+        }
+    }
+
+    @Test
+    void testToNative_PULONG() {
+        try (Arena arena = Arena.ofConfined()) {
+            MemorySegment segment = arena.allocate(ValueLayout.JAVA_INT);
+            PULONG value = new PULONG(segment);
+            Object result = TypeMapper.toNative(value, PULONG.class, arena);
+            assertEquals(segment, result);
+        }
+    }
+
+    @Test
+    void testToNative_PULONGNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(MemorySegment.NULL, TypeMapper.toNative(null, PULONG.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -1232,6 +1266,22 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative((short) 9999, USHORT.class);
         assertInstanceOf(USHORT.class, result);
         assertEquals((short) 9999, ((USHORT) result).shortValue());
+    }
+
+    @Test
+    void testFromNative_PCWSTR() {
+        MemorySegment segment = MemorySegment.ofAddress(0x5678);
+        Object result = TypeMapper.fromNative(segment, PCWSTR.class);
+        assertInstanceOf(PCWSTR.class, result);
+        assertEquals(0x5678L, ((PCWSTR) result).segment.address());
+    }
+
+    @Test
+    void testFromNative_PULONG() {
+        MemorySegment segment = MemorySegment.ofAddress(0x1234);
+        Object result = TypeMapper.fromNative(segment, PULONG.class);
+        assertInstanceOf(PULONG.class, result);
+        assertEquals(0x1234L, ((PULONG) result).segment.address());
     }
 
     @Test
