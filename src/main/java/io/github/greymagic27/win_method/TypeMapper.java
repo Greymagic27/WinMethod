@@ -126,7 +126,7 @@ public final class TypeMapper {
         }
         if (DWORD.class.isAssignableFrom(returnType)) {
             try {
-                int value = (int)raw;
+                int value = (int) raw;
                 return returnType.getConstructor(int.class).newInstance(value);
             } catch (ReflectiveOperationException e) {
                 throw new RuntimeException("DWORD subclass " + returnType + "needs an (int) constructor", e);
