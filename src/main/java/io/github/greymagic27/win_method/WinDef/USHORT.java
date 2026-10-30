@@ -20,6 +20,6 @@ public class USHORT {
     /// @return Returns the value of {@link #shortValue()} as a string
     @Override
     public @NonNull String toString() {
-        return String.valueOf(shortValue());
+        return String.valueOf(Short.toUnsignedInt(shortValue()));
     }
 }

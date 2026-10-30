@@ -34,6 +34,7 @@ import io.github.greymagic27.win_method.WinNT.LCID;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
+import io.github.greymagic27.win_method.WinNT.PCWSTR;
 import io.github.greymagic27.win_method.WinNT.PHANDLE;
 import io.github.greymagic27.win_method.WinNT.PVOID;
 import io.github.greymagic27.win_method.WinNT.SHORT;
@@ -87,7 +88,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(void.class, Void.class)) {
             assertNull(TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class, LPCVOID.class, LPBYTE.class, PHANDLE.class)) {
+        for (Class<?> type : List.of(String.class, Pointer.class, Structure.class, HANDLE.class, LPVOID.class, LPWSTR.class, LPCWSTR.class, LPDWORD.class, PVOID.class, LPCVOID.class, LPBYTE.class, PHANDLE.class, PCWSTR.class)) {
             assertEquals(ValueLayout.ADDRESS, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(HWND.class, HDC.class, HBRUSH.class, HICON.class, HCURSOR.class, HINSTANCE.class, HMENU.class, HGDIOBJ.class, HKEY.class, HFONT.class)) {

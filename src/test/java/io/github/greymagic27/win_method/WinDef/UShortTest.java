@@ -16,7 +16,8 @@ class UShortTest {
 
     @Test
     void testMaximumUnsignedValue() {
-        assertEquals(4294967295L, new USHORT((short) 4294967295L).shortValue());
+        assertEquals(-1, new USHORT((short) 65535).shortValue());
+        assertEquals("65535", new USHORT((short) 65535).toString());
     }
 
     @Test
