@@ -26,6 +26,7 @@ import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinDef.LRESULT;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.ULONG;
+import io.github.greymagic27.win_method.WinDef.USHORT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
@@ -65,7 +66,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class, UINT_PTR.class, ULONG_PTR.class, ULONG.class)) {
             assertEquals(ValueLayout.JAVA_LONG, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(short.class, Short.class, WORD.class, ATOM.class, SHORT.class)) {
+        for (Class<?> type : List.of(short.class, Short.class, WORD.class, ATOM.class, SHORT.class, USHORT.class)) {
             assertEquals(ValueLayout.JAVA_SHORT, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(byte.class, Byte.class, BYTE.class)) {
@@ -848,6 +849,22 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_USHORT() {
+        try (Arena arena = Arena.ofConfined()) {
+            USHORT value = new USHORT((short) 9999);
+            Object result = TypeMapper.toNative(value, USHORT.class, arena);
+            assertEquals((short) 9999, result);
+        }
+    }
+
+    @Test
+    void testToNative_USHORTNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals((short) 0, TypeMapper.toNative(null, USHORT.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -1206,6 +1223,13 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(9999L, ULONG.class);
         assertInstanceOf(ULONG.class, result);
         assertEquals(9999L, ((ULONG) result).longValue());
+    }
+
+    @Test
+    void testFromNative_USHOT() {
+        Object result = TypeMapper.fromNative((short) 9999, USHORT.class);
+        assertInstanceOf(USHORT.class, result);
+        assertEquals((short) 9999, ((USHORT) result).shortValue());
     }
 
     @Test

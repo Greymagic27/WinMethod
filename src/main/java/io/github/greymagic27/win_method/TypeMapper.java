@@ -7,6 +7,7 @@ import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.BYTE;
 import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.ULONG;
+import io.github.greymagic27.win_method.WinDef.USHORT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
@@ -26,7 +27,7 @@ public final class TypeMapper {
         if (javaType == int.class || javaType == Integer.class || javaType == LONG.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class || javaType == UINT.class) return ValueLayout.JAVA_INT;
         if (javaType == long.class || javaType == Long.class || javaType == ULONG.class) return ValueLayout.JAVA_LONG;
-        if (javaType == short.class || javaType == Short.class || javaType == SHORT.class) return ValueLayout.JAVA_SHORT;
+        if (javaType == short.class || javaType == Short.class || javaType == SHORT.class || javaType == USHORT.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class || javaType == BYTE.class) return ValueLayout.JAVA_BYTE;
         if (javaType == double.class || javaType == Double.class) return ValueLayout.JAVA_DOUBLE;
         if (javaType == float.class || javaType == Float.class) return ValueLayout.JAVA_FLOAT;
@@ -100,6 +101,9 @@ public final class TypeMapper {
         }
         if (javaType == ULONG.class) {
             return ((ULONG) value).longValue();
+        }
+        if (javaType == USHORT.class) {
+            return ((USHORT) value).shortValue();
         }
         return value;
     }
@@ -180,6 +184,9 @@ public final class TypeMapper {
         }
         if (returnType == ULONG.class) {
             return new ULONG((Long) raw);
+        }
+        if (returnType == USHORT.class) {
+            return new USHORT((Short) raw);
         }
         return raw;
     }
