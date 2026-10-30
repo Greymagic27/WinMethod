@@ -22,6 +22,7 @@ public final class CallbackReference {
 
     private static final IdentityHashMap<Callback, MemorySegment> LIVE = new IdentityHashMap<>();
     private static final Map<Class<?>, FunctionDescriptor> DESCRIPTORS = new ConcurrentHashMap<>();
+    private static final Arena CALLBACK_ARENA = Arena.ofShared();
     private static final MethodHandle DISPATCH;
 
     static {
@@ -56,8 +57,7 @@ public final class CallbackReference {
         MethodHandle collected = bound.asCollector(Object[].class, sam.getParameterCount());
         MethodType targetType = descriptor.toMethodType();
         MethodHandle adapted = collected.asType(targetType);
-
-        return Linker.nativeLinker().upcallStub(adapted, descriptor, Arena.ofShared());
+        return Linker.nativeLinker().upcallStub(adapted, descriptor, CALLBACK_ARENA);
     }
 
     @Keep

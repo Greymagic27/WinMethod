@@ -14,6 +14,7 @@ public class Memory extends Pointer implements Closeable {
     /// Allocates a new block of native memory
     ///
     /// @param size The number of bytes to allocate
+    @SuppressWarnings("MustBeClosedChecker")
     public Memory(long size) {
         this(size, Arena.ofShared());
     }

@@ -58,8 +58,8 @@ class MemoryTest {
 
     @Test
     void testUsesProvidedArena() {
-        Arena arena = Arena.ofConfined();
-        try (Memory mem = new Memory(4, arena)) {
+        try (Arena arena = Arena.ofConfined()) {
+            Memory mem = new Memory(4, arena);
             mem.segment.set(ValueLayout.JAVA_INT, 0, 7);
             assertEquals(7, mem.segment.get(ValueLayout.JAVA_INT, 0));
         }

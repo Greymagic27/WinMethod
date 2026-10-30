@@ -18,10 +18,10 @@ public final class NativeLibrary {
 
     private static final Linker linker = Linker.nativeLinker();
     private static final MethodHandle getLastErrorHandle;
-    private static final Arena k32Arena = Arena.ofShared();
+    private static final Arena libraryArena = Arena.ofShared();
 
     static {
-        SymbolLookup kernel32 = SymbolLookup.libraryLookup("kernel32.dll", k32Arena);
+        SymbolLookup kernel32 = SymbolLookup.libraryLookup("kernel32.dll", libraryArena);
         MemorySegment address = kernel32.find("GetLastError").orElseThrow(() -> new UnsatisfiedLinkError("GetLastError not found"));
         getLastErrorHandle = linker.downcallHandle(address, FunctionDescriptor.of(ValueLayout.JAVA_INT));
     }
@@ -30,7 +30,6 @@ public final class NativeLibrary {
     private final Map<Method, MethodHandle> handleCache = new ConcurrentHashMap<>();
 
     NativeLibrary(String libraryName) {
-        Arena libraryArena = Arena.ofShared();
         this.lookup = SymbolLookup.libraryLookup(mapLibraryName(libraryName), libraryArena);
     }
 

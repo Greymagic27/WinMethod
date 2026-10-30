@@ -30,6 +30,7 @@ public abstract class Structure {
     private final MemoryLayout layout;
     private MemorySegment segment;
 
+    @SuppressWarnings("MustBeClosedChecker")
     protected Structure() {
         this(Arena.ofShared());
     }
