@@ -181,13 +181,13 @@ public interface User32 extends Library {
 
     /// Displays a shortcut menu at the specified location and tracks the selection of items on the menu. The shortcut menu can appear anywhere on the screen
     ///
-    /// @param hMenu A {@link HANDLE} to the shortcut menu to be displayed
-    /// @param uFlags Flags to specify function options. More information can be found [here](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-trackpopupmenu)
-    /// @param x The horizontal location of the shortcut menu, in screen coordinates
-    /// @param y The vertical location of the shortcut menu, in screen coordinates
+    /// @param hMenu     A {@link HANDLE} to the shortcut menu to be displayed
+    /// @param uFlags    Flags to specify function options. More information can be found [here](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-trackpopupmenu)
+    /// @param x         The horizontal location of the shortcut menu, in screen coordinates
+    /// @param y         The vertical location of the shortcut menu, in screen coordinates
     /// @param nReserved Reserved; must be zero
-    /// @param hWnd A {@link HANDLE} to the window that owns the shortcut menu
-    /// @param prcRect Ignored
+    /// @param hWnd      A {@link HANDLE} to the window that owns the shortcut menu
+    /// @param prcRect   Ignored
     /// @return If you specify TPM_RETURNCMD in the uFlags parameter, the return value is the menu-item identifier of the item that the user selected. If the user cancels the menu without making a selection, or if an error occurs, the return value is zero. If you do not specify TPM_RETURNCMD in the uFlags parameter, the return value is nonzero if the function succeeds and zero if it fails.
     BOOL TrackPopupMenu(HMENU hMenu, UINT uFlags, int x, int y, int nReserved, HWND hWnd, WinDef.RECT prcRect);
 
@@ -278,7 +278,7 @@ public interface User32 extends Library {
 
     /// Retrieves a handle to the top-level window whose class name and window name match the specified strings. This function does not search child windows. This function does not perform a case-sensitive search
     ///
-    /// @param lpClassName The class name or a class atom created by a previous call to the RegisterClass or {@link #RegisterClassExW(WinUser.WNDCLASSEXW)} function
+    /// @param lpClassName  The class name or a class atom created by a previous call to the RegisterClass or {@link #RegisterClassExW(WinUser.WNDCLASSEXW)} function
     /// @param lpWindowName The window name (the window's title). If this parameter is NULL, all window names match
     /// @return If the function succeeds, the return value is a handle to the window that has the specified class name and window name. If the function fails, the return value is NULL
     HWND FindWindowW(LPCWSTR lpClassName, LPCWSTR lpWindowName);
@@ -320,18 +320,18 @@ public interface User32 extends Library {
 
     /// Loads an icon, cursor, animated cursor, or bitmap
     ///
-    /// @param hInst A {@link HANDLE} to the module of either a DLL or executable (.exe) that contains the image to be loaded
-    /// @param name The image to be loaded
-    /// @param type The type of image to be loaded. This can be one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadimagew)
-    /// @param cx The width, in pixels, of the icon or cursor
-    /// @param cy The height, in pixels, of the icon or cursor
+    /// @param hInst  A {@link HANDLE} to the module of either a DLL or executable (.exe) that contains the image to be loaded
+    /// @param name   The image to be loaded
+    /// @param type   The type of image to be loaded. This can be one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadimagew)
+    /// @param cx     The width, in pixels, of the icon or cursor
+    /// @param cy     The height, in pixels, of the icon or cursor
     /// @param fuLoad This parameter can be one or more of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-loadimagew)
     /// @return If the function succeeds, the return value is the handle of the newly loaded image. If the function fails, the return value is NULL
     HANDLE LoadImageW(HINSTANCE hInst, LPCWSTR name, UINT type, int cx, int cy, UINT fuLoad);
 
     /// Retrieves information about the specified window. The function also retrieves the value at a specified offset into the extra window memory
     ///
-    /// @param hWnd A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window and, indirectly, the class to which the window belongs
+    /// @param hWnd   A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the window and, indirectly, the class to which the window belongs
     /// @param nIndex The zero-based offset to the value to be retrieved. Valid values are in the range zero through the number of bytes of extra window memory, minus the size of a {@link LONG_PTR}. To retrieve any other value, specify one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-getwindowlongptrw).
     /// @return If the function succeeds, the return value is the requested value. If the function fails, the return value is zero
     LONG_PTR GetWindowLongPtrW(HWND hWnd, int nIndex);

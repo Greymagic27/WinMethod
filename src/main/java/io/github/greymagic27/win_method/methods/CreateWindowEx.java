@@ -110,13 +110,13 @@ public class CreateWindowEx {
 
     /// Creates a rich edit child window with the specified name, identifier, position, and dimensions.
     ///
-    /// @param windowName The window name
-    /// @param parent     A handle to the parent window of the rich edit control
-    /// @param id         The identifier of the rich edit control
-    /// @param x          The initial horizontal position of the rich edit control
-    /// @param y          The initial vertical position of the rich edit control
-    /// @param width      The width, in device units, of the rich edit control
-    /// @param height     The height, in device units, of the rich edit control
+    /// @param windowName        The window name
+    /// @param parent            A handle to the parent window of the rich edit control
+    /// @param id                The identifier of the rich edit control
+    /// @param x                 The initial horizontal position of the rich edit control
+    /// @param y                 The initial vertical position of the rich edit control
+    /// @param width             The width, in device units, of the rich edit control
+    /// @param height            The height, in device units, of the rich edit control
     /// @param scrollBarsVisible Determines if vertical and horizontal scroll bars will be visible on the window
     /// @return If the function succeeds, the return value is a handle to the new rich edit control. If the function fails, the return value is NULL
     public static HWND createRichEditWindow(String windowName, HWND parent, int id, int x, int y, int width, int height, boolean scrollBarsVisible) {

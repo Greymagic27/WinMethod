@@ -21,10 +21,10 @@ public class Window {
 
     /// Creates a basic window
     ///
-    /// @param wndproc Custom wndproc. If you do not want to use a custom wndproc, use {@link WinUser.Wndproc#defaultWndProc()}
-    /// @param title   Title of the window
-    /// @param width   Width of the window
-    /// @param height  Height of the window
+    /// @param wndproc         Custom wndproc. If you do not want to use a custom wndproc, use {@link WinUser.Wndproc#defaultWndProc()}
+    /// @param title           Title of the window
+    /// @param width           Width of the window
+    /// @param height          Height of the window
     /// @param richEditEnabled Enables rich text via msftedit.dll
     public static void createWindow(WinUser.Wndproc wndproc, String title, int width, int height, boolean richEditEnabled) {
         currentWidth = width;

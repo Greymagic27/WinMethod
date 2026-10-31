@@ -50,10 +50,16 @@ class MemoryTest {
     }
 
     @Test
+    void testClearResetsAllBytes() {
+        memory.segment.fill((byte) 1);
+        memory.clear();
+        for (long i = 0; i < memory.size(); i++) assertEquals(0, memory.segment.get(ValueLayout.JAVA_BYTE, i));
+    }
+
+    @Test
     void testIsPointer() {
         assertInstanceOf(Pointer.class, memory);
         assertFalse(memory.isNull());
-
     }
 
     @Test
@@ -225,5 +231,76 @@ class MemoryTest {
     @Test
     void testWriteRejectsOffsetAndLengthBeyondMemory() {
         assertThrows(IndexOutOfBoundsException.class, () -> memory.write(3, new byte[2], 0, 2));
+    }
+
+    @Test
+    void testAllocatesZeroSize() {
+        try (Memory memory = new Memory(0)) {
+            assertEquals(0, memory.size());
+            assertEquals(0, memory.getByteArray().length);
+        }
+    }
+
+    @SuppressWarnings("resource")
+    @Test
+    void testRejectsNegativeSize() {
+        assertThrows(IllegalArgumentException.class, () -> new Memory(-1));
+    }
+
+    @Test
+    void testGetByteArrayReturnsIndependentCopy() {
+        memory.segment.set(ValueLayout.JAVA_BYTE, 0, (byte) 10);
+        byte[] bytes = memory.getByteArray();
+        bytes[0] = 99;
+        assertEquals(10, memory.segment.get(ValueLayout.JAVA_BYTE, 0));
+    }
+
+    @Test
+    void testGetByteArrayRejectsOffsetAndLengthOverflow() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.getByteArray(Long.MAX_VALUE, 1));
+    }
+
+    @Test
+    void testWriteAtEndOfMemoryWithZeroLength() {
+        assertDoesNotThrow(() -> memory.write(4, new byte[]{1}, 1, 0));
+    }
+
+    @Test
+    void testWriteRejectsLengthBeyondSourceArray() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.write(0, new byte[]{1, 2}, 0, 3));
+    }
+
+    @Test
+    void testWriteRejectsLengthBeyondMemory() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.write(0, new byte[]{1, 2, 3, 4, 5}, 0, 5));
+    }
+
+    @Test
+    void testWriteRejectsOffsetAndLengthOverflow() {
+        assertThrows(IndexOutOfBoundsException.class, () -> memory.write(Long.MAX_VALUE, new byte[1], 0, 1));
+    }
+
+    @Test
+    void testCloseIsIdempotent() {
+        memory.close();
+        assertDoesNotThrow(memory::close);
+    }
+
+    @Test
+    void testClearAfterCloseThrows() {
+        memory.close();
+        assertThrows(IllegalStateException.class, memory::clear);
+    }
+
+    @Test
+    void testGetByteArrayAfterCloseThrows() {
+        memory.close();
+        assertThrows(IllegalStateException.class, memory::getByteArray);
+    }
+
+    @Test
+    void testWriteAfterCloseThrows() {
+        memory.close();
+        assertThrows(IllegalStateException.class, () -> memory.write(0, new byte[]{1}, 0, 1));
     }
 }

@@ -48,11 +48,21 @@ public class Memory extends Pointer implements Closeable {
         arena.close();
     }
 
+
+    /// Returns the contents of this memory block as a byte array
+    ///
+    /// @return A byte array containing the contents of this memory block
     public byte[] getByteArray() {
         if (size > Integer.MAX_VALUE) throw new IllegalStateException("Memory size exceeds maximum byte array size");
         return getByteArray(0, Math.toIntExact(size));
     }
 
+    /// Returns a range of this memory block as a byte array
+    ///
+    /// @param offset The offset in bytes from which to start reading
+    /// @param length The number of bytes to read
+    /// @return A byte array containing the requested memory range
+    @Override
     public byte[] getByteArray(long offset, int length) {
         if (offset < 0) throw new IndexOutOfBoundsException("Offset must be more than or equal to 0");
         if (length < 0) throw new IndexOutOfBoundsException("Length must be more than or equal to 0");
@@ -62,6 +72,12 @@ public class Memory extends Pointer implements Closeable {
         return bytes;
     }
 
+    /// Writes a range of a byte array to this memory block
+    ///
+    /// @param offset The destination offset in bytes within this memory block
+    /// @param bytes  The source byte array
+    /// @param index  The starting index in the source byte array
+    /// @param length The number of bytes to write
     public void write(long offset, byte[] bytes, int index, int length) {
         if (offset < 0) throw new IndexOutOfBoundsException("Offset must be more than or equal to 0");
         if (index < 0) throw new IndexOutOfBoundsException("Index must be more than or equal to 0");

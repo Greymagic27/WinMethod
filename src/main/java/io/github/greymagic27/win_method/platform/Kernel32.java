@@ -154,7 +154,7 @@ public interface Kernel32 extends Library {
 
     /// Waits until the specified object is in the signalled state or the time-out interval elapses
     ///
-    /// @param hHandle A {@link HANDLE} to the object
+    /// @param hHandle        A {@link HANDLE} to the object
     /// @param dwMilliseconds The time-out interval, in millisecond
     /// @return If the function succeeds, the return value indicates the event that caused the function to return. It can be one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/synchapi/nf-synchapi-waitforsingleobject)
     DWORD WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
