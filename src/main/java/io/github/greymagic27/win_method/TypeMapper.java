@@ -183,9 +183,6 @@ public final class TypeMapper {
         if (returnType == SHORT.class) {
             return new SHORT((Short) raw);
         }
-        if (returnType == DWORD.class) {
-            return new DWORD((Integer) raw);
-        }
         if (returnType == UINT.class) {
             return new UINT((Integer) raw);
         }
