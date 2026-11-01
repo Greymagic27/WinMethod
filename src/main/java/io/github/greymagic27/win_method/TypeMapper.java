@@ -25,7 +25,7 @@ import org.jspecify.annotations.Nullable;
 public final class TypeMapper {
 
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
-        if (javaType == int.class || javaType == Integer.class || javaType == LONG.class) return ValueLayout.JAVA_INT;
+        if (javaType == int.class || javaType == Integer.class) return ValueLayout.JAVA_INT;
         if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class || javaType == UINT.class) return ValueLayout.JAVA_INT;
         if (javaType == long.class || javaType == Long.class || javaType == ULONG.class || javaType == ULONGLONG.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class || javaType == SHORT.class || javaType == USHORT.class) return ValueLayout.JAVA_SHORT;
@@ -36,7 +36,7 @@ public final class TypeMapper {
         if (javaType == String.class) return ValueLayout.ADDRESS;
         if (Structure.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType) || Pointer.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         if (WORD.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_SHORT;
-        if (DWORD.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_INT;
+        if (DWORD.class.isAssignableFrom(javaType) || LONG.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_INT;
         if (LONG_PTR.class.isAssignableFrom(javaType) || UINT_PTR.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_LONG;
         if (BYTE.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_BYTE;
         if (javaType == void.class || javaType == Void.class) return null;
@@ -79,6 +79,9 @@ public final class TypeMapper {
         }
         if (BYTE.class.isAssignableFrom(javaType)) {
             return ((BYTE) value).byteValue();
+        }
+        if (LONG.class.isAssignableFrom(javaType)) {
+            return ((LONG) value).intValue();
         }
         if (javaType == Boolean.class || javaType == boolean.class) {
             return ((Boolean) value) ? 1 : 0;
@@ -166,6 +169,14 @@ public final class TypeMapper {
                 throw new RuntimeException(returnType + " needs a (byte) constructor", e);
             }
         }
+        if (LONG.class.isAssignableFrom(returnType)) {
+            try {
+                int value = (int) raw;
+                return returnType.getConstructor(int.class).newInstance(value);
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(returnType + " needs an (int) constructor", e);
+            }
+        }
         if (returnType == String.class) {
             if (raw == null || raw.equals(MemorySegment.NULL)) return null;
             MemorySegment segment = (MemorySegment) raw;
@@ -176,9 +187,6 @@ public final class TypeMapper {
         }
         if (returnType == BOOL.class) {
             return new BOOL((Integer) raw);
-        }
-        if (returnType == LONG.class) {
-            return new LONG((Integer) raw);
         }
         if (returnType == SHORT.class) {
             return new SHORT((Short) raw);

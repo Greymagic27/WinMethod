@@ -33,6 +33,7 @@ import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinDef.WPARAM;
 import io.github.greymagic27.win_method.WinNT.BOOLEAN;
 import io.github.greymagic27.win_method.WinNT.HANDLE;
+import io.github.greymagic27.win_method.WinNT.HRESULT;
 import io.github.greymagic27.win_method.WinNT.LCID;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
@@ -66,7 +67,7 @@ class TypeMapperTest {
 
     @Test
     void testLayoutMappings() {
-        for (Class<?> type : List.of(int.class, Integer.class, LONG.class, UINT.class, DWORD.class, COLORREF.class, LCID.class)) {
+        for (Class<?> type : List.of(int.class, Integer.class, LONG.class, UINT.class, DWORD.class, COLORREF.class, LCID.class, HRESULT.class)) {
             assertEquals(JAVA_INT, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class, UINT_PTR.class, ULONG_PTR.class, ULONG.class, ULONGLONG.class)) {
@@ -972,6 +973,18 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_HRESULT() {
+        HRESULT value = new HRESULT(9999);
+        Object result = TypeMapper.toNative(value, HRESULT.class, null);
+        assertEquals(9999, result);
+    }
+
+    @Test
+    void testToNative_HRESULTNull() {
+        assertEquals(0, TypeMapper.toNative(null, HRESULT.class, null));
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -1396,6 +1409,13 @@ class TypeMapperTest {
         PUCHAR result = (PUCHAR) TypeMapper.fromNative(segment, PUCHAR.class);
         assertInstanceOf(PUCHAR.class, result);
         assertEquals(segment, result.segment);
+    }
+
+    @Test
+    void testFromNative_HRESULT() {
+        Object result = TypeMapper.fromNative(9999, HRESULT.class);
+        assertInstanceOf(HRESULT.class, result);
+        assertEquals(9999, ((HRESULT) result).intValue());
     }
 
     @Test
