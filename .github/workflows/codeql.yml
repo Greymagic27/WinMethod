@@ -30,6 +30,12 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v7.0.1
+    - name: Install Java
+      if: matrix.language == 'java-kotlin'
+      uses: actions/setup-java@v6.1.0
+      with:
+          java-version: '27'
+          distribution: 'oracle'
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v4
       with:
