@@ -11,10 +11,10 @@ import org.jspecify.annotations.NonNull;
 public interface Library {
 
     static <T extends Library> @NonNull T load(@NonNull Class<T> interfaceType) {
-        return load(interfaceType.getSimpleName(), interfaceType);
+        return load(interfaceType, interfaceType.getSimpleName());
     }
 
-    static <T extends Library> @NonNull T load(String libraryName, @NonNull Class<T> interfaceType) {
+    static <T extends Library> @NonNull T load(@NonNull Class<T> interfaceType, String libraryName) {
         NativeLibrary nativeLibrary = new NativeLibrary(libraryName);
         InvocationHandler handler = (_, method, args) -> {
             if (method.getDeclaringClass() == Object.class) return method.invoke(nativeLibrary, args);

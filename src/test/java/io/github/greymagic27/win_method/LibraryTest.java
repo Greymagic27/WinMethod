@@ -20,7 +20,7 @@ class LibraryTest {
 
     @BeforeEach
     void setUp() {
-        kernel32WithLibrary = Library.load("kernel32", Kernel32.class);
+        kernel32WithLibrary = Library.load(Kernel32.class, "kernel32");
         kernel32WithoutLibrary = Library.load(Kernel32.class);
     }
 
@@ -64,7 +64,7 @@ class LibraryTest {
 
     @Test
     void testLoadFailsForMissingLibrary() {
-        assertThrows(IllegalArgumentException.class, () -> Library.load("non_existent", Kernel32.class), "Should throw exception if native library cannot be found");
+        assertThrows(IllegalArgumentException.class, () -> Library.load(Kernel32.class, "non_existent"), "Should throw exception if native library cannot be found");
     }
 
     @Test
@@ -93,7 +93,7 @@ class LibraryTest {
         interface GDI32 extends Library {
             void ChoosePixelFormat(String[] list);
         }
-        GDI32 lib = Library.load("gdi32", GDI32.class);
+        GDI32 lib = Library.load(GDI32.class, "gdi32");
         assertThrows(IllegalArgumentException.class, () -> lib.ChoosePixelFormat(null));
     }
 
