@@ -14,6 +14,13 @@ public class WORD {
         this.value = value;
     }
 
+    /// Creates a {@code WORD} from a {@code long} value
+    ///
+    /// @param value The value to store
+    public WORD(long value) {
+        this.value = (short) value;
+    }
+
     /// Returns the short value
     public short shortValue() {
         return value;
@@ -22,6 +29,6 @@ public class WORD {
     /// @return Returns the value of {@link #shortValue()} as a string
     @Override
     public @NonNull String toString() {
-        return String.valueOf(shortValue());
+        return String.valueOf(Short.toUnsignedInt(shortValue()));
     }
 }
