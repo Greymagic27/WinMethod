@@ -27,7 +27,7 @@ public final class TypeMapper {
 
     static @Nullable MemoryLayout layoutMappings(Class<?> javaType) {
         if (javaType == int.class || javaType == Integer.class) return ValueLayout.JAVA_INT;
-        if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class || javaType == UINT.class) return ValueLayout.JAVA_INT;
+        if (javaType == boolean.class || javaType == Boolean.class || javaType == BOOL.class) return ValueLayout.JAVA_INT;
         if (javaType == long.class || javaType == Long.class || javaType == ULONG.class || javaType == ULONGLONG.class) return ValueLayout.JAVA_LONG;
         if (javaType == short.class || javaType == Short.class || javaType == SHORT.class || javaType == USHORT.class) return ValueLayout.JAVA_SHORT;
         if (javaType == byte.class || javaType == Byte.class) return ValueLayout.JAVA_BYTE;
@@ -37,7 +37,7 @@ public final class TypeMapper {
         if (javaType == String.class) return ValueLayout.ADDRESS;
         if (Structure.class.isAssignableFrom(javaType) || Callback.class.isAssignableFrom(javaType) || Pointer.class.isAssignableFrom(javaType)) return ValueLayout.ADDRESS;
         if (WORD.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_SHORT;
-        if (DWORD.class.isAssignableFrom(javaType) || LONG.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_INT;
+        if (DWORD.class.isAssignableFrom(javaType) || LONG.class.isAssignableFrom(javaType) || UINT.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_INT;
         if (LONG_PTR.class.isAssignableFrom(javaType) || UINT_PTR.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_LONG;
         if (BYTE.class.isAssignableFrom(javaType)) return ValueLayout.JAVA_BYTE;
         if (javaType == void.class || javaType == Void.class) return null;
@@ -88,6 +88,9 @@ public final class TypeMapper {
         if (LONG.class.isAssignableFrom(javaType)) {
             return ((LONG) value).intValue();
         }
+        if (UINT.class.isAssignableFrom(javaType)) {
+            return ((UINT) value).intValue();
+        }
         if (javaType == Boolean.class || javaType == boolean.class) {
             return ((Boolean) value) ? 1 : 0;
         }
@@ -102,9 +105,6 @@ public final class TypeMapper {
         }
         if (javaType == SHORT.class) {
             return ((SHORT) value).shortValue();
-        }
-        if (javaType == UINT.class) {
-            return ((UINT) value).intValue();
         }
         if (javaType == WCHAR.class) {
             return ((WCHAR) value).charValue();
@@ -182,6 +182,14 @@ public final class TypeMapper {
                 throw new RuntimeException(returnType + " needs an (int) constructor", e);
             }
         }
+        if (UINT.class.isAssignableFrom(returnType)) {
+            try {
+                int value = (int) raw;
+                return returnType.getConstructor(int.class).newInstance(value);
+            } catch (ReflectiveOperationException e) {
+                throw new RuntimeException(returnType + " needs an (int) constructor", e);
+            }
+        }
         if (returnType == String.class) {
             if (raw == null || raw.equals(MemorySegment.NULL)) return null;
             MemorySegment segment = (MemorySegment) raw;
@@ -195,9 +203,6 @@ public final class TypeMapper {
         }
         if (returnType == SHORT.class) {
             return new SHORT((Short) raw);
-        }
-        if (returnType == UINT.class) {
-            return new UINT((Integer) raw);
         }
         if (returnType == WCHAR.class) {
             return new WCHAR((Character) raw);
