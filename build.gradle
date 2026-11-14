@@ -58,7 +58,9 @@ tasks.named("publishToMavenCentral") {
     dependsOn("publishToMavenLocal")
 }
 tasks.named("check") {
-    dependsOn("publishToMavenLocal")
+    if (!providers.environmentVariable("CI").isPresent()) {
+        dependsOn("publishToMavenLocal")
+    }
 }
 tasks.javadoc {
     include("io/github/greymagic27/win_method/platform/**")
