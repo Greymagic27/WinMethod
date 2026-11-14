@@ -149,6 +149,31 @@ class StructureTest {
     }
 
     @Test
+    void testPackagePrivateFields() {
+        @Structure.AutoFieldOrder
+        class PackagePrivate extends Structure {
+            int first;
+            long second;
+            short third;
+        }
+        PackagePrivate st = new PackagePrivate();
+        st.first = 100;
+        st.second = 350L;
+        st.third = 50;
+        MemorySegment segment = st.pointer().segment;
+        assertEquals(100, segment.get(ValueLayout.JAVA_INT, 0));
+        assertEquals(350L, segment.get(ValueLayout.JAVA_LONG, 8));
+        assertEquals((short) 50, segment.get(ValueLayout.JAVA_SHORT_UNALIGNED, 16));
+        st.first = 0;
+        st.second = 0;
+        st.third = 0;
+        st.read();
+        assertEquals(100, st.first);
+        assertEquals(350L, st.second);
+        assertEquals((short) 50, st.third);
+    }
+
+    @Test
     void testToString() {
         Point p = new Point();
         p.x = 42;
