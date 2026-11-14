@@ -11,6 +11,7 @@ import io.github.greymagic27.win_method.WinDef.USHORT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
+import io.github.greymagic27.win_method.WinNT.LPSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
 import io.github.greymagic27.win_method.WinNT.ULONGLONG;
@@ -49,12 +50,16 @@ public final class TypeMapper {
         return !Structure.class.isAssignableFrom(type);
     }
 
+    @SuppressWarnings("IfCanBeSwitch")
     static Object toNative(Object value, Class<?> javaType, Arena callArena) {
         if (value == null) {
             return defaultNativeValue(javaType);
         }
         if ((javaType == LPWSTR.class || javaType == LPCWSTR.class) && value instanceof String s) {
             return callArena.allocateFrom(s, StandardCharsets.UTF_16LE);
+        }
+        if ((javaType == LPSTR.class) && value instanceof String s) {
+            return callArena.allocateFrom(s, StandardCharsets.ISO_8859_1);
         }
         if (Structure.class.isAssignableFrom(javaType)) {
             return ((Structure) value).pointer().segment;

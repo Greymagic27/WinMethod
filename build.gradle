@@ -57,6 +57,9 @@ tasks.withType(Javadoc).configureEach {
 tasks.named("publishToMavenCentral") {
     dependsOn("publishToMavenLocal")
 }
+tasks.named("check") {
+    dependsOn("publishToMavenLocal")
+}
 tasks.javadoc {
     include("io/github/greymagic27/win_method/platform/**")
     include("io/github/greymagic27/win_method/types/**")
