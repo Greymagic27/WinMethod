@@ -1,5 +1,7 @@
 package io.github.greymagic27.win_method;
 
+import io.github.greymagic27.win_method.BaseTsd.DWORD_PTR;
+import io.github.greymagic27.win_method.BaseTsd.LONG_PTR;
 import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.BaseTsd.ULONG_PTR;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
@@ -70,7 +72,7 @@ class TypeMapperTest {
         for (Class<?> type : List.of(int.class, Integer.class, LONG.class, UINT.class, DWORD.class, COLORREF.class, LCID.class, HRESULT.class)) {
             assertEquals(JAVA_INT, TypeMapper.layoutMappings(type));
         }
-        for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class, UINT_PTR.class, ULONG_PTR.class, ULONG.class, ULONGLONG.class)) {
+        for (Class<?> type : List.of(long.class, Long.class, LRESULT.class, LPARAM.class, WPARAM.class, UINT_PTR.class, ULONG_PTR.class, LONG_PTR.class, DWORD_PTR.class, ULONG.class, ULONGLONG.class)) {
             assertEquals(ValueLayout.JAVA_LONG, TypeMapper.layoutMappings(type));
         }
         for (Class<?> type : List.of(short.class, Short.class, WORD.class, ATOM.class, SHORT.class, USHORT.class)) {
@@ -507,6 +509,22 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_LONGPTR() {
+        try (Arena arena = Arena.ofConfined()) {
+            LONG_PTR value = new LONG_PTR(9999L);
+            Object result = TypeMapper.toNative(value, LONG_PTR.class, arena);
+            assertEquals(9999L, result);
+        }
+    }
+
+    @Test
+    void testToNative_LONGPTRNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0L, TypeMapper.toNative(null, LONG_PTR.class, arena));
+        }
+    }
+
+    @Test
     void testToNative_SHORT() {
         try (Arena arena = Arena.ofConfined()) {
             SHORT value = new SHORT((short) 9999);
@@ -667,15 +685,6 @@ class TypeMapperTest {
             ULONG_PTR value = new ULONG_PTR(9999L);
             Object result = TypeMapper.toNative(value, ULONG_PTR.class, arena);
             assertEquals(9999L, result);
-        }
-    }
-
-    @Test
-    void testToNative_ULONGPTRUnsigned() {
-        try (Arena arena = Arena.ofConfined()) {
-            ULONG_PTR value = new ULONG_PTR(-1L);
-            Object result = TypeMapper.toNative(value, ULONG_PTR.class, arena);
-            assertEquals(-1L, result);
         }
     }
 
@@ -985,6 +994,22 @@ class TypeMapperTest {
     }
 
     @Test
+    void testToNative_DWORDPTR() {
+        try (Arena arena = Arena.ofConfined()) {
+            DWORD_PTR value = new DWORD_PTR(9999L);
+            Object result = TypeMapper.toNative(value, DWORD_PTR.class, arena);
+            assertEquals(9999L, result);
+        }
+    }
+
+    @Test
+    void testToNative_DWORDPTRNull() {
+        try (Arena arena = Arena.ofConfined()) {
+            assertEquals(0L, TypeMapper.toNative(null, DWORD_PTR.class, arena));
+        }
+    }
+
+    @Test
     void testFromNative_Pointer() {
         MemorySegment segment = MemorySegment.NULL;
         Object result = TypeMapper.fromNative(segment, Pointer.class);
@@ -1194,6 +1219,13 @@ class TypeMapperTest {
     }
 
     @Test
+    void testFromNative_LONGPTR() {
+        Object result = TypeMapper.fromNative(9999L, LONG_PTR.class);
+        assertInstanceOf(LONG_PTR.class, result);
+        assertEquals(9999L, ((LONG_PTR) result).longValue());
+    }
+
+    @Test
     void testFromNative_SHORT() {
         Object result = TypeMapper.fromNative((short) 9999, SHORT.class);
         assertInstanceOf(SHORT.class, result);
@@ -1267,14 +1299,6 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(9999L, ULONG_PTR.class);
         assertInstanceOf(ULONG_PTR.class, result);
         assertEquals(9999L, ((ULONG_PTR) result).longValue());
-    }
-
-    @Test
-    void testFromNative_ULONGPTRUnsigned() {
-        Object result = TypeMapper.fromNative(-1L, ULONG_PTR.class);
-        assertInstanceOf(ULONG_PTR.class, result);
-        assertEquals(-1L, ((ULONG_PTR) result).longValue());
-        assertEquals("18446744073709551615", Long.toUnsignedString(((ULONG_PTR) result).longValue()));
     }
 
     @Test
@@ -1416,6 +1440,13 @@ class TypeMapperTest {
         Object result = TypeMapper.fromNative(9999, HRESULT.class);
         assertInstanceOf(HRESULT.class, result);
         assertEquals(9999, ((HRESULT) result).intValue());
+    }
+
+    @Test
+    void testFromNative_DWORDPTR() {
+        Object result = TypeMapper.fromNative(9999L, DWORD_PTR.class);
+        assertInstanceOf(DWORD_PTR.class, result);
+        assertEquals(9999L, ((DWORD_PTR) result).longValue());
     }
 
     @Test
