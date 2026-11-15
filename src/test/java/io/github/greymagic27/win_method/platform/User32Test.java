@@ -28,6 +28,7 @@ import java.lang.foreign.MemorySegment;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -531,5 +532,53 @@ class User32Test {
         } finally {
             user32.DestroyWindow(testWindow);
         }
+    }
+
+    @Test
+    void testSetTimer() {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicLong timerId = new AtomicLong(0);
+        WinUser.TIMERPROC timerproc = (_, _, idEvent, _) -> {
+            timerId.set(idEvent.longValue());
+            latch.countDown();
+        };
+        UINT_PTR id = user32.SetTimer(window, new UINT_PTR(1), new UINT(100), timerproc);
+        assertNotNull(id);
+        assertNotEquals(0, id.longValue());
+        try {
+            long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+            while (latch.getCount() > 0 && System.nanoTime() < deadline) {
+                if (user32.PeekMessageW(msg, window, new UINT(WinUser.WM_TIMER), new UINT(WinUser.WM_TIMER), new UINT(WinUser.PM_REMOVE)).booleanValue()) {
+                    user32.DispatchMessageW(msg);
+                } else {
+                    Thread.onSpinWait();
+                }
+            }
+            assertEquals(0, latch.getCount());
+            assertEquals(id.longValue(), timerId.get());
+        } finally {
+            user32.KillTimer(window, id);
+        }
+    }
+
+    @Test
+    void testKillTimer() {
+        UINT_PTR id = user32.SetTimer(window, new UINT_PTR(1), new UINT(60000), null);
+        assertNotNull(id);
+        assertNotEquals(0, id.longValue());
+        assertTrue(user32.KillTimer(window, id).booleanValue());
+        assertFalse(user32.KillTimer(window, id).booleanValue());
+    }
+
+    @Test
+    void testPeekMessage() {
+        int testMsg = WinUser.WM_USER + 1;
+        assertTrue(user32.PostMessageW(window, new UINT(testMsg), new WPARAM(123), new LPARAM(456)).booleanValue());
+        BOOL result = user32.PeekMessageW(msg, window, new UINT(testMsg), new UINT(testMsg), new UINT(WinUser.PM_REMOVE));
+        assertTrue(result.booleanValue());
+        assertEquals(testMsg, msg.message.intValue());
+        assertEquals(123, msg.wParam.longValue());
+        assertEquals(456, msg.lParam.longValue());
+        assertFalse(user32.PeekMessageW(msg, window, new UINT(testMsg), new UINT(testMsg), new UINT(WinUser.PM_REMOVE)).booleanValue());
     }
 }

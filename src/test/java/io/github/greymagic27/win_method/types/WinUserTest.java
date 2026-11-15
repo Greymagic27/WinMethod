@@ -1,5 +1,7 @@
 package io.github.greymagic27.win_method.types;
 
+import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
+import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.BYTE;
 import io.github.greymagic27.win_method.WinDef.HDC;
@@ -55,6 +57,7 @@ import static io.github.greymagic27.win_method.types.WinUser.MB_YESNO;
 import static io.github.greymagic27.win_method.types.WinUser.MF_POPUP;
 import static io.github.greymagic27.win_method.types.WinUser.MF_SEPARATOR;
 import static io.github.greymagic27.win_method.types.WinUser.MF_STRING;
+import static io.github.greymagic27.win_method.types.WinUser.PM_REMOVE;
 import static io.github.greymagic27.win_method.types.WinUser.SM_CXSCREEN;
 import static io.github.greymagic27.win_method.types.WinUser.SM_CYSCREEN;
 import static io.github.greymagic27.win_method.types.WinUser.SWP_NOZORDER;
@@ -159,6 +162,7 @@ import static io.github.greymagic27.win_method.types.WinUser.WM_PAINT;
 import static io.github.greymagic27.win_method.types.WinUser.WM_SETFONT;
 import static io.github.greymagic27.win_method.types.WinUser.WM_SETREDRAW;
 import static io.github.greymagic27.win_method.types.WinUser.WM_SIZE;
+import static io.github.greymagic27.win_method.types.WinUser.WM_TIMER;
 import static io.github.greymagic27.win_method.types.WinUser.WM_USER;
 import static io.github.greymagic27.win_method.types.WinUser.WS_BORDER;
 import static io.github.greymagic27.win_method.types.WinUser.WS_CAPTION;
@@ -213,6 +217,7 @@ class WinUserTest {
         assertEquals(0x0102, WM_CHAR);
         assertEquals(0x0400, WM_USER);
         assertEquals(0x000B, WM_SETREDRAW);
+        assertEquals(0x0113, WM_TIMER);
     }
 
     @Test
@@ -401,6 +406,7 @@ class WinUserTest {
         assertEquals(0x00000080, BS_BITMAP.intValue());
         assertEquals(-16, GWL_STYLE);
         assertEquals(0x00F7, BM_SETIMAGE);
+        assertEquals(0x0001, PM_REMOVE);
     }
 
     @Test
@@ -467,5 +473,20 @@ class WinUserTest {
         assertFalse(ps.fRestore.booleanValue());
         assertFalse(ps.fIncUpdate.booleanValue());
         for (int i = 0; i < ps.rgbReserved.length; i++) assertEquals((byte) i, ps.rgbReserved[i].byteValue());
+    }
+
+    @Test
+    void testTimerProc() {
+        HWND hwnd = new HWND(0x12345678);
+        UINT msg = new UINT(WM_TIMER);
+        UINT_PTR idEvent = new UINT_PTR(123);
+        DWORD dwTime = new DWORD(456);
+        WinUser.TIMERPROC timerproc = (hWnd, umsg, uIdEvent, dwTimeP) -> {
+            assertEquals(hwnd.segment.address(), hWnd.segment.address());
+            assertEquals(msg.intValue(), umsg.intValue());
+            assertEquals(idEvent.longValue(), uIdEvent.longValue());
+            assertEquals(dwTime.intValue(), dwTimeP.intValue());
+        };
+        timerproc.callback(hwnd, msg, idEvent, dwTime);
     }
 }

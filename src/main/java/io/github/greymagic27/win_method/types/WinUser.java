@@ -1,5 +1,6 @@
 package io.github.greymagic27.win_method.types;
 
+import io.github.greymagic27.win_method.BaseTsd.UINT_PTR;
 import io.github.greymagic27.win_method.Callback;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.Pointer;
@@ -81,7 +82,12 @@ public interface WinUser {
     int WM_CHAR = 0x0102;
     /// Used to define private messages for use by private window classes, usually of the form WM_USER+x, where x is an integer value
     int WM_USER = 0x0400;
+
+    /// You send the WM_SETREDRAW message to a window to allow changes in that window to be redrawn, or to prevent changes in that window from being redrawn
     int WM_SETREDRAW = 0x000B;
+
+    /// Posted to the installing thread's message queue when a timer expires. The message is posted by the {@link User32#GetMessageW(MSG, HWND, UINT, UINT)} or {@link User32#PeekMessageW(MSG, HWND, UINT, UINT, UINT)} function
+    int WM_TIMER = 0x0113;
 
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;
@@ -349,6 +355,9 @@ public interface WinUser {
     /// The user can select menu items with both the left and right mouse buttons
     int TPM_RIGHTBUTTON = 0x002;
 
+    /// Messages are removed from the queue after processing by {@link User32#PeekMessageW(MSG, HWND, UINT, UINT, UINT)}
+    int PM_REMOVE = 0x0001;
+
     /// Designates a multiline edit control
     LONG ES_MULTILINE = new LONG(0x0004);
     /// Automatically scrolls text up one page when the user presses the ENTER key on the last line
@@ -396,6 +405,11 @@ public interface WinUser {
         /// @param lParam Additional message information
         /// @return Return value is the result of the message processing and depends on the message sent
         LRESULT callback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    }
+
+    /// An application-defined callback function that processes {@link WinUser#WM_TIMER} messages
+    interface TIMERPROC extends Callback {
+        void callback(HWND unnamedParam1, UINT unnamedParam2, UINT_PTR unnamedParam3, DWORD unnamedParam4);
     }
 
     /// Contains window class information
