@@ -95,6 +95,12 @@ public interface WinUser {
     /// Posted when the user presses the left mouse button while the cursor is in the client area of a window. If the mouse is not captured, the message is posted to the window beneath the cursor. Otherwise, the message is posted to the window that has captured the mouse
     int WM_LBUTTONDOWN = 0x0201;
 
+    /// Posted to a window when the cursor moves. If the mouse is not captured, the message is posted to the window that contains the cursor. Otherwise, the message is posted to the window that has captured the mouse
+    int WM_MOUSEMOVE = 0x0200;
+
+    /// Posted when the user releases the left mouse button while the cursor is in the client area of a window. If the mouse is not captured, the message is posted to the window beneath the cursor. Otherwise, the message is posted to the window that has captured the mouse
+    int WM_LBUTTONUP = 0x0202;
+
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;
     /// Hides the window and activates another window
@@ -363,6 +369,17 @@ public interface WinUser {
 
     /// Messages are removed from the queue after processing by {@link User32#PeekMessageW(MSG, HWND, UINT, UINT, UINT)}
     int PM_REMOVE = 0x0001;
+
+    /// The left mouse button is down
+    int MK_LBUTTON = 0x0001;
+    /// The right mouse button is down
+    int MK_RBUTTON = 0x0002;
+    /// The SHIFT key is down
+    int MK_SHIFT = 0x0004;
+    /// The CTRL key is down
+    int MK_CONTROL = 0x0008;
+    /// The middle mouse button is down
+    int MK_MBUTTON = 0x0010;
 
     /// Designates a multiline edit control
     LONG ES_MULTILINE = new LONG(0x0004);

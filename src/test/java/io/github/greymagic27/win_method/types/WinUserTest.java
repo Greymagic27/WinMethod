@@ -57,6 +57,11 @@ import static io.github.greymagic27.win_method.types.WinUser.MB_YESNO;
 import static io.github.greymagic27.win_method.types.WinUser.MF_POPUP;
 import static io.github.greymagic27.win_method.types.WinUser.MF_SEPARATOR;
 import static io.github.greymagic27.win_method.types.WinUser.MF_STRING;
+import static io.github.greymagic27.win_method.types.WinUser.MK_CONTROL;
+import static io.github.greymagic27.win_method.types.WinUser.MK_LBUTTON;
+import static io.github.greymagic27.win_method.types.WinUser.MK_MBUTTON;
+import static io.github.greymagic27.win_method.types.WinUser.MK_RBUTTON;
+import static io.github.greymagic27.win_method.types.WinUser.MK_SHIFT;
 import static io.github.greymagic27.win_method.types.WinUser.PM_REMOVE;
 import static io.github.greymagic27.win_method.types.WinUser.SM_CXSCREEN;
 import static io.github.greymagic27.win_method.types.WinUser.SM_CYSCREEN;
@@ -159,6 +164,8 @@ import static io.github.greymagic27.win_method.types.WinUser.WM_DESTROY;
 import static io.github.greymagic27.win_method.types.WinUser.WM_ERASEBKGND;
 import static io.github.greymagic27.win_method.types.WinUser.WM_KEYDOWN;
 import static io.github.greymagic27.win_method.types.WinUser.WM_LBUTTONDOWN;
+import static io.github.greymagic27.win_method.types.WinUser.WM_LBUTTONUP;
+import static io.github.greymagic27.win_method.types.WinUser.WM_MOUSEMOVE;
 import static io.github.greymagic27.win_method.types.WinUser.WM_MOUSEWHEEL;
 import static io.github.greymagic27.win_method.types.WinUser.WM_PAINT;
 import static io.github.greymagic27.win_method.types.WinUser.WM_SETFONT;
@@ -222,6 +229,8 @@ class WinUserTest {
         assertEquals(0x0113, WM_TIMER);
         assertEquals(0x0014, WM_ERASEBKGND);
         assertEquals(0x0201, WM_LBUTTONDOWN);
+        assertEquals(0x0200, WM_MOUSEMOVE);
+        assertEquals(0x0202, WM_LBUTTONUP);
     }
 
     @Test
@@ -402,6 +411,15 @@ class WinUserTest {
         assertEquals(0x0100, TPM_RETURNCMD);
         assertEquals(0x0000, TPM_LEFTBUTTON);
         assertEquals(0x0002, TPM_RIGHTBUTTON);
+    }
+
+    @Test
+    void testMkValues() {
+        assertEquals(0x0001, MK_LBUTTON);
+        assertEquals(0x0002, MK_RBUTTON);
+        assertEquals(0x0004, MK_SHIFT);
+        assertEquals(0x0008, MK_CONTROL);
+        assertEquals(0x0010, MK_MBUTTON);
     }
 
     @Test
