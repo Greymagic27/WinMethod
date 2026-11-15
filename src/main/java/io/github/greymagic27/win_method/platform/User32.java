@@ -208,6 +208,11 @@ public interface User32 extends Library {
     /// @return If a message is available, the return value is nonzero. If no messages are available, the return value is zero
     BOOL PeekMessageW(WinUser.MSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg);
 
+    /// Releases the mouse capture from a window in the current thread and restores normal mouse input processing
+    ///
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL ReleaseCapture();
+
     /// Retrieves the specified system metric or system configuration setting
     ///
     /// @param nIndex System metric or configuration setting to be retrieved
@@ -299,6 +304,12 @@ public interface User32 extends Library {
     /// @param lpWindowName The window name (the window's title). If this parameter is NULL, all window names match
     /// @return If the function succeeds, the return value is a handle to the window that has the specified class name and window name. If the function fails, the return value is NULL
     HWND FindWindowW(LPCWSTR lpClassName, LPCWSTR lpWindowName);
+
+    /// Sets the mouse capture to the specified window belonging to the current thread
+    ///
+    /// @param hWnd A handle to the window in the current thread that is to capture the mouse
+    /// @return The return value is a handle to the window that had previously captured the mouse. If there is no such window, the return value is NULL
+    HWND SetCapture(HWND hWnd);
 
     /// Creates a menu. This is initially empty but can be filled with menu items by using the [InsertMenuItem](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuitemw), {@link #AppendMenuW(HMENU, UINT, UINT_PTR, LPCWSTR)} and [InsertMenu](https://learn.microsoft.com/en-us/windows/desktop/api/winuser/nf-winuser-insertmenuw) functions
     ///

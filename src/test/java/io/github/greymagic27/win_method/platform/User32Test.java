@@ -581,4 +581,45 @@ class User32Test {
         assertEquals(456, msg.lParam.longValue());
         assertFalse(user32.PeekMessageW(msg, window, new UINT(testMsg), new UINT(testMsg), new UINT(WinUser.PM_REMOVE)).booleanValue());
     }
+
+    @Test
+    void testSetCapture() {
+        HWND window1 = CreateWindowEx.createStaticWindow(null, null, 0, 1, 1, 800, 600);
+        try {
+            assertNotNull(window);
+            assertNotNull(window1);
+            assertNotEquals(0, window.segment.address());
+            assertNotEquals(0, window1.segment.address());
+            HWND previous = user32.SetCapture(window);
+            assertNotNull(previous);
+            assertEquals(0, previous.segment.address());
+            previous = user32.SetCapture(window1);
+            assertNotNull(previous);
+            assertEquals(window.segment.address(), previous.segment.address());
+            previous = user32.SetCapture(window);
+            assertNotNull(previous);
+            assertEquals(window1.segment.address(), previous.segment.address());
+        } finally {
+            user32.ReleaseCapture();
+            user32.DestroyWindow(window1);
+        }
+    }
+
+    @Test
+    void testReleaseCapture() {
+        HWND window1 = CreateWindowEx.createStaticWindow(null, null, 0, 1, 1, 800, 600);
+        try {
+            assertNotNull(window1);
+            assertNotEquals(0, window1.segment.address());
+            user32.SetCapture(window);
+            BOOL result = user32.ReleaseCapture();
+            assertTrue(result.booleanValue());
+            HWND previous = user32.SetCapture(window1);
+            assertNotNull(previous);
+            assertEquals(0, previous.segment.address());
+        } finally {
+            user32.ReleaseCapture();
+            user32.DestroyWindow(window1);
+        }
+    }
 }
