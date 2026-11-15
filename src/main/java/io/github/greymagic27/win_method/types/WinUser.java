@@ -92,6 +92,9 @@ public interface WinUser {
     /// Sent when the window background must be erased (for example, when a window is resized). The message is sent to prepare an invalidated portion of a window for painting
     int WM_ERASEBKGND = 0x0014;
 
+    /// Posted when the user presses the left mouse button while the cursor is in the client area of a window. If the mouse is not captured, the message is posted to the window beneath the cursor. Otherwise, the message is posted to the window that has captured the mouse
+    int WM_LBUTTONDOWN = 0x0201;
+
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;
     /// Hides the window and activates another window
