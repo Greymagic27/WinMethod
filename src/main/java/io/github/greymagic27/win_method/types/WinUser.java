@@ -89,6 +89,9 @@ public interface WinUser {
     /// Posted to the installing thread's message queue when a timer expires. The message is posted by the {@link User32#GetMessageW(MSG, HWND, UINT, UINT)} or {@link User32#PeekMessageW(MSG, HWND, UINT, UINT, UINT)} function
     int WM_TIMER = 0x0113;
 
+    /// Sent when the window background must be erased (for example, when a window is resized). The message is sent to prepare an invalidated portion of a window for painting
+    int WM_ERASEBKGND = 0x0014;
+
     /// Activates the window and displays it in its current size and position
     int SW_SHOW = 5;
     /// Hides the window and activates another window

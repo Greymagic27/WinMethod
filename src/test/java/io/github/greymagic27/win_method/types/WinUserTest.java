@@ -156,6 +156,7 @@ import static io.github.greymagic27.win_method.types.WinUser.WM_CLOSE;
 import static io.github.greymagic27.win_method.types.WinUser.WM_COMMAND;
 import static io.github.greymagic27.win_method.types.WinUser.WM_CREATE;
 import static io.github.greymagic27.win_method.types.WinUser.WM_DESTROY;
+import static io.github.greymagic27.win_method.types.WinUser.WM_ERASEBKGND;
 import static io.github.greymagic27.win_method.types.WinUser.WM_KEYDOWN;
 import static io.github.greymagic27.win_method.types.WinUser.WM_MOUSEWHEEL;
 import static io.github.greymagic27.win_method.types.WinUser.WM_PAINT;
@@ -218,6 +219,7 @@ class WinUserTest {
         assertEquals(0x0400, WM_USER);
         assertEquals(0x000B, WM_SETREDRAW);
         assertEquals(0x0113, WM_TIMER);
+        assertEquals(0x0014, WM_ERASEBKGND);
     }
 
     @Test

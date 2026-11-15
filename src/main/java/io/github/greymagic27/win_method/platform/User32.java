@@ -193,17 +193,18 @@ public interface User32 extends Library {
 
     /// Destroys the specified timer
     ///
-    /// @param hWnd A handle to the window associated with the specified timer
+    /// @param hWnd     A handle to the window associated with the specified timer
     /// @param uIDEvent The timer to be destroyed. If the window handle passed to {@link User32#SetTimer(HWND, UINT_PTR, UINT, WinUser.TIMERPROC)} is valid, this parameter must be the same as the nIDEvent
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL KillTimer(HWND hWnd, UINT_PTR uIDEvent);
 
     /// Dispatches incoming nonqueued messages, checks the thread message queue for a posted message, and retrieves the message (if any exist)
-    ///  @param lpMsg A {@link io.github.greymagic27.win_method.Pointer} to an {@link io.github.greymagic27.win_method.types.WinUser.MSG} structure that receives message information
-    /// @param hWnd A {@link HANDLE} to the window whose messages are to be retrieved. The window must belong to the current thread
+    ///
+    /// @param lpMsg         A {@link io.github.greymagic27.win_method.Pointer} to an {@link io.github.greymagic27.win_method.types.WinUser.MSG} structure that receives message information
+    /// @param hWnd          A {@link HANDLE} to the window whose messages are to be retrieved. The window must belong to the current thread
     /// @param wMsgFilterMin The value of the first message in the range of messages to be examined. Use WM_KEYFIRST (0x0100) to specify the first keyboard message or WM_MOUSEFIRST (0x0200) to specify the first mouse message
     /// @param wMsgFilterMax The value of the last message in the range of messages to be examined. Use WM_KEYLAST to specify the last keyboard message or WM_MOUSELAST to specify the last mouse message
-    /// @param wRemoveMsg Specifies how messages are to be handled. This parameter can be one or more of the [following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagew)
+    /// @param wRemoveMsg    Specifies how messages are to be handled. This parameter can be one or more of the [following values](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-peekmessagew)
     /// @return If a message is available, the return value is nonzero. If no messages are available, the return value is zero
     BOOL PeekMessageW(WinUser.MSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg);
 
@@ -354,9 +355,9 @@ public interface User32 extends Library {
 
     /// Creates a timer with the specified time-out value
     ///
-    /// @param hWnd A {@link HANDLE} to the window to be associated with the timer
-    /// @param nIDEvent A nonzero timer identifier. If the hWnd parameter is NULL, and the nIDEvent does not match an existing timer then it is ignored and a new timer ID is generated
-    /// @param uElapse The time-out value, in milliseconds
+    /// @param hWnd        A {@link HANDLE} to the window to be associated with the timer
+    /// @param nIDEvent    A nonzero timer identifier. If the hWnd parameter is NULL, and the nIDEvent does not match an existing timer then it is ignored and a new timer ID is generated
+    /// @param uElapse     The time-out value, in milliseconds
     /// @param lpTimerFunc A {@link io.github.greymagic27.win_method.Pointer} to the function to be notified when the time-out value elapses
     /// @return If the function succeeds and the hWnd parameter is NULL, the return value is an integer identifying the new time. If the function succeeds and the hWnd parameter is not NULL, then the return value is a nonzero integer.
     UINT_PTR SetTimer(HWND hWnd, UINT_PTR nIDEvent, UINT uElapse, WinUser.TIMERPROC lpTimerFunc);
