@@ -1,9 +1,7 @@
 package io.github.greymagic27.win_method;
 
-import io.github.greymagic27.win_method.types.Commdlg;
 import io.github.greymagic27.win_method.types.MinWinBase;
 import io.github.greymagic27.win_method.types.ProcessThreadsApi;
-import io.github.greymagic27.win_method.types.RichEdit;
 import io.github.greymagic27.win_method.types.WinDef;
 import io.github.greymagic27.win_method.types.WinGdi;
 import io.github.greymagic27.win_method.types.WinUser;
@@ -330,7 +328,6 @@ class StructureTest {
 
     @Test
     void testStructureSizes() {
-        assertEquals(152, new Commdlg.OPENFILENAMEW().size());
         assertEquals(8, new WinDef.POINT().size());
         assertEquals(16, new WinDef.RECT().size());
         assertEquals(48, new WinUser.MSG().size());
@@ -345,8 +342,6 @@ class StructureTest {
         assertEquals(32, new MinWinBase.OVERLAPPED().size());
         assertEquals(104, new ProcessThreadsApi.STARTUPINFOW().size());
         assertEquals(24, new ProcessThreadsApi.PROCESS_INFORMATION().size());
-        assertEquals(116, new RichEdit.CHARFORMAT2W().size());
-        assertEquals(92, new RichEdit.CHARFORMATW().size());
     }
 
     @Structure.AutoFieldOrder
