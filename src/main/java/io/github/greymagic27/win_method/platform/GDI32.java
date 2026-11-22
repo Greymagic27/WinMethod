@@ -40,6 +40,13 @@ public interface GDI32 extends Library {
     /// @return If the function succeeds, the return value is a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to the requested logical object. If the function fails, the return type is NULL
     HGDIOBJ GetStockObject(int i);
 
+    /// The SelectObject function selects an object into the specified device context (DC). The new object replaces the previous object of the same type
+    ///
+    /// @param hdc A handle to the DC
+    /// @param h   A handle to the object to be selected. The object must be created using one of [the following functions](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-selectobject)
+    /// @return If the selected object is not a region and the function succeeds, the return value is a handle to the object being replaced. If the selected object is a region and the function succeeds, the return value is one of [the following values](https://learn.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-selectobject)
+    HGDIOBJ SelectObject(HDC hdc, HGDIOBJ h);
+
     /// Creates a logical font with the specified characteristics
     ///
     /// @param cHeight         The height, in logical units, of the font's character cell or character. If zero, a default height value is used

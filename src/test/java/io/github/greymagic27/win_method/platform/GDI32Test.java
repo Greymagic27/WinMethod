@@ -26,6 +26,7 @@ import static io.github.greymagic27.win_method.types.WinGdi.FF_MODERN;
 import static io.github.greymagic27.win_method.types.WinGdi.FIXED_PITCH;
 import static io.github.greymagic27.win_method.types.WinGdi.FW_NORMAL;
 import static io.github.greymagic27.win_method.types.WinGdi.OUT_DEFAULT_PRECIS;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -95,5 +96,16 @@ class GDI32Test {
         assertTrue(gdi32.DeleteObject(hgdiobj).booleanValue());
         HGDIOBJ invalidObject = new HGDIOBJ(MemorySegment.ofAddress(0));
         assertFalse(gdi32.DeleteObject(invalidObject).booleanValue());
+    }
+
+    @Test
+    void testSelectObject() {
+        HGDIOBJ previousFont = gdi32.SelectObject(hdc, new HGDIOBJ(hfont));
+        assertNotNull(previousFont);
+        assertFalse(previousFont.isNull());
+        HGDIOBJ restoredFont = gdi32.SelectObject(hdc, previousFont);
+        assertNotNull(restoredFont);
+        assertFalse(restoredFont.isNull());
+        assertEquals(hfont.segment.address(), restoredFont.segment.address());
     }
 }
