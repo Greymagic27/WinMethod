@@ -382,20 +382,20 @@ public interface WinUser {
     int MK_MBUTTON = 0x0010;
 
     /// Designates a multiline edit control
-    LONG ES_MULTILINE = new LONG(0x0004);
+    int ES_MULTILINE = new LONG(0x0004).intValue();
     /// Automatically scrolls text up one page when the user presses the ENTER key on the last line
-    LONG ES_AUTOVSCROLL = new LONG(0x0040);
+    int ES_AUTOVSCROLL = new LONG(0x0040).intValue();
     /// Automatically scrolls text to the right by 10 characters when the user types a character at the end of the line. When the user presses the ENTER key, the control scrolls all text back to position zero
-    LONG ES_AUTOHSCROLL = new LONG(0x0080);
+    int ES_AUTOHSCROLL = new LONG(0x0080).intValue();
     /// Specifies that a carriage return be inserted when the user presses the ENTER key while entering text into a multiline edit control in a dialogue box
-    LONG ES_WANTRETURN = new LONG(0x1000);
+    int ES_WANTRETURN = new LONG(0x1000).intValue();
 
     /// Causes the list box to send a notification code to the parent window whenever the user clicks a list box item, double-clicks an item, or cancels the selection
-    LONG LBS_NOTIFY = new LONG(0x0001);
+    int LBS_NOTIFY = new LONG(0x0001).intValue();
     /// Specifies that a list box contains items consisting of strings
-    LONG LBS_HASSTRINGS = new LONG(0x0040);
+    int LBS_HASSTRINGS = new LONG(0x0040).intValue();
     /// Specifies that the button displays a bitmap
-    LONG BS_BITMAP = new LONG(0x00000080);
+    int BS_BITMAP = new LONG(0x00000080).intValue();
 
     /// Creates a pointer value from an integer resource
     ///

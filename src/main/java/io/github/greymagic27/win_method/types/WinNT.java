@@ -10,9 +10,9 @@ public interface WinNT {
     /// A file that does not have other attributes set. This attribute is valid only when used alone
     int FILE_ATTRIBUTE_NORMAL = 0x00000080;
     /// Read access
-    LONG GENERIC_READ = new LONG(0x80000000);
+    int GENERIC_READ = new LONG(0x80000000).intValue();
     /// Write access
-    LONG GENERIC_WRITE = new LONG(0x40000000);
+    int GENERIC_WRITE = new LONG(0x40000000).intValue();
     /// Enables subsequent open operations on a file or device to request read access
     int FILE_SHARE_READ = 0x00000001;
     int FILE_SHARE_WRITE = 0x00000002;

@@ -24,7 +24,7 @@ public class CreateWindowEx {
     /// @param height     The height, in device units, of the list box
     /// @return If the function succeeds, the return value is a handle to the new list box. If the function fails, the return value is NULL
     public static HWND createListBoxWindow(String windowName, HWND parent, int id, int x, int y, int width, int height) {
-        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("LISTBOX"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.WS_VSCROLL | WinUser.LBS_NOTIFY.intValue() | WinUser.LBS_HASSTRINGS.intValue()), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
+        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("LISTBOX"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.WS_VSCROLL | WinUser.LBS_NOTIFY | WinUser.LBS_HASSTRINGS), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
     }
 
     /// Creates an edit child window with the specified name, identifier, position, and dimensions.
@@ -38,7 +38,7 @@ public class CreateWindowEx {
     /// @param height            The height, in device units, of the edit control
     /// @param scrollBarsVisible Determines if vertical and horizontal scroll bars will be visible on the window
     public static HWND createEditWindow(String windowName, HWND parent, int id, int x, int y, int width, int height, boolean scrollBarsVisible) {
-        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("EDIT"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.ES_MULTILINE.intValue() | WinUser.ES_AUTOVSCROLL.intValue() | WinUser.ES_AUTOHSCROLL.intValue() | WinUser.ES_WANTRETURN.intValue() | (scrollBarsVisible ? WinUser.WS_VSCROLL | WinUser.WS_HSCROLL : 0)), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
+        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("EDIT"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.ES_MULTILINE | WinUser.ES_AUTOVSCROLL | WinUser.ES_AUTOHSCROLL | WinUser.ES_WANTRETURN | (scrollBarsVisible ? WinUser.WS_VSCROLL | WinUser.WS_HSCROLL : 0)), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
     }
 
     /// Creates a static child window with the specified name, identifier, position, and dimensions.
@@ -120,7 +120,7 @@ public class CreateWindowEx {
     /// @param scrollBarsVisible Determines if vertical and horizontal scroll bars will be visible on the window
     /// @return If the function succeeds, the return value is a handle to the new rich edit control. If the function fails, the return value is NULL
     public static HWND createRichEditWindow(String windowName, HWND parent, int id, int x, int y, int width, int height, boolean scrollBarsVisible) {
-        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("RICHEDIT50W"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.ES_MULTILINE.intValue() | WinUser.ES_AUTOVSCROLL.intValue() | WinUser.ES_AUTOHSCROLL.intValue() | WinUser.ES_WANTRETURN.intValue() | (scrollBarsVisible ? WinUser.WS_VSCROLL | WinUser.WS_HSCROLL : 0)), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
+        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("RICHEDIT50W"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | WinUser.WS_BORDER | WinUser.ES_MULTILINE | WinUser.ES_AUTOVSCROLL | WinUser.ES_AUTOHSCROLL | WinUser.ES_WANTRETURN | (scrollBarsVisible ? WinUser.WS_VSCROLL | WinUser.WS_HSCROLL : 0)), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
     }
 
     /// Creates a popup window with the specified class, name, owner, instance, position, and dimensions.

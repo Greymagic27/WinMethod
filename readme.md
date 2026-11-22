@@ -2,8 +2,7 @@
 
 # Information
 
-An implementation of my own JNA like bindings, sticking to the C++ structure as much as possible. Contributions are
-welcomed
+An implementation of my own JNA like bindings for windows libraries, sticking to the C++ structure as much as possible.
 
 # Usage
 

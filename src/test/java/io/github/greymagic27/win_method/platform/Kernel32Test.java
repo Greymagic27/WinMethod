@@ -139,7 +139,7 @@ class Kernel32Test {
     @Test
     void testWriteFile() throws IOException {
         Path outputFile = tempDir.resolve("test-output.txt");
-        HANDLE hFile = kernel32.CreateFileW(new LPCWSTR(outputFile.toString()), new DWORD(GENERIC_WRITE.intValue()), new DWORD(0), null, new DWORD(2), new DWORD(0), null);
+        HANDLE hFile = kernel32.CreateFileW(new LPCWSTR(outputFile.toString()), new DWORD(GENERIC_WRITE), new DWORD(0), null, new DWORD(2), new DWORD(0), null);
         assertNotNull(hFile);
         assertFalse(hFile.isNull());
         try {
@@ -186,7 +186,7 @@ class Kernel32Test {
     void testCreateFile() {
         Path file = tempDir.resolve("DoesNotExist.txt");
         HANDLE hFile = openTestFile();
-        HANDLE hFile2 = kernel32.CreateFileW(new LPCWSTR(file.toString()), new DWORD(GENERIC_READ.intValue()), new DWORD(FILE_SHARE_READ), null, new DWORD(3), new DWORD(0), null);
+        HANDLE hFile2 = kernel32.CreateFileW(new LPCWSTR(file.toString()), new DWORD(GENERIC_READ), new DWORD(FILE_SHARE_READ), null, new DWORD(3), new DWORD(0), null);
         assertNotNull(hFile);
         assertFalse(hFile.isNull());
         assertTrue(Files.exists(testFile));
@@ -314,6 +314,6 @@ class Kernel32Test {
     }
 
     private HANDLE openTestFile() {
-        return kernel32.CreateFileW(new LPCWSTR(testFile.toString()), new DWORD(GENERIC_READ.intValue()), new DWORD(FILE_SHARE_READ), null, new DWORD(3), new DWORD(0), null);
+        return kernel32.CreateFileW(new LPCWSTR(testFile.toString()), new DWORD(GENERIC_READ), new DWORD(FILE_SHARE_READ), null, new DWORD(3), new DWORD(0), null);
     }
 }

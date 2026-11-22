@@ -67,11 +67,11 @@ class CreateWindowExTest {
 
     @Test
     void testCreateButtonWindowWithCustomStyle() {
-        HWND button = assertDoesNotThrow(() -> CreateWindowEx.createButtonWindow("Test Button", WinUser.BS_BITMAP.intValue(), Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        HWND button = assertDoesNotThrow(() -> CreateWindowEx.createButtonWindow("Test Button", WinUser.BS_BITMAP, Window.getCurrentWindow(), 0, 0, 0, 800, 600));
         assertNotNull(button);
         assertNotEquals(0, button.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(button).segment.address());
-        assertTrue((User32.INSTANCE.GetWindowLongPtrW(button, WinUser.GWL_STYLE).longValue() & WinUser.BS_BITMAP.intValue()) != 0);
+        assertTrue((User32.INSTANCE.GetWindowLongPtrW(button, WinUser.GWL_STYLE).longValue() & WinUser.BS_BITMAP) != 0);
         User32.INSTANCE.DestroyWindow(button);
     }
 

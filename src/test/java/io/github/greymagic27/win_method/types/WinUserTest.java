@@ -247,10 +247,10 @@ class WinUserTest {
 
     @Test
     void testEsValues() {
-        assertEquals(0x0004, ES_MULTILINE.intValue());
-        assertEquals(0x0040, ES_AUTOVSCROLL.intValue());
-        assertEquals(0x1000, ES_WANTRETURN.intValue());
-        assertEquals(0x0080, ES_AUTOHSCROLL.intValue());
+        assertEquals(0x0004, ES_MULTILINE);
+        assertEquals(0x0040, ES_AUTOVSCROLL);
+        assertEquals(0x1000, ES_WANTRETURN);
+        assertEquals(0x0080, ES_AUTOHSCROLL);
     }
 
     @Test
@@ -356,8 +356,8 @@ class WinUserTest {
 
     @Test
     void testLbValues() {
-        assertEquals(0x0001, LBS_NOTIFY.intValue());
-        assertEquals(0x0040, LBS_HASSTRINGS.intValue());
+        assertEquals(0x0001, LBS_NOTIFY);
+        assertEquals(0x0040, LBS_HASSTRINGS);
         assertEquals(2, LBN_DBLCICK);
         assertEquals(1, LBN_SELCHANGE);
         assertEquals(0x0184, LB_RESETCONTENT);
@@ -425,7 +425,7 @@ class WinUserTest {
     @Test
     void testMiscValues() {
         assertEquals(0x004, SWP_NOZORDER);
-        assertEquals(0x00000080, BS_BITMAP.intValue());
+        assertEquals(0x00000080, BS_BITMAP);
         assertEquals(-16, GWL_STYLE);
         assertEquals(0x00F7, BM_SETIMAGE);
         assertEquals(0x0001, PM_REMOVE);
@@ -505,9 +505,9 @@ class WinUserTest {
         DWORD dwTime = new DWORD(456);
         WinUser.TIMERPROC timerproc = (hWnd, umsg, uIdEvent, dwTimeP) -> {
             assertEquals(hwnd.segment.address(), hWnd.segment.address());
-            assertEquals(msg.intValue(), umsg.intValue());
+            assertEquals(msg, umsg);
             assertEquals(idEvent.longValue(), uIdEvent.longValue());
-            assertEquals(dwTime.intValue(), dwTimeP.intValue());
+            assertEquals(dwTime, dwTimeP);
         };
         timerproc.callback(hwnd, msg, idEvent, dwTime);
     }
