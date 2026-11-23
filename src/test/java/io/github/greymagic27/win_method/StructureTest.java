@@ -1,6 +1,8 @@
 package io.github.greymagic27.win_method;
 
 import io.github.greymagic27.win_method.types.MinWinBase;
+import io.github.greymagic27.win_method.types.MmSysCom;
+import io.github.greymagic27.win_method.types.MmeApi;
 import io.github.greymagic27.win_method.types.ProcessThreadsApi;
 import io.github.greymagic27.win_method.types.WinDef;
 import io.github.greymagic27.win_method.types.WinGdi;
@@ -327,6 +329,46 @@ class StructureTest {
     }
 
     @Test
+    void testPack() {
+        @SuppressWarnings("unused")
+        @Structure.Pack(1)
+        @Structure.AutoFieldOrder
+        class Pack1 extends Structure {
+            byte b;
+            int i;
+        }
+        @SuppressWarnings("unused")
+        @Structure.Pack(2)
+        @Structure.AutoFieldOrder
+        class Pack2 extends Structure {
+            byte b;
+            int i;
+        }
+        @SuppressWarnings("unused")
+        @Structure.AutoFieldOrder
+        class NoPack extends Structure {
+            byte b;
+            int i;
+        }
+        assertEquals(5, new Pack1().size());
+        assertEquals(6, new Pack2().size());
+        assertEquals(8, new NoPack().size());
+    }
+
+    @Test
+    void testPackArray() {
+        @SuppressWarnings("unused")
+        @Structure.Pack(1)
+        @Structure.AutoFieldOrder
+        class Packed extends Structure {
+            byte b;
+            @Structure.ArrayLength(2)
+            int[] values;
+        }
+        assertEquals(9, new Packed().size());
+    }
+
+    @Test
     void testStructureSizes() {
         assertEquals(8, new WinDef.POINT().size());
         assertEquals(16, new WinDef.RECT().size());
@@ -342,6 +384,9 @@ class StructureTest {
         assertEquals(32, new MinWinBase.OVERLAPPED().size());
         assertEquals(104, new ProcessThreadsApi.STARTUPINFOW().size());
         assertEquals(24, new ProcessThreadsApi.PROCESS_INFORMATION().size());
+        assertEquals(18, new MmeApi.WAVEFORMATEX().size());
+        assertEquals(48, new MmeApi.WAVEHDR().size());
+        assertEquals(12, new MmSysCom.MMTIME().size());
     }
 
     @Structure.AutoFieldOrder

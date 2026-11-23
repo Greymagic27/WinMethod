@@ -127,6 +127,7 @@ public abstract class Structure {
             } else {
                 ml = TypeMapper.layoutMappings(f.getType());
                 if (ml == null) throw new IllegalStateException("Unsupported struct field type: " + f.getType() + " on " + f.getName());
+                ml = applyPack(ml);
             }
             if (isUnion()) {
                 members.add(ml.withName(f.getName()));
@@ -286,7 +287,7 @@ public abstract class Structure {
         }
         MemoryLayout elementLayout = TypeMapper.layoutMappings(componentType);
         if (elementLayout == null) throw new IllegalStateException("Unsupported array component type: " + componentType + " in field " + field.getName());
-        return elementLayout;
+        return applyPack(elementLayout);
     }
 
     private void writeNestedStructure(@NonNull Field field, Object nestedValue) {
@@ -340,6 +341,15 @@ public abstract class Structure {
             }
         }
         return null;
+    }
+
+    private long packLimit() {
+        Pack pack = getClass().getAnnotation(Pack.class);
+        return pack == null ? Long.MAX_VALUE : pack.value();
+    }
+
+    private MemoryLayout applyPack(@NonNull MemoryLayout ml) {
+        return ml.withByteAlignment(Math.min(ml.byteAlignment(), packLimit()));
     }
 
     public Pointer pointer() {
@@ -453,6 +463,13 @@ public abstract class Structure {
     @Retention(RetentionPolicy.RUNTIME)
     @Target(ElementType.FIELD)
     public @interface ArrayLength {
+        int value();
+    }
+
+    /// Caps field alignment to match a native struct's packing boundary ('#pragma pack(n)`)
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public @interface Pack {
         int value();
     }
 }
