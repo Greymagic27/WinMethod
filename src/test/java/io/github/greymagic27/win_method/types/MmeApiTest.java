@@ -8,6 +8,7 @@ import io.github.greymagic27.win_method.WinNT.LPSTR;
 import org.junit.jupiter.api.Test;
 
 import static io.github.greymagic27.win_method.types.MmeApi.WAVE_FORMAT_PCM;
+import static io.github.greymagic27.win_method.types.MmeApi.WAVE_MAPPER;
 import static io.github.greymagic27.win_method.types.MmeApi.WHDR_DONE;
 import static io.github.greymagic27.win_method.types.MmeApi.WHDR_PREPARED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,6 +22,7 @@ class MmeApiTest {
         assertEquals(1, WAVE_FORMAT_PCM);
         assertEquals(0x00000001, WHDR_DONE);
         assertEquals(0x00000002, WHDR_PREPARED);
+        assertEquals(-1, WAVE_MAPPER);
     }
 
     @Test
