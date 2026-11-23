@@ -42,7 +42,6 @@ public interface WinGdi {
 
     /// Contains information about the dimension and colour format of the device-independent bitmap (DIB)
     @Structure.AutoFieldOrder
-    @Structure.Pack(2)
     class BITMAPINFOHEADER extends Structure {
         /// Specifies the number of bytes required by the structure. This does not include the size of the colour table or the size of the colour masks
         public DWORD biSize;

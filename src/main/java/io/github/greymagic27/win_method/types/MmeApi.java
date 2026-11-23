@@ -21,7 +21,6 @@ public interface MmeApi {
 
     /// The WAVEFORMATEX structure defines the format of waveform-audio data. Only format information common to all waveform-audio data formats is included in this structure
     @Structure.AutoFieldOrder
-    @Structure.Pack(1)
     class WAVEFORMATEX extends Structure {
         /// Waveform-audio format type
         public WORD wFormatTag;
@@ -41,7 +40,6 @@ public interface MmeApi {
 
     /// The WAVEHDR structure defines the header used to identify a waveform-audio buffer
     @Structure.AutoFieldOrder
-    @Structure.Pack(1)
     class WAVEHDR extends Structure {
         /// {@link io.github.greymagic27.win_method.Pointer} to the waveform buffer
         public LPSTR lpData;
