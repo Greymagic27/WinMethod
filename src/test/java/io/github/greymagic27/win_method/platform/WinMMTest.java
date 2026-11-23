@@ -9,6 +9,7 @@ import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LPSTR;
 import io.github.greymagic27.win_method.types.MmSysCom;
 import io.github.greymagic27.win_method.types.MmeApi;
+import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterEach;
@@ -93,7 +94,7 @@ class WinMMTest {
     void testWaveOutClose() {
         assertEquals(0, winmm.waveOutClose(device).intValue());
         device = null;
-        assertNotEquals(0, winmm.waveOutClose(new WinMM.WAVEOUT(new Pointer(null))).intValue());
+        assertNotEquals(0, winmm.waveOutClose(new WinMM.WAVEOUT(new Pointer(MemorySegment.NULL))).intValue());
     }
 
     @Test
@@ -150,7 +151,7 @@ class WinMMTest {
             assertEquals(0, winmm.waveOutPrepareHeader(device, header, new UINT(header.size())).intValue());
             assertEquals(0, winmm.waveOutWrite(device, header, new UINT(header.size())).intValue());
             assertEquals(0, winmm.waveOutReset(device).intValue());
-            assertNotEquals(0, winmm.waveOutReset(new WinMM.WAVEOUT(new Pointer(null))).intValue());
+            assertNotEquals(0, winmm.waveOutReset(new WinMM.WAVEOUT(new Pointer(MemorySegment.NULL))).intValue());
             assertTrue((header.dwFlags.intValue() & WHDR_DONE) != 0);
             assertEquals(0, winmm.waveOutUnprepareHeader(device, header, new UINT(header.size())).intValue());
         }
@@ -190,6 +191,6 @@ class WinMMTest {
     void testWaveOutGetPositionInvalidHandle() {
         MmSysCom.MMTIME time = new MmSysCom.MMTIME();
         time.wType = new UINT(2);
-        assertNotEquals(0, winmm.waveOutGetPosition(new WinMM.WAVEOUT(new Pointer(null)), time, new UINT(time.size())).intValue());
+        assertNotEquals(0, winmm.waveOutGetPosition(new WinMM.WAVEOUT(new Pointer(MemorySegment.NULL)), time, new UINT(time.size())).intValue());
     }
 }
