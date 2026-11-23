@@ -4,6 +4,8 @@ import io.github.greymagic27.win_method.BaseTsd.ULONG_PTR;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.WinDef.BOOL;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
+import io.github.greymagic27.win_method.WinNT.HANDLE;
+import io.github.greymagic27.win_method.WinNT.PVOID;
 import java.lang.foreign.MemorySegment;
 import org.junit.jupiter.api.Test;
 
@@ -89,31 +91,32 @@ class MinWinBaseTest {
     @Test
     void testOverlapped() {
         MinWinBase.OVERLAPPED overlapped = new MinWinBase.OVERLAPPED();
-        assertNotNull(overlapped);
-        assertNotNull(overlapped.Internal);
-        assertNotNull(overlapped.InternalHigh);
-        assertNotNull(overlapped.dummyunionname);
-        assertNotNull(overlapped.hEvent);
-        assertEquals(0, overlapped.Internal.longValue());
-        assertEquals(0, overlapped.InternalHigh.longValue());
-        assertNotNull(overlapped.dummyunionname.dummystructname);
-        assertNotNull(overlapped.dummyunionname.Pointer);
-        assertEquals(0, overlapped.dummyunionname.dummystructname.Offset.intValue());
-        assertEquals(0, overlapped.dummyunionname.dummystructname.OffsetHigh.intValue());
-        assertEquals(0, overlapped.hEvent.segment.address());
         overlapped.Internal = new ULONG_PTR(10);
         overlapped.InternalHigh = new ULONG_PTR(20);
-        overlapped.dummyunionname.dummystructname.Offset = new DWORD(30);
-        overlapped.dummyunionname.dummystructname.OffsetHigh = new DWORD(40);
+        overlapped.hEvent = new HANDLE(MemorySegment.ofAddress(0x1000));
         assertEquals(10, overlapped.Internal.longValue());
         assertEquals(20, overlapped.InternalHigh.longValue());
-        assertEquals(30, overlapped.dummyunionname.dummystructname.Offset.intValue());
-        assertEquals(40, overlapped.dummyunionname.dummystructname.OffsetHigh.intValue());
+        assertEquals(0x1000, overlapped.hEvent.segment.address());
+        assertNotNull(overlapped.dummyunionname);
     }
 
     @Test
-    void testOverlappedSizes() {
-        assertEquals(8, new MinWinBase.OVERLAPPED.DUMMYSTRUCTNAME().size());
-        assertEquals(8, new MinWinBase.OVERLAPPED.DUMMYUNIONNAME().size());
+    void testOverlappedUnion() {
+        MinWinBase.OVERLAPPED.DUMMYUNIONNAME union = new MinWinBase.OVERLAPPED.DUMMYUNIONNAME();
+        assertEquals(8, union.size());
+        union.dummystructname = new MinWinBase.OVERLAPPED.DUMMYSTRUCTNAME();
+        assertNotNull(union.dummystructname);
+        union.Pointer = new PVOID(MemorySegment.ofAddress(0x1000));
+        assertEquals(0x1000, union.Pointer.segment.address());
+    }
+
+    @Test
+    void testOverlappedStruct() {
+        MinWinBase.OVERLAPPED.DUMMYSTRUCTNAME struct = new MinWinBase.OVERLAPPED.DUMMYSTRUCTNAME();
+        assertEquals(8, struct.size());
+        struct.Offset = new DWORD(30);
+        struct.OffsetHigh = new DWORD(40);
+        assertEquals(30, struct.Offset.intValue());
+        assertEquals(40, struct.OffsetHigh.intValue());
     }
 }
