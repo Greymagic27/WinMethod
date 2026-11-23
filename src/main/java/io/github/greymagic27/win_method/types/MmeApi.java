@@ -41,7 +41,6 @@ public interface MmeApi {
 
     /// The WAVEHDR structure defines the header used to identify a waveform-audio buffer
     @Structure.AutoFieldOrder
-    @Structure.Pack(1)
     class WAVEHDR extends Structure {
         /// {@link io.github.greymagic27.win_method.Pointer} to the waveform buffer
         public LPSTR lpData;

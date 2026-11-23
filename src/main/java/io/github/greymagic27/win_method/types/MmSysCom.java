@@ -14,7 +14,6 @@ public interface MmSysCom {
 
     /// The MMTIME structure contains timing information for different types of multimedia data
     @Structure.AutoFieldOrder
-    @Structure.Pack(1)
     class MMTIME extends Structure {
         /// Time format. It can be one of [the following formats](https://learn.microsoft.com/en-us/previous-versions//dd757347(v=vs.85))
         public UINT wType;
