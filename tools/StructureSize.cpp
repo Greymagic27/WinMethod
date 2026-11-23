@@ -35,9 +35,8 @@ static void check(const char* name, size_t size, size_t align, const std::vector
         Sim s = simulate(f, size, pack);
         if (s.layoutOk && s.align == align) {
             if (natural.layoutOk) {
-                std::cout << "  optional  " << name << " -> pack(" << pack << ")"
-                          << "  (same size/offsets, but alignment is " << align
-                          << " instead of " << natural.align << ")\n";
+               std::cout << "  NEEDS     " << name << " -> pack(" << pack << ")"
+                                         << "  (actual " << size << ", natural would be " << natural.size << ")\n";
             } else {
                 std::cout << "  NEEDS     " << name << " -> pack(" << pack << ")"
                           << "  (actual " << size << ", natural would be " << natural.size << ")\n";
