@@ -19,7 +19,7 @@ public interface MmeApi {
     /// Set by Windows to indicate that the buffer has been prepared with the waveInPrepareHeader or {@link io.github.greymagic27.win_method.platform.WinMM#waveOutPrepareHeader(WinMM.WAVEOUT, WAVEHDR, UINT)} function
     int WHDR_PREPARED = 0x00000002;
     /// The function selects a waveform-audio output device capable of playing the given format
-    int WAVE_MAPPER = new UINT(-1).intValue();
+    UINT WAVE_MAPPER = new UINT(-1);
 
     /// The WAVEFORMATEX structure defines the format of waveform-audio data. Only format information common to all waveform-audio data formats is included in this structure
     @Structure.AutoFieldOrder

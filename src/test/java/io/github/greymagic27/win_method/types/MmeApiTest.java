@@ -22,7 +22,7 @@ class MmeApiTest {
         assertEquals(1, WAVE_FORMAT_PCM);
         assertEquals(0x00000001, WHDR_DONE);
         assertEquals(0x00000002, WHDR_PREPARED);
-        assertEquals(-1, WAVE_MAPPER);
+        assertEquals(-1, WAVE_MAPPER.intValue());
     }
 
     @Test
