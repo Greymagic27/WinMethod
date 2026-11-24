@@ -17,6 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.github.greymagic27.win_method.types.MmeApi.WAVE_FORMAT_PCM;
+import static io.github.greymagic27.win_method.types.MmeApi.WAVE_MAPPER;
 import static io.github.greymagic27.win_method.types.MmeApi.WHDR_DONE;
 import static io.github.greymagic27.win_method.types.MmeApi.WHDR_PREPARED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -28,14 +29,16 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 class WinMMTest {
 
     private static final WinMM winmm = WinMM.INSTANCE;
-    private MmeApi.WAVEFORMATEX format;
     private WinMM.WAVEOUT device;
+    private int length;
 
     private static void waitUntilDone(MmeApi.@NonNull WAVEHDR header) {
         long deadline = System.nanoTime() + 3_000_000_000L;
-        while ((header.dwFlags.intValue() & WHDR_DONE) == 0 && System.nanoTime() < deadline) {
+        do {
+            header.read();
+            if ((header.dwFlags.intValue() & WHDR_DONE) != 0) return;
             Thread.onSpinWait();
-        }
+        } while (System.nanoTime() < deadline);
     }
 
     private static MmeApi.@NonNull WAVEFORMATEX pcmFormat(int tag) {
@@ -61,9 +64,10 @@ class WinMMTest {
 
     @BeforeEach
     void setUp() {
-        format = pcmFormat(WAVE_FORMAT_PCM);
+        MmeApi.WAVEFORMATEX format = pcmFormat(WAVE_FORMAT_PCM);
+        length = format.nAvgBytesPerSec.intValue();
         try (Memory out = new Memory(ValueLayout.ADDRESS.byteSize())) {
-            WinMM.MMRESULT result = winmm.waveOutOpen(new WinMM.WAVEOUT(out), new UINT(-1), format, new DWORD_PTR(0), new DWORD_PTR(0), new DWORD(0));
+            WinMM.MMRESULT result = winmm.waveOutOpen(new WinMM.WAVEOUT(out), WAVE_MAPPER, format, new DWORD_PTR(0), new DWORD_PTR(0), new DWORD(0));
             assumeTrue(result.intValue() != 6, "No audio device available");
             assertEquals(0, result.intValue(), "waveOutOpen should succeed");
             device = new WinMM.WAVEOUT(new Pointer(out.segment.get(ValueLayout.ADDRESS, 0)));
@@ -83,9 +87,13 @@ class WinMMTest {
     void testWaveOutOpen() {
         assertNotNull(device);
         assertNotEquals(0, device.segment.address());
+    }
+
+    @Test
+    void testWaveOutOpenInvalidFormat() {
         MmeApi.WAVEFORMATEX bad = pcmFormat(0x7FFF);
         try (Memory out = new Memory(ValueLayout.ADDRESS.byteSize())) {
-            WinMM.MMRESULT result = winmm.waveOutOpen(new WinMM.WAVEOUT(out), new UINT(-1), bad, new DWORD_PTR(0), new DWORD_PTR(0), new DWORD(0));
+            WinMM.MMRESULT result = winmm.waveOutOpen(new WinMM.WAVEOUT(out), WAVE_MAPPER, bad, new DWORD_PTR(0), new DWORD_PTR(0), new DWORD(0));
             assertNotEquals(0, result.intValue());
         }
     }
@@ -120,7 +128,6 @@ class WinMMTest {
 
     @Test
     void testWaveOutWrite() {
-        int length = format.nAvgBytesPerSec.intValue() / 10;
         try (Memory data = new Memory(length)) {
             MmeApi.WAVEHDR header = newHeader(data, length);
             assertEquals(0, winmm.waveOutPrepareHeader(device, header, new UINT(header.size())).intValue());
@@ -130,6 +137,7 @@ class WinMMTest {
                 assertTrue((header.dwFlags.intValue() & WHDR_DONE) != 0);
             } finally {
                 winmm.waveOutReset(device);
+                header.read();
                 assertEquals(0, winmm.waveOutUnprepareHeader(device, header, new UINT(header.size())).intValue());
             }
         }
@@ -145,12 +153,12 @@ class WinMMTest {
 
     @Test
     void testWaveOutReset() {
-        int length = format.nAvgBytesPerSec.intValue() * 5;
         try (Memory data = new Memory(length)) {
             MmeApi.WAVEHDR header = newHeader(data, length);
             assertEquals(0, winmm.waveOutPrepareHeader(device, header, new UINT(header.size())).intValue());
             assertEquals(0, winmm.waveOutWrite(device, header, new UINT(header.size())).intValue());
             assertEquals(0, winmm.waveOutReset(device).intValue());
+            header.read();
             assertNotEquals(0, winmm.waveOutReset(new WinMM.WAVEOUT(new Pointer(MemorySegment.NULL))).intValue());
             assertTrue((header.dwFlags.intValue() & WHDR_DONE) != 0);
             assertEquals(0, winmm.waveOutUnprepareHeader(device, header, new UINT(header.size())).intValue());
@@ -169,7 +177,6 @@ class WinMMTest {
 
     @Test
     void testWaveOutGetPositionAdvances() {
-        int length = format.nAvgBytesPerSec.intValue() / 5;
         try (Memory data = new Memory(length)) {
             MmeApi.WAVEHDR header = newHeader(data, length);
             assertEquals(0, winmm.waveOutPrepareHeader(device, header, new UINT(header.size())).intValue());
@@ -182,6 +189,7 @@ class WinMMTest {
                 assertTrue(time.u.sample.intValue() > 0);
             } finally {
                 winmm.waveOutReset(device);
+                header.read();
                 winmm.waveOutUnprepareHeader(device, header, new UINT(header.size()));
             }
         }
