@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@DisabledIfEnvironmentVariable(named = "CI", matches = ".+")
+//@DisabledIfEnvironmentVariable(named = "CI", matches = ".+")
 class WinMMTest {
 
     private static final WinMM winmm = WinMM.INSTANCE;
