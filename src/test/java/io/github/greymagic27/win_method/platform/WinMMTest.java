@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 class WinMMTest {
@@ -32,13 +33,20 @@ class WinMMTest {
     private WinMM.WAVEOUT device;
     private int length;
 
+    @SuppressWarnings("BusyWait")
     private static void waitUntilDone(MmeApi.@NonNull WAVEHDR header) {
         long deadline = System.nanoTime() + 3_000_000_000L;
-        do {
-            header.read();
-            if ((header.dwFlags.intValue() & WHDR_DONE) != 0) return;
-            Thread.onSpinWait();
-        } while (System.nanoTime() < deadline);
+        try {
+            do {
+                header.read();
+                if ((header.dwFlags.intValue() & WHDR_DONE) != 0) return;
+                Thread.sleep(5);
+            } while (System.nanoTime() < deadline);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            fail("Interrupted while waiting for WHDR_DONE");
+        }
+        fail("Timed out waiting for WHDR_DONE");
     }
 
     private static MmeApi.@NonNull WAVEFORMATEX pcmFormat(int tag) {
@@ -106,6 +114,19 @@ class WinMMTest {
     }
 
     @Test
+    void testWaveOutCloseWhilePlaying() {
+        try (Memory data = new Memory(length)) {
+            MmeApi.WAVEHDR header = newHeader(data, length);
+            assertEquals(0, winmm.waveOutPrepareHeader(device, header, new UINT(header.size())).intValue());
+            assertEquals(0, winmm.waveOutWrite(device, header, new UINT(header.size())).intValue());
+            assertEquals(33, winmm.waveOutClose(device).intValue());
+            winmm.waveOutReset(device);
+            header.read();
+            winmm.waveOutUnprepareHeader(device, header, new UINT(header.size()));
+        }
+    }
+
+    @Test
     void testWaveOutPrepareHeader() {
         try (Memory data = new Memory(4096)) {
             MmeApi.WAVEHDR header = newHeader(data, 4096);
@@ -159,10 +180,14 @@ class WinMMTest {
             assertEquals(0, winmm.waveOutWrite(device, header, new UINT(header.size())).intValue());
             assertEquals(0, winmm.waveOutReset(device).intValue());
             header.read();
-            assertNotEquals(0, winmm.waveOutReset(new WinMM.WAVEOUT(new Pointer(MemorySegment.NULL))).intValue());
             assertTrue((header.dwFlags.intValue() & WHDR_DONE) != 0);
             assertEquals(0, winmm.waveOutUnprepareHeader(device, header, new UINT(header.size())).intValue());
         }
+    }
+
+    @Test
+    void testWaveOutResetInvalidHandle() {
+        assertNotEquals(0, winmm.waveOutReset(new WinMM.WAVEOUT(new Pointer(MemorySegment.NULL))).intValue());
     }
 
     @Test
@@ -200,5 +225,13 @@ class WinMMTest {
         MmSysCom.MMTIME time = new MmSysCom.MMTIME();
         time.wType = new UINT(2);
         assertNotEquals(0, winmm.waveOutGetPosition(new WinMM.WAVEOUT(new Pointer(MemorySegment.NULL)), time, new UINT(time.size())).intValue());
+    }
+
+    @Test
+    void testWaveOutPrepareHeaderInvalidHandle() {
+        try (Memory data = new Memory(4096)) {
+            MmeApi.WAVEHDR header = newHeader(data, 4096);
+            assertNotEquals(0, winmm.waveOutPrepareHeader(new WinMM.WAVEOUT(new Pointer(MemorySegment.NULL)), header, new UINT(header.size())).intValue());
+        }
     }
 }
