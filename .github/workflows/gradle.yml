@@ -21,17 +21,6 @@ jobs:
         with:
           gradle-version: release-nightly
       - name: Set up virtual audio device
-        shell: pwsh
-        run: |
-            Set-Service audiosrv -StartupType Automatic
-            Start-Service audiosrv
-            Invoke-WebRequest "https://download.vb-audio.com/Download_CABLE/VBCABLE_Driver_Pack46.zip" -OutFile vbcable.zip
-            Expand-Archive vbcable.zip -DestinationPath vbcable
-            $cert = (Get-AuthenticodeSignature "vbcable\VBCABLE_Setup_x64.exe").SignerCertificate
-            $store = New-Object System.Security.Cryptography.X509Certificates.X509Store("TrustedPublisher", "LocalMachine")
-            $store.Open("ReadWrite"); $store.Add($cert); $store.Close()
-            Start-Process "vbcable\VBCABLE_Setup_x64.exe" -ArgumentList "-i", "-h" -Wait
-            Start-Sleep -Seconds 5
-            Get-CimInstance Win32_SoundDevice | Select-Object Name, Status
+        uses: LABSN/sound-ci-helpers@v1.0.4
       - name: Build with Gradle
         run: gradle build
