@@ -15,7 +15,6 @@ import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 import static io.github.greymagic27.win_method.types.MmeApi.WAVE_FORMAT_PCM;
 import static io.github.greymagic27.win_method.types.MmeApi.WAVE_MAPPER;
@@ -27,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-//@DisabledIfEnvironmentVariable(named = "CI", matches = ".+")
 class WinMMTest {
 
     private static final WinMM winmm = WinMM.INSTANCE;
