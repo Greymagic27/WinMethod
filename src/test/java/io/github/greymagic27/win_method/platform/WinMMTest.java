@@ -15,6 +15,7 @@ import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 import static io.github.greymagic27.win_method.types.MmeApi.WAVE_FORMAT_PCM;
 import static io.github.greymagic27.win_method.types.MmeApi.WAVE_MAPPER;
@@ -25,8 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
+@DisabledIfEnvironmentVariable(named = "CI", matches = ".+")
 class WinMMTest {
 
     private static final WinMM winmm = WinMM.INSTANCE;
@@ -76,8 +77,7 @@ class WinMMTest {
         length = format.nAvgBytesPerSec.intValue();
         try (Memory out = new Memory(ValueLayout.ADDRESS.byteSize())) {
             WinMM.MMRESULT result = winmm.waveOutOpen(new WinMM.WAVEOUT(out), WAVE_MAPPER, format, new DWORD_PTR(0), new DWORD_PTR(0), new DWORD(0));
-            assumeTrue(result.intValue() != 6, "No audio device available");
-            assertEquals(0, result.intValue(), "waveOutOpen should succeed");
+            assertEquals(0, result.intValue());
             device = new WinMM.WAVEOUT(new Pointer(out.segment.get(ValueLayout.ADDRESS, 0)));
         }
     }
