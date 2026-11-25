@@ -1,5 +1,6 @@
 package io.github.greymagic27.win_method;
 
+import io.github.greymagic27.win_method.types.Commctrl;
 import io.github.greymagic27.win_method.types.MinWinBase;
 import io.github.greymagic27.win_method.types.MmSysCom;
 import io.github.greymagic27.win_method.types.MmeApi;
@@ -387,6 +388,7 @@ class StructureTest {
         assertEquals(18, new MmeApi.WAVEFORMATEX().size());
         assertEquals(48, new MmeApi.WAVEHDR().size());
         assertEquals(12, new MmSysCom.MMTIME().size());
+        assertEquals(8, new Commctrl.INITCOMMONCONTROLSEX().size());
     }
 
     @Structure.AutoFieldOrder

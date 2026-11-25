@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <commctrl.h>
 #include <iostream>
 
 #define PRINT_SIZE(type) \
@@ -24,5 +25,6 @@ int main()
     PRINT_SIZE(WAVEFORMATEX)
     PRINT_SIZE(WAVEHDR)
     PRINT_SIZE(MMTIME)
+    PRINT_SIZE(INITCOMMONCONTROLSEX)
     return 0;
 }
