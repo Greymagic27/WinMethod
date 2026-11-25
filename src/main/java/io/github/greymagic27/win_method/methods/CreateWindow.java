@@ -7,6 +7,7 @@ import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.WinDef.LPVOID;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.platform.User32;
+import io.github.greymagic27.win_method.types.Commctrl;
 import io.github.greymagic27.win_method.types.WinUser;
 import java.lang.foreign.MemorySegment;
 
@@ -136,5 +137,19 @@ public class CreateWindow {
     /// @return If the function succeeds, the return value is a handle to the new popup window. If the function fails, the return value is NULL
     public static HWND createPopupWindow(LPCWSTR className, String windowName, HWND parent, int x, int y, int width, int height, HINSTANCE hinstance) {
         return User32.INSTANCE.CreateWindowExW(new DWORD(0), className, new LPCWSTR(windowName), new DWORD(WinUser.WS_POPUP | WinUser.WS_CAPTION | WinUser.WS_SYSMENU | WinUser.WS_VISIBLE), x, y, width, height, parent, null, hinstance, null);
+    }
+
+    ///  Creates a status bar child window with the specified name, identifier, position, and dimensions.
+    ///
+    /// @param windowName The window name
+    /// @param parent     A handle to the parent window of the status bar
+    /// @param id         The identifier of the status bar
+    /// @param x          The initial horizontal position of the status bar
+    /// @param y          The initial vertical position of the status bar
+    /// @param width      The width, in device units, of the status bar
+    /// @param height     The height, in device units, of the status bar
+    /// @return If the function succeeds, a handle to the new status bar. If the function fails, NULL
+    public static HWND createStatusBarWindow(String windowName, HWND parent, int id, int x, int y, int width, int height) {
+        return User32.INSTANCE.CreateWindowExW(new DWORD(0), new LPCWSTR("msctls_statusbar32"), new LPCWSTR(windowName), new DWORD(WinUser.WS_CHILD | WinUser.WS_VISIBLE | Commctrl.SBARS_SIZEGRIP), x, y, width, height, parent, new HMENU(MemorySegment.ofAddress(id)), null, null);
     }
 }

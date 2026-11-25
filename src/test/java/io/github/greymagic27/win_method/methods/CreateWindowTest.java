@@ -2,6 +2,7 @@ package io.github.greymagic27.win_method.methods;
 
 import io.github.greymagic27.win_method.WinDef.HWND;
 import io.github.greymagic27.win_method.platform.User32;
+import io.github.greymagic27.win_method.types.Commctrl;
 import io.github.greymagic27.win_method.types.WinUser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -115,5 +116,18 @@ class CreateWindowTest {
         assertTrue((style & WinUser.WS_CAPTION) != 0);
         assertTrue((style & WinUser.WS_SYSMENU) != 0);
         assertTrue((style & WinUser.WS_VISIBLE) != 0);
+    }
+
+    @Test
+    void testCreateStatusBarWindow() {
+        HWND statusBar = assertDoesNotThrow(() -> CreateWindow.createStatusBarWindow("Test Status Bar", Window.getCurrentWindow(), 0, 0, 0, 800, 20));
+        assertNotNull(statusBar);
+        assertNotEquals(0, statusBar.segment.address());
+        assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(statusBar).segment.address());
+        long style = User32.INSTANCE.GetWindowLongPtrW(statusBar, WinUser.GWL_STYLE).longValue();
+        assertTrue((style & WinUser.WS_CHILD) != 0);
+        assertTrue((style & WinUser.WS_VISIBLE) != 0);
+        assertTrue((style & Commctrl.SBARS_SIZEGRIP) != 0);
+        User32.INSTANCE.DestroyWindow(statusBar);
     }
 }
