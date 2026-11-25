@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class CreateWindowExTest {
+class CreateWindowTest {
 
     @BeforeEach
     void setUp() {
@@ -27,7 +27,7 @@ class CreateWindowExTest {
 
     @Test
     void testCreateListBoxWindow() {
-        HWND listBox = assertDoesNotThrow(() -> CreateWindowEx.createListBoxWindow("Test List", Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        HWND listBox = assertDoesNotThrow(() -> CreateWindow.createListBoxWindow("Test List", Window.getCurrentWindow(), 0, 0, 0, 800, 600));
         assertNotNull(listBox);
         assertNotEquals(0, listBox.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(listBox).segment.address());
@@ -36,7 +36,7 @@ class CreateWindowExTest {
 
     @Test
     void testCreateEditWindowWithScrollBars() {
-        HWND edit = CreateWindowEx.createEditWindow("Test Edit", Window.getCurrentWindow(), 0, 0, 0, 800, 600, true);
+        HWND edit = CreateWindow.createEditWindow("Test Edit", Window.getCurrentWindow(), 0, 0, 0, 800, 600, true);
         assertNotNull(edit);
         assertNotEquals(0, edit.segment.address());
         long style = User32.INSTANCE.GetWindowLongPtrW(edit, WinUser.GWL_STYLE).longValue();
@@ -47,7 +47,7 @@ class CreateWindowExTest {
 
     @Test
     void testCreateEditWindowWithoutScrollBars() {
-        HWND edit = CreateWindowEx.createEditWindow("Test Edit", Window.getCurrentWindow(), 0, 0, 0, 800, 600, false);
+        HWND edit = CreateWindow.createEditWindow("Test Edit", Window.getCurrentWindow(), 0, 0, 0, 800, 600, false);
         assertNotNull(edit);
         assertNotEquals(0, edit.segment.address());
         long style = User32.INSTANCE.GetWindowLongPtrW(edit, WinUser.GWL_STYLE).longValue();
@@ -58,7 +58,7 @@ class CreateWindowExTest {
 
     @Test
     void testCreateButtonWindow() {
-        HWND button = assertDoesNotThrow(() -> CreateWindowEx.createButtonWindow("Test Button", Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        HWND button = assertDoesNotThrow(() -> CreateWindow.createButtonWindow("Test Button", Window.getCurrentWindow(), 0, 0, 0, 800, 600));
         assertNotNull(button);
         assertNotEquals(0, button.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(button).segment.address());
@@ -67,7 +67,7 @@ class CreateWindowExTest {
 
     @Test
     void testCreateButtonWindowWithCustomStyle() {
-        HWND button = assertDoesNotThrow(() -> CreateWindowEx.createButtonWindow("Test Button", WinUser.BS_BITMAP, Window.getCurrentWindow(), 0, 0, 0, 800, 600));
+        HWND button = assertDoesNotThrow(() -> CreateWindow.createButtonWindow("Test Button", WinUser.BS_BITMAP, Window.getCurrentWindow(), 0, 0, 0, 800, 600));
         assertNotNull(button);
         assertNotEquals(0, button.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(button).segment.address());
@@ -77,7 +77,7 @@ class CreateWindowExTest {
 
     @Test
     void testCreateOkButtonWindow() {
-        HWND button = assertDoesNotThrow(() -> CreateWindowEx.createOkButtonWindow(Window.getCurrentWindow(), 0, 0, 800, 600));
+        HWND button = assertDoesNotThrow(() -> CreateWindow.createOkButtonWindow(Window.getCurrentWindow(), 0, 0, 800, 600));
         assertNotNull(button);
         assertNotEquals(0, button.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(button).segment.address());
@@ -86,7 +86,7 @@ class CreateWindowExTest {
 
     @Test
     void testCreateCancelButtonWindow() {
-        HWND button = assertDoesNotThrow(() -> CreateWindowEx.createCancelButtonWindow(Window.getCurrentWindow(), 0, 0, 800, 600));
+        HWND button = assertDoesNotThrow(() -> CreateWindow.createCancelButtonWindow(Window.getCurrentWindow(), 0, 0, 800, 600));
         assertNotNull(button);
         assertNotEquals(0, button.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(button).segment.address());
@@ -97,7 +97,7 @@ class CreateWindowExTest {
     void testCreateRichEditWindow() {
         Window.reset();
         Window.createWindow(WinUser.Wndproc.defaultWndProc(), "CreateRichEditWindow", 800, 600, true);
-        HWND richEdit = assertDoesNotThrow(() -> CreateWindowEx.createRichEditWindow("Test Rich Edit", Window.getCurrentWindow(), 0, 0, 0, 800, 600, false));
+        HWND richEdit = assertDoesNotThrow(() -> CreateWindow.createRichEditWindow("Test Rich Edit", Window.getCurrentWindow(), 0, 0, 0, 800, 600, false));
         assertNotNull(richEdit);
         assertNotEquals(0, richEdit.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(richEdit).segment.address());
@@ -106,7 +106,7 @@ class CreateWindowExTest {
 
     @Test
     void testCreatePopupWindow() {
-        HWND popup = assertDoesNotThrow(() -> CreateWindowEx.createPopupWindow(Window.getClassName(), "Test Popup", Window.getCurrentWindow(), 0, 0, 0, 800, null));
+        HWND popup = assertDoesNotThrow(() -> CreateWindow.createPopupWindow(Window.getClassName(), "Test Popup", Window.getCurrentWindow(), 0, 0, 0, 800, null));
         assertNotNull(popup);
         assertNotEquals(0, popup.segment.address());
         assertEquals(Window.getCurrentWindow().segment.address(), User32.INSTANCE.GetParent(popup).segment.address());

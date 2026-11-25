@@ -19,7 +19,7 @@ import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.WinNT.LPWSTR;
 import io.github.greymagic27.win_method.WinNT.SHORT;
-import io.github.greymagic27.win_method.methods.CreateWindowEx;
+import io.github.greymagic27.win_method.methods.CreateWindow;
 import io.github.greymagic27.win_method.methods.Menu;
 import io.github.greymagic27.win_method.types.WinDef;
 import io.github.greymagic27.win_method.types.WinGdi;
@@ -48,7 +48,7 @@ class User32Test {
 
     @BeforeEach
     void setUp() {
-        window = CreateWindowEx.createStaticWindow(null, null, 0, 1, 1, 800, 600);
+        window = CreateWindow.createStaticWindow(null, null, 0, 1, 1, 800, 600);
         hdc = user32.GetDC(window);
         msg = new WinUser.MSG();
         rect = new WinDef.RECT();
@@ -92,7 +92,7 @@ class User32Test {
 
     @Test
     void testDestroyWindow() {
-        HWND hwnd1 = CreateWindowEx.createStaticWindow(null, null, 0, 0, 0, 800, 600);
+        HWND hwnd1 = CreateWindow.createStaticWindow(null, null, 0, 0, 0, 800, 600);
         BOOL result = user32.DestroyWindow(hwnd1);
         assertTrue(result.booleanValue());
     }
@@ -498,8 +498,8 @@ class User32Test {
 
     @Test
     void testSetFocus() {
-        HWND first = CreateWindowEx.createEditWindow("First", window, 1, 0, 0, 100, 25, false);
-        HWND second = CreateWindowEx.createEditWindow("Second", window, 2, 0, 30, 100, 25, false);
+        HWND first = CreateWindow.createEditWindow("First", window, 1, 0, 0, 100, 25, false);
+        HWND second = CreateWindow.createEditWindow("Second", window, 2, 0, 30, 100, 25, false);
         try {
             assertNotNull(first);
             assertNotNull(second);
@@ -521,7 +521,7 @@ class User32Test {
     @Test
     void testFindWindow() {
         String title = "FindWindowTest";
-        HWND testWindow = CreateWindowEx.createStaticWindow(title, null, 0, 0, 0, 0, 0);
+        HWND testWindow = CreateWindow.createStaticWindow(title, null, 0, 0, 0, 0, 0);
         assertNotNull(testWindow);
         assertNotEquals(0, testWindow.segment.address());
         try {
@@ -584,7 +584,7 @@ class User32Test {
 
     @Test
     void testSetCapture() {
-        HWND window1 = CreateWindowEx.createStaticWindow(null, null, 0, 1, 1, 800, 600);
+        HWND window1 = CreateWindow.createStaticWindow(null, null, 0, 1, 1, 800, 600);
         try {
             assertNotNull(window);
             assertNotNull(window1);
@@ -607,7 +607,7 @@ class User32Test {
 
     @Test
     void testReleaseCapture() {
-        HWND window1 = CreateWindowEx.createStaticWindow(null, null, 0, 1, 1, 800, 600);
+        HWND window1 = CreateWindow.createStaticWindow(null, null, 0, 1, 1, 800, 600);
         try {
             assertNotNull(window1);
             assertNotEquals(0, window1.segment.address());

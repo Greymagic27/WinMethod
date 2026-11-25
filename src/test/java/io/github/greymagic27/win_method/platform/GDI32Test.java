@@ -11,7 +11,7 @@ import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
-import io.github.greymagic27.win_method.methods.CreateWindowEx;
+import io.github.greymagic27.win_method.methods.CreateWindow;
 import io.github.greymagic27.win_method.types.WinGdi;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -42,7 +42,7 @@ class GDI32Test {
 
     @BeforeEach
     void setUp() {
-        window = CreateWindowEx.createStaticWindow(null, null, 0, 0, 0, 800, 600);
+        window = CreateWindow.createStaticWindow(null, null, 0, 0, 0, 800, 600);
         hfont = gdi32.CreateFontW(16, 0, 0, 0, FW_NORMAL, new DWORD(0), new DWORD(0), new DWORD(0), new DWORD(ANSI_CHARSET), new DWORD(OUT_DEFAULT_PRECIS), new DWORD(CLIP_DEFAULT_PRECIS), new DWORD(CLEARTYPE_QUALITY), new DWORD(FIXED_PITCH | FF_MODERN), new LPCWSTR("Arial"));
         hdc = user32.GetDC(window);
     }

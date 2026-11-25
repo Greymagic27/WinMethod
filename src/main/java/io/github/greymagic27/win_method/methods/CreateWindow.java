@@ -11,7 +11,7 @@ import io.github.greymagic27.win_method.types.WinUser;
 import java.lang.foreign.MemorySegment;
 
 /// Helpers to create windows using {@link User32#CreateWindowExW(DWORD, LPCWSTR, LPCWSTR, DWORD, int, int, int, int, HWND, HMENU, HINSTANCE, LPVOID)}
-public class CreateWindowEx {
+public class CreateWindow {
 
     /// Creates a list box child window with the specified name, identifier, position, and dimensions.
     ///
@@ -93,7 +93,7 @@ public class CreateWindowEx {
     /// @param height The height, in device units, of the button
     /// @return If the function succeeds, a handle to the new OK button. If the function fails, the return value is NULL
     public static HWND createOkButtonWindow(HWND parent, int x, int y, int width, int height) {
-        return CreateWindowEx.createButtonWindow("Ok", parent, WinUser.IDOK, x, y, width, height);
+        return CreateWindow.createButtonWindow("Ok", parent, WinUser.IDOK, x, y, width, height);
     }
 
     /// Creates a Cancel button child window with the specified identifier, position, and dimensions.
@@ -105,7 +105,7 @@ public class CreateWindowEx {
     /// @param height The height, in device units, of the button
     /// @return If the function succeeds, a handle to the new Cancel button. If the function fails, the return value is NULL
     public static HWND createCancelButtonWindow(HWND parent, int x, int y, int width, int height) {
-        return CreateWindowEx.createButtonWindow("Cancel", parent, WinUser.IDCANCEL, x, y, width, height);
+        return CreateWindow.createButtonWindow("Cancel", parent, WinUser.IDCANCEL, x, y, width, height);
     }
 
     /// Creates a rich edit child window with the specified name, identifier, position, and dimensions.
