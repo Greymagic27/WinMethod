@@ -15,5 +15,6 @@ public interface WinNT {
     int GENERIC_WRITE = new LONG(0x40000000).intValue();
     /// Enables subsequent open operations on a file or device to request read access
     int FILE_SHARE_READ = 0x00000001;
+    /// Enables subsequent open operations on a file or device to request write access
     int FILE_SHARE_WRITE = 0x00000002;
 }

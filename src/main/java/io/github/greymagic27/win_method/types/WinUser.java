@@ -432,6 +432,10 @@ public interface WinUser {
 
     /// An application-defined callback function that processes {@link WinUser#WM_TIMER} messages
     interface TIMERPROC extends Callback {
+        /// @param unnamedParam1 A handle to the window associated with the timer. This parameter is typically named hWnd
+        /// @param unnamedParam2 The {@link #WM_TIMER} message. This parameter is typically named uMsg
+        /// @param unnamedParam3 The timer's identifier. This parameter is typically named idEvent
+        /// @param unnamedParam4 The number of milliseconds that have elapsed since the system was started. This is the value returned by the {@code GetTickCount} function. This parameter is typically named dwTime
         void callback(HWND unnamedParam1, UINT unnamedParam2, UINT_PTR unnamedParam3, DWORD unnamedParam4);
     }
 
