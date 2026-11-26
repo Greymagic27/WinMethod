@@ -9,7 +9,6 @@ import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.platform.Kernel32;
 import io.github.greymagic27.win_method.platform.User32;
 import io.github.greymagic27.win_method.types.WinUser;
-import java.util.Objects;
 
 /// Helpers to create a window without rewriting lines of code
 public class Window {
@@ -29,7 +28,6 @@ public class Window {
     public static void createWindow(WinUser.Wndproc wndproc, String title, int width, int height, boolean richEditEnabled) {
         currentWidth = width;
         currentHeight = height;
-        Objects.requireNonNull(wndproc);
         if (richEditEnabled && (richEdit == null || richEdit.isNull())) {
             richEdit = Kernel32.INSTANCE.LoadLibraryW(new LPCWSTR("msftedit.dll"));
             if (richEdit.isNull() || richEdit.segment.address() == 0) throw new IllegalStateException("Failed to load msftedit.dll, GetLastError: " + Kernel32.INSTANCE.GetLastError());
@@ -61,7 +59,7 @@ public class Window {
     /// @param position The position you would like the window to appear in. This is defined by {@link WindowPosition}
     public static void setWindowPosition(WindowPosition position) {
         if (currentWindow == null) throw new IllegalStateException("No window has been created");
-        Objects.requireNonNull(position, "Window position must be set using WindowPosition");
+        if (position == null) throw new IllegalStateException("Window position must be set using WindowPosition");
         int screenWidth = User32.INSTANCE.GetSystemMetrics(WinUser.SM_CXSCREEN);
         int screenHeight = User32.INSTANCE.GetSystemMetrics(WinUser.SM_CYSCREEN);
         int x;
