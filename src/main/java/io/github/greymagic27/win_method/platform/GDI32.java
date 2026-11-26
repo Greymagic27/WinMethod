@@ -3,6 +3,7 @@ package io.github.greymagic27.win_method.platform;
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.Library;
 import io.github.greymagic27.win_method.WinDef.BOOL;
+import io.github.greymagic27.win_method.WinDef.COLORREF;
 import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HFONT;
 import io.github.greymagic27.win_method.WinDef.HGDIOBJ;
@@ -33,6 +34,13 @@ public interface GDI32 extends Library {
     /// @param rop        A raster-operation code that specifies how the source pixels, the destination device context's current brush, and the destination pixels are to be combined to form the new image
     /// @return If the function succeeds, the return value is the number of scan lines copied. If the function fails, or no scan lines are copied, the return value is 0
     int StretchDIBits(HDC hdc, int xDest, int yDest, int DestWidth, int DestHeight, int xSrc, int ySrc, int SrcWidth, int SrcHeight, LPVOID lpBits, WinGdi.BITMAPINFO lpbmi, UINT iUsage, DWORD rop);
+
+    ///  The SetBkMode function sets the background mix mode of the specified device context. The background mix mode is used with text, hatched brushes, and pen styles that are not solid lines
+    ///
+    /// @param hdc A handle to the device context
+    /// @param mode The background mode. This parameter can be one of the following values: {@link WinGdi#TRANSPARENT}, {@link WinGdi#OPAQUE}
+    /// @return If the function succeeds, the return value specifies the previous background mode. If the function fails, the return value is zero
+    int SetBkMode(HDC hdc, int mode);
 
     /// Retrieves a {@link io.github.greymagic27.win_method.WinNT.HANDLE} to one of the stock pens, brushes, fonts or palettes.
     ///
@@ -71,4 +79,21 @@ public interface GDI32 extends Library {
     /// @param ho A {@link io.github.greymagic27.win_method.WinNT.HANDLE} to a logical pen, brush, font, bitmap, region or palette
     /// @return If the function succeeds, the return value is nonzero. If the specified handle is not valid or is currently selected into a DC, the return value is zero
     BOOL DeleteObject(HGDIOBJ ho);
+
+    /// The TextOut function writes a character string at the specified location, using the currently selected font, background color, and text color
+    ///
+    /// @param hdc A handle to the device context
+    /// @param x The x-coordinate, in logical coordinates, of the reference point that the system uses to align the string
+    /// @param y The y-coordinate, in logical coordinates, of the reference point that the system uses to align the string
+    /// @param lpString A pointer to the string to be drawn. The string does not need to be zero-terminated, because cchString specifies the length of the string
+    /// @param c The length of the string pointed to by {@code lpString}, in characters
+    /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
+    BOOL TextOutW(HDC hdc, int x, int y, LPCWSTR lpString, int c);
+
+    /// The SetTextColor function sets the text colour for the specified device context to the specified colour
+    ///
+    /// @param hdc A handle to the device context
+    /// @param color The colour of the text
+    /// @return If the function succeeds, the return value is a colour reference for the previous text colour as a {@link COLORREF} value. If the function fails, the return value is {@code CLR_INVALID}
+    COLORREF SetTextColor(HDC hdc, COLORREF color);
 }

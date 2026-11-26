@@ -13,8 +13,10 @@ import static io.github.greymagic27.win_method.types.WinGdi.DIB_RGB_COLORS;
 import static io.github.greymagic27.win_method.types.WinGdi.FF_MODERN;
 import static io.github.greymagic27.win_method.types.WinGdi.FIXED_PITCH;
 import static io.github.greymagic27.win_method.types.WinGdi.FW_NORMAL;
+import static io.github.greymagic27.win_method.types.WinGdi.OPAQUE;
 import static io.github.greymagic27.win_method.types.WinGdi.OUT_DEFAULT_PRECIS;
 import static io.github.greymagic27.win_method.types.WinGdi.SRCCOPY;
+import static io.github.greymagic27.win_method.types.WinGdi.TRANSPARENT;
 import static io.github.greymagic27.win_method.types.WinGdi.WHITE_BRUSH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -33,6 +35,8 @@ class WinGdiTest {
         assertEquals(5, CLEARTYPE_QUALITY);
         assertEquals(1, FIXED_PITCH);
         assertEquals(48, FF_MODERN);
+        assertEquals(1, TRANSPARENT);
+        assertEquals(2, OPAQUE);
     }
 
     @Test

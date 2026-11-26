@@ -2,6 +2,7 @@ package io.github.greymagic27.win_method.platform;
 
 import io.github.greymagic27.win_method.IntSafe.DWORD;
 import io.github.greymagic27.win_method.Memory;
+import io.github.greymagic27.win_method.WinDef.COLORREF;
 import io.github.greymagic27.win_method.WinDef.HDC;
 import io.github.greymagic27.win_method.WinDef.HFONT;
 import io.github.greymagic27.win_method.WinDef.HGDIOBJ;
@@ -12,6 +13,7 @@ import io.github.greymagic27.win_method.WinDef.WORD;
 import io.github.greymagic27.win_method.WinNT.LONG;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.methods.CreateWindow;
+import io.github.greymagic27.win_method.methods.Font;
 import io.github.greymagic27.win_method.types.WinGdi;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -19,13 +21,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static io.github.greymagic27.win_method.types.WinGdi.ANSI_CHARSET;
-import static io.github.greymagic27.win_method.types.WinGdi.CLEARTYPE_QUALITY;
-import static io.github.greymagic27.win_method.types.WinGdi.CLIP_DEFAULT_PRECIS;
-import static io.github.greymagic27.win_method.types.WinGdi.FF_MODERN;
-import static io.github.greymagic27.win_method.types.WinGdi.FIXED_PITCH;
-import static io.github.greymagic27.win_method.types.WinGdi.FW_NORMAL;
-import static io.github.greymagic27.win_method.types.WinGdi.OUT_DEFAULT_PRECIS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -43,7 +38,7 @@ class GDI32Test {
     @BeforeEach
     void setUp() {
         window = CreateWindow.createStaticWindow(null, null, 0, 0, 0, 800, 600);
-        hfont = gdi32.CreateFontW(16, 0, 0, 0, FW_NORMAL, new DWORD(0), new DWORD(0), new DWORD(0), new DWORD(ANSI_CHARSET), new DWORD(OUT_DEFAULT_PRECIS), new DWORD(CLIP_DEFAULT_PRECIS), new DWORD(CLEARTYPE_QUALITY), new DWORD(FIXED_PITCH | FF_MODERN), new LPCWSTR("Arial"));
+        hfont = Font.create("Arial", 16);
         hdc = user32.GetDC(window);
     }
 
@@ -51,6 +46,7 @@ class GDI32Test {
     void tearDown() {
         user32.ReleaseDC(window, hdc);
         user32.DestroyWindow(window);
+        gdi32.DeleteObject(new HGDIOBJ(hfont));
     }
 
     @Test
@@ -81,10 +77,11 @@ class GDI32Test {
 
     @Test
     void testCreateFont() {
-        assertNotNull(hfont);
-        assertNotEquals(0, hfont.segment.address());
-        assertFalse(hfont.isNull());
-        gdi32.DeleteObject(new HGDIOBJ(hfont));
+        HFONT font = gdi32.CreateFontW(-16, 0, 0, 0, WinGdi.FW_NORMAL, new DWORD(0), new DWORD(0), new DWORD(0), new DWORD(WinGdi.ANSI_CHARSET), new DWORD(WinGdi.OUT_DEFAULT_PRECIS), new DWORD(WinGdi.CLIP_DEFAULT_PRECIS), new DWORD(WinGdi.CLEARTYPE_QUALITY), new DWORD(0), new LPCWSTR("Arial"));
+        assertNotNull(font);
+        assertNotEquals(0, font.segment.address());
+        assertFalse(font.isNull());
+        assertTrue(gdi32.DeleteObject(new HGDIOBJ(font)).booleanValue());
     }
 
     @Test
@@ -107,5 +104,32 @@ class GDI32Test {
         assertNotNull(restoredFont);
         assertFalse(restoredFont.isNull());
         assertEquals(hfont.segment.address(), restoredFont.segment.address());
+    }
+
+    @Test
+    void testTextOut() {
+        gdi32.SelectObject(hdc, new HGDIOBJ(hfont));
+        assertTrue(gdi32.SetTextColor(hdc, new COLORREF(0x000000FF)).intValue() != 0xFFFFFFFF);
+        String txt = "test";
+        assertTrue(gdi32.TextOutW(hdc, 10, 10, new LPCWSTR(txt), txt.length()).booleanValue());
+    }
+
+    @Test
+    void testSetTextColor() {
+        COLORREF originalColor = gdi32.SetTextColor(hdc, new COLORREF(0x000000FF));
+        assertNotNull(originalColor);
+        assertNotEquals(0xFFFFFFFF, originalColor.intValue());
+        COLORREF previousColor = gdi32.SetTextColor(hdc, new COLORREF(0x0000FF00));
+        assertEquals(0x000000FF, previousColor.intValue());
+        gdi32.SetTextColor(hdc, originalColor);
+    }
+
+    @Test
+    void testSetBkMode() {
+        int originalMode = gdi32.SetBkMode(hdc, WinGdi.TRANSPARENT);
+        assertEquals(WinGdi.OPAQUE, originalMode);
+        int previousMode = gdi32.SetBkMode(hdc, WinGdi.OPAQUE);
+        assertEquals(WinGdi.TRANSPARENT, previousMode);
+        gdi32.SetBkMode(hdc, originalMode);
     }
 }

@@ -29,6 +29,10 @@ public interface WinGdi {
     int FIXED_PITCH = 1;
     /// Fonts with constant stroke width, with or without serifs. Pica, Elite, and Courier New are examples
     int FF_MODERN = 3 << 4;
+    /// Background is unaffected
+    int TRANSPARENT = 1;
+    /// Background is filled with the current background colour before the text, hatched brush, or pen is drawn
+    int OPAQUE = 2;
 
     /// Defines the dimensions and colour information for a DIB
     @Structure.AutoFieldOrder
