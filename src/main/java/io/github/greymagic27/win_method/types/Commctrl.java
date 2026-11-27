@@ -6,9 +6,6 @@ import io.github.greymagic27.win_method.Structure;
 /// Values defined in commctrl.h
 public interface Commctrl {
 
-    /// Load one of the intrinsic User32 control classes. The user controls include button, edit, static, listbox, combobox, and scroll bar
-    int ICC_STANDARD_CLASSES = 0x00004000;
-
     /// The status bar control will include a sizing grip at the right end of the status bar. A sizing grip is similar to a sizing border; it is a rectangular area that the user can click and drag to resize the parent window.
     int SBARS_SIZEGRIP = 0x0100;
 
