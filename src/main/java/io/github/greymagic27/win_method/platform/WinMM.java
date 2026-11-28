@@ -13,6 +13,7 @@ import org.jspecify.annotations.NonNull;
 /// Interface for WinMM.dll
 public interface WinMM extends Library {
 
+    /// The instance
     WinMM INSTANCE = Library.load(WinMM.class);
 
     /// The waveOutOpen function opens the given waveform-audio output device for playback

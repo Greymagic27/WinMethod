@@ -7,6 +7,7 @@ import io.github.greymagic27.win_method.types.Commctrl;
 /// Interface for Comctl32.dll
 public interface Comctl32 extends Library {
 
+    /// The instance
     Comctl32 INSTANCE = Library.load(Comctl32.class);
 
     /// Ensures that the common control DLL (Comctl32.dll) is loaded, and registers specific common control classes from the DLL. An application must call this function before creating a common control
