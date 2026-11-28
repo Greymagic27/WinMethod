@@ -50,13 +50,13 @@ class WinMMTest {
 
     private static MmeApi.@NonNull WAVEFORMATEX pcmFormat(int tag) {
         MmeApi.WAVEFORMATEX wfx = new MmeApi.WAVEFORMATEX();
-        wfx.wFormatTag = new WORD((short) tag);
-        wfx.nChannels = new WORD((short) 2);
+        wfx.wFormatTag = new WORD(tag);
+        wfx.nChannels = new WORD(2);
         wfx.nSamplesPerSec = new DWORD(44100);
-        wfx.wBitsPerSample = new WORD((short) 16);
-        wfx.nBlockAlign = new WORD((short) (2 * 16 / 8));
+        wfx.wBitsPerSample = new WORD(16);
+        wfx.nBlockAlign = new WORD((2 * 16 / 8));
         wfx.nAvgBytesPerSec = new DWORD(44100 * 2 * 16 / 8);
-        wfx.cbSize = new WORD((short) 0);
+        wfx.cbSize = new WORD(0);
         return wfx;
     }
 

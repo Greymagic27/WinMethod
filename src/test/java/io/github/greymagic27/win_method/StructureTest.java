@@ -1,6 +1,7 @@
 package io.github.greymagic27.win_method;
 
 import io.github.greymagic27.win_method.types.Commctrl;
+import io.github.greymagic27.win_method.types.Commdlg;
 import io.github.greymagic27.win_method.types.MinWinBase;
 import io.github.greymagic27.win_method.types.MmSysCom;
 import io.github.greymagic27.win_method.types.MmeApi;
@@ -371,6 +372,7 @@ class StructureTest {
 
     @Test
     void testStructureSizes() {
+        assertEquals(152, new Commdlg.OPENFILENAMEW().size());
         assertEquals(8, new WinDef.POINT().size());
         assertEquals(16, new WinDef.RECT().size());
         assertEquals(48, new WinUser.MSG().size());

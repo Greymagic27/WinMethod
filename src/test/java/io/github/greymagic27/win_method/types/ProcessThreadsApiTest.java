@@ -28,8 +28,8 @@ class ProcessThreadsApiTest {
         startupInfo.dwYCountChars = new DWORD(25);
         startupInfo.dwFillAttribute = new DWORD(7);
         startupInfo.dwFlags = new DWORD(1);
-        startupInfo.wShowWindow = new WORD((short) 5);
-        startupInfo.cbReserved2 = new WORD((short) 0);
+        startupInfo.wShowWindow = new WORD(5);
+        startupInfo.cbReserved2 = new WORD(0);
         startupInfo.lpReserved2 = new LPBYTE(MemorySegment.NULL);
         startupInfo.hStdInput = new HANDLE(MemorySegment.ofAddress(0x4000));
         startupInfo.hStdOutput = new HANDLE(MemorySegment.ofAddress(0x5000));
@@ -47,8 +47,8 @@ class ProcessThreadsApiTest {
         startupInfo.dwYCountChars = new DWORD(0);
         startupInfo.dwFillAttribute = new DWORD(0);
         startupInfo.dwFlags = new DWORD(0);
-        startupInfo.wShowWindow = new WORD((short) 0);
-        startupInfo.cbReserved2 = new WORD((short) 0);
+        startupInfo.wShowWindow = new WORD(0);
+        startupInfo.cbReserved2 = new WORD(0);
         startupInfo.lpReserved2 = new LPBYTE(MemorySegment.NULL);
         startupInfo.hStdInput = new HANDLE(MemorySegment.NULL);
         startupInfo.hStdOutput = new HANDLE(MemorySegment.NULL);

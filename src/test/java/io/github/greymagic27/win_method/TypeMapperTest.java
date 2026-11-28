@@ -317,7 +317,7 @@ class TypeMapperTest {
     @Test
     void testToNative_WORD() {
         try (Arena arena = Arena.ofConfined()) {
-            WORD value = new WORD((short) 9999);
+            WORD value = new WORD(9999);
             Object result = TypeMapper.toNative(value, WORD.class, arena);
             assertEquals((short) 9999, result);
         }

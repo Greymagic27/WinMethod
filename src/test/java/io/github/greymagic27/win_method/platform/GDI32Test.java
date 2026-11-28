@@ -66,8 +66,8 @@ class GDI32Test {
             bmi.bmiHeader.biSize = new DWORD(bmi.size());
             bmi.bmiHeader.biWidth = new LONG(width);
             bmi.bmiHeader.biHeight = new LONG(height);
-            bmi.bmiHeader.biPlanes = new WORD((short) 1);
-            bmi.bmiHeader.biBitCount = new WORD((short) 32);
+            bmi.bmiHeader.biPlanes = new WORD(1);
+            bmi.bmiHeader.biBitCount = new WORD(32);
             bmi.bmiHeader.biCompression = new DWORD(0);
             bmi.bmiHeader.biSizeImage = new DWORD(0);
             int result = gdi32.StretchDIBits(hdc, 0, 0, width, height, 0, 0, width, height, new LPVOID(pixels), bmi, new UINT(WinGdi.DIB_RGB_COLORS), new DWORD(WinGdi.SRCCOPY));

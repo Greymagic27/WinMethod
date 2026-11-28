@@ -433,6 +433,7 @@ public interface WinUser {
     /// An application-defined callback function that processes {@link WinUser#WM_TIMER} messages
     interface TIMERPROC extends Callback {
         /// A callback function that processes a timer message
+        ///
         /// @param unnamedParam1 A handle to the window associated with the timer. This parameter is typically named hWnd
         /// @param unnamedParam2 The {@link #WM_TIMER} message. This parameter is typically named uMsg
         /// @param unnamedParam3 The timer's identifier. This parameter is typically named idEvent

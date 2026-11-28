@@ -52,8 +52,8 @@ class WinGdiTest {
         assertEquals(new DWORD(0).intValue(), header.biSize.intValue());
         assertEquals(0, header.biWidth.intValue());
         assertEquals(0, header.biHeight.intValue());
-        assertEquals(new WORD((short) 0).shortValue(), header.biPlanes.shortValue());
-        assertEquals(new WORD((short) 0).shortValue(), header.biBitCount.shortValue());
+        assertEquals(new WORD(0).shortValue(), header.biPlanes.shortValue());
+        assertEquals(new WORD(0).shortValue(), header.biBitCount.shortValue());
         assertEquals(new DWORD(0).intValue(), header.biCompression.intValue());
         assertEquals(new DWORD(0).intValue(), header.biSizeImage.intValue());
         assertEquals(new LONG(0).intValue(), header.biXPelsPerMeter.intValue());
@@ -62,8 +62,8 @@ class WinGdiTest {
         assertEquals(new DWORD(0).intValue(), header.biClrImportant.intValue());
         header.biWidth = new LONG(1920);
         header.biHeight = new LONG(1080);
-        header.biPlanes = new WORD((short) 1);
-        header.biBitCount = new WORD((short) 32);
+        header.biPlanes = new WORD(1);
+        header.biBitCount = new WORD(32);
         header.biCompression = new DWORD(5);
         header.biSizeImage = new DWORD(20);
         header.biXPelsPerMeter = new LONG(15);
