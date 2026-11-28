@@ -7,6 +7,13 @@ public class WORD {
 
     private final short value;
 
+    /// Creates a {@code WORD} from a {@code short} value
+    ///
+    /// @param value The value to store
+    public WORD(short value) {
+        this.value = value;
+    }
+
     /// Creates a {@code WORD} from a {@code long} value
     ///
     /// @param value The value to store
