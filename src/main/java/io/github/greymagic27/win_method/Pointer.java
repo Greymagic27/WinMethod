@@ -39,6 +39,17 @@ public class Pointer {
         return new String(bytes, StandardCharsets.UTF_16LE);
     }
 
+    /// Reads a UTF-16LE string from native memory
+    ///
+    /// @param offset The byte offset from the pointer address where the string starts
+    /// @param length The number of UTF-16 code units to read
+    /// @return Returns the decoded Java string
+    public @NonNull String getWideString(long offset, int length) {
+        byte[] bytes = new byte[Math.multiplyExact(length, 2)];
+        MemorySegment.copy(segment, ValueLayout.JAVA_BYTE, offset, bytes, 0, bytes.length);
+        return new String(bytes, StandardCharsets.UTF_16LE);
+    }
+
     /// Reads a range of bytes from native memory
     ///
     /// @param offset The byte offset from the pointer address where reading starts

@@ -42,11 +42,29 @@ class PointerTest {
     }
 
     @Test
+    void testGetWideStringWithLength() {
+        String expected = "first\0second\0";
+        byte[] bytes = expected.getBytes(StandardCharsets.UTF_16LE);
+        MemorySegment segment = arena.allocate(bytes.length);
+        for (int i = 0; i < bytes.length; i++) segment.set(ValueLayout.JAVA_BYTE, i, bytes[i]);
+        Pointer ptr = new Pointer(segment);
+        assertEquals(expected, ptr.getWideString(0, expected.length()));
+    }
+
+    @Test
     void testGetWideStringOutOfBounds() {
         MemorySegment segment = arena.allocate(2);
         segment.set(ValueLayout.JAVA_SHORT, 0, (short) 'A');
         Pointer p = new Pointer(segment);
         assertThrows(IndexOutOfBoundsException.class, () -> p.getWideString(0));
+    }
+
+    @Test
+    void testGetWideStringWithLengthOutOfBounds() {
+        MemorySegment segment = arena.allocate(2);
+        segment.set(ValueLayout.JAVA_SHORT, 0, (short) 'A');
+        Pointer pointer = new Pointer(segment);
+        assertThrows(IndexOutOfBoundsException.class, () -> pointer.getWideString(0, 2));
     }
 
     @Test

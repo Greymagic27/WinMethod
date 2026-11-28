@@ -37,7 +37,7 @@ public interface GDI32 extends Library {
 
     ///  The SetBkMode function sets the background mix mode of the specified device context. The background mix mode is used with text, hatched brushes, and pen styles that are not solid lines
     ///
-    /// @param hdc A handle to the device context
+    /// @param hdc  A handle to the device context
     /// @param mode The background mode. This parameter can be one of the following values: {@link WinGdi#TRANSPARENT}, {@link WinGdi#OPAQUE}
     /// @return If the function succeeds, the return value specifies the previous background mode. If the function fails, the return value is zero
     int SetBkMode(HDC hdc, int mode);
@@ -82,17 +82,17 @@ public interface GDI32 extends Library {
 
     /// The TextOut function writes a character string at the specified location, using the currently selected font, background color, and text color
     ///
-    /// @param hdc A handle to the device context
-    /// @param x The x-coordinate, in logical coordinates, of the reference point that the system uses to align the string
-    /// @param y The y-coordinate, in logical coordinates, of the reference point that the system uses to align the string
+    /// @param hdc      A handle to the device context
+    /// @param x        The x-coordinate, in logical coordinates, of the reference point that the system uses to align the string
+    /// @param y        The y-coordinate, in logical coordinates, of the reference point that the system uses to align the string
     /// @param lpString A pointer to the string to be drawn. The string does not need to be zero-terminated, because cchString specifies the length of the string
-    /// @param c The length of the string pointed to by {@code lpString}, in characters
+    /// @param c        The length of the string pointed to by {@code lpString}, in characters
     /// @return If the function succeeds, the return value is nonzero. If the function fails, the return value is zero
     BOOL TextOutW(HDC hdc, int x, int y, LPCWSTR lpString, int c);
 
     /// The SetTextColor function sets the text colour for the specified device context to the specified colour
     ///
-    /// @param hdc A handle to the device context
+    /// @param hdc   A handle to the device context
     /// @param color The colour of the text
     /// @return If the function succeeds, the return value is a colour reference for the previous text colour as a {@link COLORREF} value. If the function fails, the return value is {@code CLR_INVALID}
     COLORREF SetTextColor(HDC hdc, COLORREF color);
