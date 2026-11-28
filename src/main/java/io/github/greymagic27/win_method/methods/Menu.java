@@ -49,7 +49,7 @@ public class Menu {
     /// @param menu The menu to be changed
     /// @return {@code true} if the function succeeds, otherwise {@code false}
     public static boolean appendExitMenuItem(HMENU menu) {
-        return User32.INSTANCE.AppendMenuW(menu, new UINT(WinUser.MF_STRING), new UINT_PTR(1), new LPCWSTR("Exit")).booleanValue();
+        return User32.INSTANCE.AppendMenuW(menu, new UINT(WinUser.MF_STRING), new UINT_PTR(10000), new LPCWSTR("Exit")).booleanValue();
     }
 
     /// Appends a popup submenu item to the end of the specified menu
