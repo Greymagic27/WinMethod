@@ -31,13 +31,13 @@ class MenuTest {
     @Test
     void testAppendExitMenuItem() {
         HMENU menu = User32.INSTANCE.CreateMenu();
-        assertTrue(Menu.appendExitMenuItem(menu));
+        assertTrue(Menu.appendExitMenuItem(menu, 0));
     }
 
     @Test
     void testAppendPopupMenu() {
         HMENU menu = User32.INSTANCE.CreateMenu();
         HMENU popup = User32.INSTANCE.CreatePopupMenu();
-        assertTrue(Menu.appendPopupMenu(menu, popup.segment.address(), "File"));
+        assertTrue(Menu.appendPopupMenu(menu, popup, "File"));
     }
 }

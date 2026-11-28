@@ -6,6 +6,7 @@ import io.github.greymagic27.win_method.WinDef.UINT;
 import io.github.greymagic27.win_method.WinNT.LPCWSTR;
 import io.github.greymagic27.win_method.platform.User32;
 import io.github.greymagic27.win_method.types.WinUser;
+import org.jspecify.annotations.NonNull;
 
 /// Helpers to create menus using {@link User32#AppendMenuW(HMENU, UINT, UINT_PTR, LPCWSTR)}
 public class Menu {
@@ -48,8 +49,8 @@ public class Menu {
     ///
     /// @param menu The menu to be changed
     /// @return {@code true} if the function succeeds, otherwise {@code false}
-    public static boolean appendExitMenuItem(HMENU menu) {
-        return User32.INSTANCE.AppendMenuW(menu, new UINT(WinUser.MF_STRING), new UINT_PTR(10000), new LPCWSTR("Exit")).booleanValue();
+    public static boolean appendExitMenuItem(HMENU menu, int id) {
+        return User32.INSTANCE.AppendMenuW(menu, new UINT(WinUser.MF_STRING), new UINT_PTR(id), new LPCWSTR("Exit")).booleanValue();
     }
 
     /// Appends a popup submenu item to the end of the specified menu
@@ -58,10 +59,10 @@ public class Menu {
     /// rather than a menu item identifier.
     ///
     /// @param menu    The menu to be changed
-    /// @param id      A handle to the drop-down menu or submenu
+    /// @param popup   The drop-down menu or submenu to attach
     /// @param newItem The text displayed for the popup menu item
     /// @return {@code true} if the function succeeds, otherwise {@code false}
-    public static boolean appendPopupMenu(HMENU menu, long id, String newItem) {
-        return User32.INSTANCE.AppendMenuW(menu, new UINT(WinUser.MF_POPUP), new UINT_PTR(id), new LPCWSTR(newItem)).booleanValue();
+    public static boolean appendPopupMenu(HMENU menu, @NonNull HMENU popup, String newItem) {
+        return User32.INSTANCE.AppendMenuW(menu, new UINT(WinUser.MF_POPUP), new UINT_PTR(popup.segment.address()), new LPCWSTR(newItem)).booleanValue();
     }
 }
